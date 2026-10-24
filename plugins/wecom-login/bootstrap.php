@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Services\Hook;
 use Blessing\Filter;
 use Blessing\WeCom\Routes;
+use Blessing\WeCom\Bindings;
+use Illuminate\Support\Facades\View;
 use Blessing\WeCom\Settings;
 
 return function (Filter $filter): void {
@@ -18,9 +20,20 @@ return function (Filter $filter): void {
     Hook::addMenuItem('user', 1, [
         'title' => '企业微信绑定', 'link' => 'user/wecom', 'icon' => 'fa-building',
     ]);
+    $filter->add('grid:user.index', function (array $grid): array {
+        $grid['widgets'][0][0][] = 'Blessing\\WeCom::widgets.account';
+        return $grid;
+    });
+    View::composer('Blessing\\WeCom::widgets.account', function ($view): void {
+        $uid = auth()->id();
+        $view->with([
+            'wecom_binding' => $uid ? app(Bindings::class)->forUser((int) $uid) : null,
+            'wecom_ready' => app(Settings::class)->ready(),
+        ]);
+    });
     $filter->add('auth_page_rows:login', function (array $rows): array {
         if (app(Settings::class)->ready()) {
-            $rows[] = 'WeCom::login-row';
+            $rows[] = 'Blessing\\WeCom::login-row';
         }
         return $rows;
     });

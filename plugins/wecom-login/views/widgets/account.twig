@@ -1,0 +1,19 @@
+<div class="card card-outline card-success" id="wecom-binding-widget">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-building mr-1" aria-hidden="true"></i>企业微信账号</h2>
+  </div>
+  <div class="card-body">
+    {% if wecom_binding %}
+      <p><span class="badge badge-success">已绑定企业微信</span></p>
+      <p class="mb-1">{{ wecom_binding.member_name ?: '企业成员' }} <span class="text-muted">({{ wecom_binding.member_id }})</span></p>
+      <p class="text-muted">现在可以使用企业微信扫码登录当前皮肤站账号。</p>
+      <a class="btn btn-outline-success" href="{{ url('user/wecom') }}">管理企业微信绑定</a>
+    {% elseif wecom_ready %}
+      <p>尚未绑定企业微信。绑定后可通过企业微信扫码登录你的现有账号。</p>
+      <a class="btn btn-success" href="{{ url('user/wecom') }}">绑定企业微信</a>
+    {% else %}
+      <p class="text-muted">管理员尚未完成企业微信配置，暂时无法绑定。</p>
+      <a class="btn btn-outline-secondary" href="{{ url('user/wecom') }}">查看绑定设置</a>
+    {% endif %}
+  </div>
+</div>

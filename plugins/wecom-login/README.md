@@ -2,10 +2,20 @@
 
 适用于此前构建的 **Blessing Skin Server 6.0.2 开发快照 / Laravel 10 / PHP 8.5 / MariaDB**。不依赖 OAuth 核心插件，不需要额外安装 Composer 包或编译前端资源。
 
+## 1.0.1：用户面板与插件管理注册
+
+- 修正所有视图引用为清单中定义的完整命名空间 `Blessing\WeCom`，不再依赖未注册的简写别名。
+- 通过用户面板 `grid:user.index` 扩展点注册首页卡片，显示当前账号的绑定状态与操作入口；保留用户侧栏的“企业微信绑定”菜单。
+- 通过标准 `package.json` 提供插件名称、介绍、作者、版本、图标和 `enchants.config` 配置类，供后台插件管理列表和配置菜单自动读取。
+- 增加真实 PluginManager 加载、用户首页及 `/admin/plugins/data` 接口验证。
+- 从 1.0.0 升级时，覆盖原 `wecom-login/` 目录并停用后重新启用插件；不会删除已有绑定。如服务器关闭了 OPcache 时间戳检查，应重启网站的 PHP 运行环境。
+
+对照开发文档：[插件信息定义](https://bs-plugin.netlify.app/guide/information)、[视图与命名空间](https://bs-plugin.netlify.app/guide/view)、[用户菜单事件](https://bs-plugin.netlify.app/guide/backend-event#configureusermenu)，并结合当前服务端用户面板网格接口实现。
+
 ## 功能
 
 - 登录页面提供企业微信扫码入口，跳转到企业微信官方二维码页面。
-- 已有账号登录皮肤站后，可在个人中心的“企业微信绑定”菜单自行扫码绑定。
+- 已有账号登录皮肤站后，可在用户首页的“企业微信账号”卡片或“企业微信绑定”菜单自行扫码绑定。
 - 绑定后，企业微信扫码登录对应的已有账号。
 - 用户验证当前皮肤站密码后自行解绑；不更改或删除原账号。
 - 一个企业微信成员只能绑定一个皮肤站账号，一个皮肤站账号只能保留一项绑定。
@@ -14,7 +24,7 @@
 
 ## 安装到 1Panel
 
-1. 在 Blessing Skin 后台上传 `wecom-login_1.0.0_php85.zip` 并启用。插件会创建 `wecom_bindings` 和 `wecom_oauth_states` 两张表；会自动使用网站配置的数据库表前缀。两张插件表使用 InnoDB；网站原有 users 表也需要支持外键（MariaDB / MySQL 使用 InnoDB）。初次启用需要数据库账号具备建表和创建外键的权限。
+1. 在 Blessing Skin 后台上传 `wecom-login_1.0.1_php85.zip` 并启用。插件会创建 `wecom_bindings` 和 `wecom_oauth_states` 两张表；会自动使用网站配置的数据库表前缀。两张插件表使用 InnoDB；网站原有 users 表也需要支持外键（MariaDB / MySQL 使用 InnoDB）。初次启用需要数据库账号具备建表和创建外键的权限。
 2. 在**网站项目根目录**的 `.env` 中加入以下配置，不要修改 `public/` 下的文件：
 
 ```dotenv
@@ -90,7 +100,7 @@ php artisan config:clear
 
 ## 已完成验证
 
-在此前的 Blessing Skin 构建和 PHP 8.5.12 下执行了 **48 项测试、333 个断言，全部通过**，测试记录随交付的验证包提供。测试使用 SQLite 内存数据库与模拟的企业微信 HTTP 响应，覆盖页面、绑定、登录、解绑、配置权限、CSRF、授权状态重放、跨会话/跨账号、成员范围检查、token 缓存刷新及失败脱敏。
+在此前的 Blessing Skin 构建和 PHP 8.5.12 下执行了 **53 项测试、369 个断言，全部通过**，测试记录随交付的验证包提供。测试使用 SQLite 内存数据库与模拟的企业微信 HTTP 响应，覆盖页面、绑定、登录、解绑、配置权限、CSRF、授权状态重放、跨会话/跨账号、成员范围检查、token 缓存刷新及失败脱敏。
 
 **尚未使用你的企业微信真实凭据进行扫码联调，也未连接你的 MariaDB 实例。** 需要你配置自建应用后，分别用一个已有账号和一个未绑定成员验证实际绑定、登录、解绑；生产使用前也应确认数据库建表和外键权限。
 

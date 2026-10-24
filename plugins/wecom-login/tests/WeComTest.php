@@ -38,8 +38,9 @@ final class WeComTest extends Tests\TestCase
         $manager = app(PluginManager::class);
         $manager->all()->put('wecom-login', $plugin);
         self::assertTrue($manager->enable($plugin));
-        view()->addNamespace('WeCom', $path.'/views');
-        app()->call(require $path.'/bootstrap.php');
+        $booted = new ReflectionProperty($manager, 'booted');
+        $booted->setValue($manager, false);
+        $manager->boot();
         event(new ConfigureRoutes(app('router')));
         app('router')->getRoutes()->refreshNameLookups();
         config(['wecom' => [
@@ -559,5 +560,51 @@ final class WeComTest extends Tests\TestCase
             DB::setDefaultConnection($old);
             Schema::clearResolvedInstance('db.schema');
         }
+    }
+
+    public function testDashboardRegistersBindingWidgetAndUserMenu(): void
+    {
+        $user = $this->user();
+        $this->actingAs($user)->get('/user')->assertOk()
+            ->assertSee('id="wecom-binding-widget"', false)
+            ->assertSee('尚未绑定企业微信')
+            ->assertSee('企业微信绑定')
+            ->assertSee('/user/wecom', false);
+        app(Bindings::class)->bind($user, $this->member());
+        $this->get('/user')->assertOk()->assertSee('已绑定企业微信')->assertSee('张三')
+            ->assertSee('管理企业微信绑定');
+    }
+
+    public function testDashboardWidgetOnlyDisplaysCurrentUserBinding(): void
+    {
+        app(Bindings::class)->bind($this->user(), $this->member());
+        $this->actingAs($this->user())->get('/user')->assertOk()
+            ->assertSee('尚未绑定企业微信')->assertDontSee('张三');
+    }
+
+    public function testDashboardExplainsMissingApplicationConfiguration(): void
+    {
+        config(['wecom.secret' => '']);
+        $this->actingAs($this->user())->get('/user')->assertOk()
+            ->assertSee('管理员尚未完成企业微信配置');
+    }
+
+    public function testPluginManagementPublishesMetadataAndConfigEntry(): void
+    {
+        $this->actingAs($this->user(['permission' => User::ADMIN]));
+        $this->get('/admin/plugins/data')->assertOk()->assertJsonFragment([
+            'name' => 'wecom-login', 'title' => '企业微信登录与绑定',
+            'enabled' => true, 'config' => true, 'readme' => true,
+        ])->assertJsonFragment(['fa' => 'building', 'faType' => 'fas', 'bg' => 'success']);
+        $this->get('/admin/plugins/config/wecom-login')->assertOk()
+            ->assertSee('企业微信登录配置')->assertSee('CorpID');
+        $this->get('/admin/plugins/manage')->assertOk()->assertSee('企业微信登录与绑定');
+    }
+
+    public function testOnlyFullPluginViewNamespaceIsRegistered(): void
+    {
+        self::assertTrue(view()->exists('Blessing\\WeCom::account'));
+        self::assertTrue(view()->exists('Blessing\\WeCom::widgets.account'));
+        self::assertFalse(view()->exists('WeCom::account'));
     }
 }

@@ -11,7 +11,7 @@ final class Configuration
     public function render(Settings $settings)
     {
         $values = $settings->values();
-        return view('WeCom::config', [
+        return view('Blessing\\WeCom::config', [
             'corp_id' => $values['corp_id'], 'agent_id' => $values['agent_id'],
             'redirect_uri' => $values['redirect_uri'], 'secret_set' => $values['secret'] !== '',
         ]);
@@ -25,7 +25,7 @@ final class Configuration
             'redirect_uri' => 'required|string|max:2048',
         ]);
         if (!$settings->validPublicSettings($values)) {
-            return response()->view('WeCom::message', [
+            return response()->view('Blessing\\WeCom::message', [
                 'message' => 'CorpID / AgentID 或回调地址格式不正确。回调必须为 HTTPS，路径为 /auth/wecom/callback，不能带查询参数。',
             ], 422);
         }

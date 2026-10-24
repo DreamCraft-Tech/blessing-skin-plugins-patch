@@ -20,7 +20,7 @@ final class Controller extends \Illuminate\Routing\Controller
 
     private function failure(Failure $failure)
     {
-        return response()->view('WeCom::message', ['message' => $failure->getMessage()], $failure->status);
+        return response()->view('Blessing\\WeCom::message', ['message' => $failure->getMessage()], $failure->status);
     }
 
     public function login(Request $request)
@@ -82,7 +82,7 @@ final class Controller extends \Illuminate\Routing\Controller
 
     public function account(Request $request)
     {
-        return view('WeCom::account', [
+        return view('Blessing\\WeCom::account', [
             'binding' => $this->bindings->forUser((int) $request->user()->uid),
             'ready' => $this->settings->ready(),
         ]);

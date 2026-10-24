@@ -1,10 +1,20 @@
 {
   "name": "wecom-login",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "企业微信登录与绑定",
   "description": "企业内部自建应用扫码登录；已有皮肤站账号自助绑定与解绑，不自动注册。",
   "author": "Custom plugin",
   "namespace": "Blessing\\WeCom",
-  "require": {"blessing-skin-server": "^6.0.2", "php": "~8.5.0"},
-  "enchants": {"config": "Configuration", "icon": {"fa": "building", "bg": "success"}}
+  "require": {
+    "blessing-skin-server": "^6.0.2",
+    "php": "~8.5.0"
+  },
+  "enchants": {
+    "config": "Configuration",
+    "icon": {
+      "fa": "building",
+      "bg": "success"
+    }
+  },
+  "license": "MIT"
 }
