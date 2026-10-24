@@ -19,6 +19,7 @@ final class Viewed
 
     public function reveal(Request $request)
     {
+        abort_unless(app(Settings::class)->values()['luck_enabled'], 404);
         $uid = (int) $request->user()->uid;
         $result = app(Luck::class)->today($uid);
         DB::table(Installer::TABLE)->upsert([['user_id' => $uid, 'viewed_date' => $result['date']]], ['user_id'], ['viewed_date']);

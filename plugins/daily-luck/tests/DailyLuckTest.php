@@ -79,6 +79,71 @@ final class DailyLuckTest extends Tests\TestCase
         $this->assertDatabaseCount(Blessing\DailyLuck\Installer::TABLE, 0);
     }
 
+    public function testFeatureSwitchesIndependentlyControlWidgetsAndRevealEndpoint(): void
+    {
+        $user = User::factory()->superAdmin()->create();
+        $this->actingAs($user);
+        $form = ['title' => '组合卡片', 'position' => 'right', 'display' => 'reveal', 'texts' => ''];
+        foreach ([[1, 0], [0, 1], [0, 0], [1, 1]] as [$luck,$prank]) {
+            $this->post('/admin/daily-luck/config', $form + ['luck_enabled' => $luck, 'prank_enabled' => $prank])->assertRedirect();
+            $response = $this->get('/user')->assertOk();
+            if ($luck) {
+                $response->assertSee('查看今日人品');
+            } else {
+                $response->assertDontSee('id="daily-luck-result"', false);
+                $this->post('/user/daily-luck/reveal')->assertNotFound();
+            }
+            if ($prank) {
+                $response->assertSee('id="daily-prank-trigger"', false);
+            } else {
+                $response->assertDontSee('id="daily-prank-trigger"', false);
+            }
+            if (!$luck && !$prank) {
+                $response->assertDontSee('id="daily-luck-card"', false);
+            }
+        }
+    }
+
+    public function testCustomTextLinesAreNormalizedStableEscapedAndDoNotChangeScore(): void
+    {
+        $user = User::factory()->superAdmin()->create();
+        $this->actingAs($user);
+        $before = app(Luck::class)->today($user->uid);
+        $this->post('/admin/daily-luck/config', ['title' => '组合', 'position' => 'right', 'display' => 'visible', 'texts' => " 第一条 \r\n\n第二条\r第三条 "])->assertRedirect();
+        self::assertSame(['第一条', '第二条', '第三条'], app(Settings::class)->texts());
+        $one = app(Luck::class)->today($user->uid);
+        self::assertContains($one['text'], app(Settings::class)->texts());
+        self::assertSame($before['score'], $one['score']);
+        self::assertSame($one, app(Luck::class)->today($user->uid));
+        $form = ['title' => '组合', 'position' => 'right', 'display' => 'visible', 'texts' => '<script>customLuck()</script>'];
+        $this->post('/admin/daily-luck/config', $form)->assertRedirect();
+        $this->get('/user')->assertOk()->assertSee('&lt;script&gt;customLuck()&lt;/script&gt;', false)->assertDontSee('<script>customLuck()</script>', false);
+        $this->post('/admin/daily-luck/config', array_replace($form, ['texts' => '']))->assertRedirect();
+        self::assertSame($before['text'], app(Luck::class)->today($user->uid)['text']);
+    }
+
+    public function testCustomTextAndEffectValidationKeepsSavedSettings(): void
+    {
+        $this->actingAs(User::factory()->superAdmin()->create());
+        $before = app(Settings::class)->values();
+        $form = ['title' => '组合', 'position' => 'right', 'display' => 'reveal'];
+        foreach ([['texts' => str_repeat('字', 201)], ['texts' => implode("\n", array_fill(0, 101, '短评'))], ['effect' => 'evil'], ['motion' => 'fast'], ['duration' => 999], ['luck_enabled' => 2], ['prank_enabled' => 'yes']] as $invalid) {
+            $this->postJson('/admin/daily-luck/config', $form + $invalid)->assertStatus(422);
+        }
+        self::assertSame($before, app(Settings::class)->values());
+    }
+
+    public function testLegacySettingsAndOpenedDateSurviveCombinedUpgrade(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user)->post('/user/daily-luck/reveal')->assertRedirect();
+        option(['daily_luck_settings' => json_encode(['title' => '原来的标题', 'position' => 'left', 'display' => 'reveal'])]);
+        $s = app(Settings::class)->values();
+        self::assertTrue($s['luck_enabled']);
+        self::assertTrue($s['prank_enabled']);
+        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.1.0', false);
+    }
+
     protected function tearDown(): void
     {
         CarbonImmutable::setTestNow();
@@ -132,7 +197,7 @@ final class DailyLuckTest extends Tests\TestCase
         $user = User::factory()->create();
         $score = $user->score;
         CarbonImmutable::setTestNow(CarbonImmutable::parse('2026-10-24 12:00:00', 'Asia/Shanghai'));
-        $this->actingAs($user)->get('/user')->assertOk()->assertSee('每日人品')->assertSee('2026-10-24')
+        $this->actingAs($user)->get('/user')->assertOk()->assertSee('今日人品')->assertSee('2026-10-24')
             ->assertSee('查看今日人品')->assertSee('id="daily-luck-result"', false)->assertSee('id="usage-box"', false)
             ->assertHeader('Cache-Control', 'no-store, private');
         self::assertSame($score, $user->fresh()->score);
@@ -160,7 +225,7 @@ final class DailyLuckTest extends Tests\TestCase
         $user = User::factory()->superAdmin()->create();
         $this->actingAs($user);
         $this->post('/admin/daily-luck/config', ['title' => '<b>我的今日人品</b>', 'position' => 'left', 'display' => 'visible'])->assertRedirect('/admin/plugins/config/daily-luck')->assertSessionHas('daily_luck.notice');
-        $this->get('/admin/plugins/config/daily-luck')->assertOk()->assertSee('仪表板卡片')->assertSee('每日人品配置已保存。');
+        $this->get('/admin/plugins/config/daily-luck')->assertOk()->assertSee('仪表板卡片')->assertSee('今日人品与千万别点配置已保存。');
         self::assertSame('visible', app(Settings::class)->values()['display']);
         $this->get('/user')->assertOk()->assertSee('&lt;b&gt;我的今日人品&lt;/b&gt;', false)->assertDontSee('查看今日人品')->assertDontSee('<b>我的今日人品</b>', false);
     }

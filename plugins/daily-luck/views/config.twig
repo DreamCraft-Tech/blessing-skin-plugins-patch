@@ -1,15 +1,24 @@
 {% extends 'admin.base' %}
-{% block title %}每日人品{% endblock %}
+{% block title %}今日人品与千万别点{% endblock %}
 {% block content %}
 {% if session('daily_luck.notice') %}<div class="alert alert-success" role="status">{{ session('daily_luck.notice') }}</div>{% endif %}
 {% if errors.any() %}<div class="alert alert-danger" role="alert">{{ errors.first() }}</div>{% endif %}
 <form method="post" action="{{ url('admin/daily-luck/config') }}">{{ csrf_field() }}
 <fieldset {{ not can_save ? 'disabled' : '' }}>
 <div class="row"><div class="col-md-6"><div class="card card-outline card-primary"><div class="card-header"><h2 class="card-title">仪表板卡片</h2></div><div class="card-body">
+{% for key,label in {'luck_enabled':'今日人品','prank_enabled':'千万别点'} %}
+<div class="form-group"><input type="hidden" name="{{ key }}" value="0"><div class="custom-control custom-switch"><input id="{{ key }}" name="{{ key }}" value="1" type="checkbox" role="switch" class="custom-control-input" {{ old(key, attribute(settings,key)) ? 'checked' : '' }}><label for="{{ key }}" class="custom-control-label">{{ label }}</label></div></div>
+{% endfor %}
 <div class="form-group"><label for="luck-title">卡片标题</label><input class="form-control" id="luck-title" name="title" value="{{ old('title', settings.title) }}" maxlength="40" required></div>
 <div class="form-group"><label for="luck-position">显示位置</label><select class="form-control" id="luck-position" name="position">{% for value,label in {'left':'左栏','right':'右栏'} %}<option value="{{ value }}" {{ old('position', settings.position) == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
 <div class="form-group mb-0"><label for="luck-display">结果展示</label><select class="form-control" id="luck-display" name="display">{% for value,label in {'reveal':'点击查看','visible':'直接展示'} %}<option value="{{ value }}" {{ old('display', settings.display) == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
-</div><div class="card-footer"><button class="btn btn-primary" type="submit">保存配置</button></div></div></div>
-<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">每日结果</h2></div><div class="card-body"><p>每位用户每天获得一个 0–100 分的人品结果，搭配 Minecraft 风格短评。</p><p>同一账号当天查看、刷新页面或更换设备，结果保持一致。</p><p class="mb-0">按站点时区 <strong>{{ timezone }}</strong> 每日 00:00 更新，新结果在下次打开或刷新仪表板时展示。</p></div></div></div></div>
-</fieldset></form>
+</div></div></div>
+<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">今日人品短评</h2></div><div class="card-body"><div class="form-group"><label for="luck-texts">自定义文本（一行一条）</label><textarea class="form-control" id="luck-texts" name="texts" rows="7" maxlength="32000" placeholder="今天适合探索新的世界。&#10;和朋友一起，平凡的一天也很精彩。">{{ old('texts', settings.texts) }}</textarea><small class="form-text text-muted">每天为每位用户固定选取一条。留空使用默认短评，最多 100 条，每条最多 200 字。</small></div><p>同一账号当天查看、刷新页面或更换设备，结果保持一致。</p><p class="mb-0">按站点时区 <strong>{{ timezone }}</strong> 每日 00:00 更新，新结果在下次打开或刷新仪表板时展示。</p></div></div></div></div>
+<div class="row"><div class="col-md-6"><div class="card card-outline card-warning"><div class="card-header"><h2 class="card-title">千万别点效果</h2></div><div class="card-body">
+{% for key,field in {'effect':{'label':'配色效果','options':{'mixed':'随机彩蛋','rainbow':'缤纷配色','paper':'奶油纸张'}},'motion':{'label':'动画强度','options':{'gentle':'轻柔（配色变化）','playful':'活泼（配色与轻微晃动）'}},'duration':{'label':'效果时长','options':{'15':'15 秒','30':'30 秒','60':'60 秒'}}} %}
+<div class="form-group"><label for="prank-{{ key }}">{{ field.label }}</label><select class="form-control" id="prank-{{ key }}" name="{{ key }}">{% for value,label in field.options %}<option value="{{ value }}" {{ old(key, attribute(settings,key)) == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
+{% endfor %}
+<p class="text-muted mb-0">连续点击触发趣味提示与配色彩蛋。点击“恢复原样”或按 Esc 即可恢复，倒计时结束也会自动恢复。</p>
+</div></div></div></div>
+<button class="btn btn-primary mb-3" type="submit">保存配置</button></fieldset></form>
 {% endblock %}

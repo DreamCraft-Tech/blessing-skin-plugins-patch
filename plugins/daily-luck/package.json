@@ -1,8 +1,8 @@
 {
   "name": "daily-luck",
-  "version": "1.0.1",
-  "title": "每日人品",
-  "description": "在用户仪表板展示每天固定的人品分数与 Minecraft 风格短评。",
+  "version": "1.1.0",
+  "title": "今日人品与千万别点",
+  "description": "仪表板每日人品与互动彩蛋，支持独立开关、自定义短评和趣味配色。",
   "author": "Custom plugin",
   "license": "MIT",
   "namespace": "Blessing\\DailyLuck",

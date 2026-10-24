@@ -1,0 +1,18 @@
+.daily-prank-rainbow .card {
+  outline: 2px solid #9187df;
+  box-shadow: 0 2px 12px rgba(122, 109, 204, .22);
+}
+.daily-prank-rainbow .card > .card-header {
+  background: linear-gradient(110deg, #ffe9d6, #e4f4e9, #e4edff, #f6e5f5);
+  color: #343a40;
+}
+.daily-prank-paper .card {
+  background-color: #fffaf0 !important;
+  color: #343a40;
+  outline: 1px solid #d5ba8b;
+}
+.daily-prank-paper .card > .card-header { background-color: #f5e9d4; color: #343a40; }
+.daily-prank-paper .card .text-muted { color: #62676c !important; }
+.daily-prank-playful #daily-luck-card { animation: daily-prank-sway 2s ease-in-out infinite; }
+@keyframes daily-prank-sway { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(.25deg); } 70% { transform: rotate(-.25deg); } }
+@media (prefers-reduced-motion: reduce) { .daily-prank-playful #daily-luck-card { animation: none; } }

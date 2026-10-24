@@ -13,7 +13,11 @@ return function (Blessing\Filter $filter, Illuminate\Contracts\Events\Dispatcher
     Installer::install();
     App\Models\User::deleted(fn ($user) => Illuminate\Support\Facades\DB::table(Installer::TABLE)->where('user_id', $user->uid)->delete());
     $filter->add('grid:user.index', function (array $grid): array {
-        $column = app(Settings::class)->values()['position'] === 'left' ? 0 : 1;
+        $settings = app(Settings::class)->values();
+        if (!$settings['luck_enabled'] && !$settings['prank_enabled']) {
+            return $grid;
+        }
+        $column = $settings['position'] === 'left' ? 0 : 1;
         $grid['widgets'][0][$column] ??= [];
         if (!in_array('Blessing\\DailyLuck::card', $grid['widgets'][0][$column], true)) {
             $grid['widgets'][0][$column][] = 'Blessing\\DailyLuck::card';
@@ -23,13 +27,16 @@ return function (Blessing\Filter $filter, Illuminate\Contracts\Events\Dispatcher
     });
     View::composer(['user.index', 'Blessing\\DailyLuck::card'], function ($view): void {
         $user = auth()->user();
-        $view->with(['daily_luck' => $user ? app(Viewed::class)->result((int) $user->uid) : null, 'luck_settings' => app(Settings::class)->values()]);
+        $settings = app(Settings::class)->values();
+        $view->with(['luck_user' => $user !== null, 'daily_luck' => $user && $settings['luck_enabled'] ? app(Viewed::class)->result((int) $user->uid) : null, 'luck_settings' => $settings]);
     });
     $events->listen(RequestHandled::class, function (RequestHandled $event): void {
         if ($event->request->is('user', 'user/daily-luck/*')) {
             $event->response->headers->set('Cache-Control', 'no-store, private');
         }
     });
+    Hook::addStyleFileToPage(plugin('daily-luck')->assets('prank.css'), ['user']);
+    Hook::addScriptFileToPage(plugin('daily-luck')->assets('prank.js'), ['user']);
     Hook::addRoute(function (): void {
         Route::post('user/daily-luck/reveal', [Viewed::class, 'reveal'])
             ->middleware(['web', 'authorize', 'throttle:10,1,daily-luck.reveal']);

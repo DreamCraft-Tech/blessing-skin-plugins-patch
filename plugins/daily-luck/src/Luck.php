@@ -15,7 +15,13 @@ final class Luck
         $hash = hash_hmac('sha256', 'daily-luck:v1|'.$date.'|'.$uid, (string) config('app.key'));
         $score = (int) (hexdec(substr($hash, 0, 8)) % 101);
 
-        return ['date' => $date, 'timezone' => $timezone, 'score' => $score] + $this->describe($score);
+        $description = $this->describe($score);
+        $texts = app(Settings::class)->texts();
+        if ($texts) {
+            $description['text'] = $texts[(int) (hexdec(substr($hash, 8, 8)) % count($texts))];
+        }
+
+        return ['date' => $date, 'timezone' => $timezone, 'score' => $score] + $description;
     }
 
     public function describe(int $score): array
