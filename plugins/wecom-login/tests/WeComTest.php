@@ -101,7 +101,7 @@ final class WeComTest extends Tests\TestCase
         \Illuminate\Support\Facades\Log::spy();
         $this->mockMember([], ['errcode' => 60111, 'errmsg' => 'sensitive-code-token-url']);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         \Illuminate\Support\Facades\Log::shouldHaveReceived('warning')->once()->with(
             'wecom-login: api_error', ['endpoint' => 'user/get', 'http_status' => 200, 'errcode' => 60111]
         );
@@ -112,7 +112,7 @@ final class WeComTest extends Tests\TestCase
         \Illuminate\Support\Facades\Log::spy();
         Http::fake(fn () => throw new \RuntimeException('https://example.invalid/?corpsecret=never-log-this'));
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertStatus(502);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         \Illuminate\Support\Facades\Log::shouldHaveReceived('warning')->once()->with(
             'wecom-login: transport_or_invalid_response', ['endpoint' => 'gettoken', 'http_status' => null, 'errcode' => null]
         );
@@ -177,8 +177,8 @@ final class WeComTest extends Tests\TestCase
         Http::assertSent(fn ($request) => $request->method() === 'POST'
             && str_contains($request->url(), '/message/send?access_token=notify-token-secret')
             && $request['touser'] === 'zhangsan' && $request['agentid'] === 1000001
-            && $request['msgtype'] === 'text' && str_contains($request['text']['content'], 'UID '.$user->uid)
-            && !str_contains($request['text']['content'], 'wwTestCorp'));
+            && $request['msgtype'] === 'textcard' && str_contains($request['textcard']['description'], 'UID '.$user->uid)
+            && !str_contains($request['textcard']['description'], 'wwTestCorp'));
     }
 
     public function testPasswordLoginWithRememberCheckedStillNotifies(): void
@@ -284,7 +284,73 @@ final class WeComTest extends Tests\TestCase
         $this->assertAuthenticatedAs($user);
         $messages = Http::recorded(fn ($request) => str_contains($request->url(), '/message/send'));
         self::assertCount(1, $messages);
-        self::assertStringContainsString('企业微信扫码', $messages->first()[0]['text']['content']);
+        self::assertStringContainsString('企业微信扫码', $messages->first()[0]['textcard']['description']);
+    }
+
+    public function testUnbindErrorStaysInsideAccountPageAndPasswordIsNotFlashed(): void
+    {
+        $user = $this->user();$user->changePassword('Known-password-123');
+        $this->notificationBinding($user);
+        $response = $this->actingAs($user)->post('/user/wecom/unbind', ['password' => 'wrong-password-never-flash']);
+        $response->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
+        self::assertStringNotContainsString('wrong-password-never-flash', json_encode(session()->all()));
+        $this->get('/user/wecom')->assertOk()->assertSee('alert alert-danger', false)
+            ->assertSee('皮肤站密码验证失败')->assertSee('保存通知设置')->assertSee('验证密码并解绑')
+            ->assertDontSee('wrong-password-never-flash')->assertDontSee('企业微信授权提示');
+        $this->assertDatabaseCount(Installer::BINDINGS, 1);
+    }
+
+    public function testEmptyUnbindPasswordIsShownOnBindingPage(): void
+    {
+        $user = $this->user();$this->notificationBinding($user);
+        $this->actingAs($user)->post('/user/wecom/unbind', [])->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
+        $this->get('/user/wecom')->assertOk()->assertSee('请输入皮肤站密码')->assertSee('接收企业微信登录通知');
+        $this->assertDatabaseCount(Installer::BINDINGS, 1);
+    }
+
+    public function testGuestAuthorizationErrorAppearsInsideSiteLoginPage(): void
+    {
+        config(['wecom.secret' => '']);
+        $this->get('/auth/wecom/login')->assertRedirect('/auth/login')->assertSessionHas('wecom_error');
+        $this->get('/auth/login')->assertOk()->assertSee('企业微信登录尚未配置完成')
+            ->assertSee('login-card-body', false)->assertDontSee('企业微信授权提示');
+    }
+
+    public function testConfigErrorStaysInAdminPageAndPreservesOnlyPublicInput(): void
+    {
+        $this->actingAs($this->user(['permission' => User::ADMIN]))->post('/admin/wecom/config', [
+            'corp_id' => 'wwRetainedCorp', 'agent_id' => '1000012',
+            'redirect_uri' => 'http://invalid.example.test/auth/wecom/callback',
+            'secret' => 'never-flash-this-secret', 'login_notifications_enabled' => 1,
+        ])->assertRedirect('/admin/plugins/config/wecom-login')->assertSessionHas('wecom_error');
+        self::assertStringNotContainsString('never-flash-this-secret', json_encode(session()->all()));
+        $this->get('/admin/plugins/config/wecom-login')->assertOk()->assertSee('alert alert-danger', false)
+            ->assertSee('wwRetainedCorp')->assertSee('1000012')->assertSee('保存配置')->assertDontSee('never-flash-this-secret');
+        self::assertSame('wwTestCorp', app(Settings::class)->values()['corp_id']);
+    }
+
+    public function testLoginCardEscapesMarkupAndUsesConfiguredAccountUrl(): void
+    {
+        $this->notificationApi();
+        app(WeComClient::class)->sendLoginMessage('zhangsan', "登录成功\n<script>alert(1)</script>&安全", app(Settings::class)->requireValid());
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/message/send')
+            && $request['msgtype'] === 'textcard' && !isset($request['text'])
+            && $request['textcard']['url'] === 'https://skin.example.test/user/wecom'
+            && $request['textcard']['btntxt'] === '查看账号'
+            && str_contains($request['textcard']['description'], '<br>&lt;script&gt;')
+            && !str_contains($request['textcard']['description'], '<script>'));
+    }
+
+    public function testLoginCardTruncatesWithoutSplittingUnicodeOrEntities(): void
+    {
+        $this->notificationApi();
+        app(WeComClient::class)->sendLoginMessage('zhangsan', str_repeat('中&', 500), app(Settings::class)->requireValid());
+        $messages = Http::recorded(fn ($request) => str_contains($request->url(), '/message/send'));
+        $description = $messages->first()[0]['textcard']['description'];
+        self::assertLessThanOrEqual(512, strlen($description));
+        self::assertTrue(mb_check_encoding($description, 'UTF-8'));
+        self::assertStringEndsWith('…', $description);
+        self::assertDoesNotMatchRegularExpression('/&[^;]*…$/u', $description);
     }
 
     private function user(array $values = []): User
@@ -356,7 +422,7 @@ final class WeComTest extends Tests\TestCase
     {
         config(['wecom.secret' => '']);
         $this->get('/auth/login')->assertOk()->assertDontSee('企业微信扫码登录');
-        $this->get('/auth/wecom/login')->assertStatus(503);
+        $this->get('/auth/wecom/login')->assertRedirect('/auth/login')->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -403,7 +469,7 @@ final class WeComTest extends Tests\TestCase
         $this->user(['email' => 'zhangsan@example.test']);
         $this->mockMember([], ['email' => 'zhangsan@example.test']);
         $state = $this->start();
-        $this->oauthCallback($state)->assertForbidden()->assertSee('尚未绑定');
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error', fn ($message) => str_contains($message, '尚未绑定'));
         $this->assertGuest();
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount(Installer::BINDINGS, 0);
@@ -411,14 +477,14 @@ final class WeComTest extends Tests\TestCase
 
     public function testInvalidStateStopsBeforeApi(): void
     {
-        $this->oauthCallback(str_repeat('a', 64))->assertStatus(400);
+        $this->oauthCallback(str_repeat('a', 64))->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
     public function testMissingOrArrayStateRejected(): void
     {
-        $this->get('/auth/wecom/callback?code=x')->assertStatus(400);
-        $this->get('/auth/wecom/callback?state[]=x&code=x')->assertStatus(400);
+        $this->get('/auth/wecom/callback?code=x')->assertRedirect()->assertSessionHas('wecom_error');
+        $this->get('/auth/wecom/callback?state[]=x&code=x')->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -426,7 +492,7 @@ final class WeComTest extends Tests\TestCase
     {
         $state = $this->start();
         $this->withSession(['wecom' => ['session_key' => str_repeat('b', 64)]]);
-        $this->oauthCallback($state)->assertStatus(400);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::STATES, 1);
         Http::assertNothingSent();
     }
@@ -435,7 +501,7 @@ final class WeComTest extends Tests\TestCase
     {
         $state = $this->start();
         DB::table(Installer::STATES)->update(['expires_at' => time() - 1]);
-        $this->oauthCallback($state)->assertStatus(400);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::STATES, 0);
         Http::assertNothingSent();
     }
@@ -445,7 +511,7 @@ final class WeComTest extends Tests\TestCase
         $this->mockMember();
         $state = $this->start($this->user());
         $this->oauthCallback($state)->assertRedirect('/user/wecom');
-        $this->oauthCallback($state)->assertStatus(400);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertSentCount(3);
     }
 
@@ -454,7 +520,7 @@ final class WeComTest extends Tests\TestCase
         $first = $this->start();
         $second = $this->start();
         self::assertNotSame($first, $second);
-        $this->oauthCallback($first)->assertStatus(400);
+        $this->oauthCallback($first)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -462,7 +528,7 @@ final class WeComTest extends Tests\TestCase
     {
         $state = $this->start();
         config(['wecom.secret' => 'changed-secret']);
-        $this->oauthCallback($state)->assertStatus(400);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -470,7 +536,7 @@ final class WeComTest extends Tests\TestCase
     {
         $state = $this->start($this->user());
         $this->actingAs($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -478,15 +544,15 @@ final class WeComTest extends Tests\TestCase
     {
         $state = $this->start();
         $this->actingAs($this->user());
-        $this->oauthCallback($state)->assertStatus(409);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
     public function testMissingCodeConsumesState(): void
     {
         $state = $this->start();
-        $this->get('/auth/wecom/callback?state='.$state)->assertStatus(400);
-        $this->oauthCallback($state)->assertStatus(400);
+        $this->get('/auth/wecom/callback?state='.$state)->assertRedirect()->assertSessionHas('wecom_error');
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -494,7 +560,7 @@ final class WeComTest extends Tests\TestCase
     {
         $this->mockMember(['userid' => null, 'openid' => 'external-contact']);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden()->assertSee('内部成员');
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error', fn ($message) => str_contains($message, '内部成员'));
         $this->assertDatabaseCount(Installer::BINDINGS, 0);
         Http::assertSentCount(2);
     }
@@ -503,7 +569,7 @@ final class WeComTest extends Tests\TestCase
     {
         $this->mockMember([], ['enable' => 0]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::BINDINGS, 0);
     }
 
@@ -511,21 +577,21 @@ final class WeComTest extends Tests\TestCase
     {
         $this->mockMember([], ['status' => 4]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
     }
 
     public function testMemberOutsideAppScopeRejected(): void
     {
         $this->mockMember([], ['errcode' => 60111]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
     }
 
     public function testMismatchedMemberIdentityRejected(): void
     {
         $this->mockMember([], ['userid' => 'lisi']);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
     }
 
     public function testIdentityCannotBeBoundToTwoUsers(): void
@@ -534,7 +600,7 @@ final class WeComTest extends Tests\TestCase
         app(Bindings::class)->bind($owner, $this->member());
         $this->mockMember();
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertStatus(409);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::BINDINGS, 1);
         $this->assertDatabaseHas(Installer::BINDINGS, ['user_id' => $owner->uid]);
     }
@@ -543,7 +609,7 @@ final class WeComTest extends Tests\TestCase
     {
         $user = $this->user();
         app(Bindings::class)->bind($user, $this->member());
-        $this->actingAs($user)->post('/user/wecom/bind')->assertStatus(409);
+        $this->actingAs($user)->post('/user/wecom/bind')->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
         Http::assertNothingSent();
     }
 
@@ -571,7 +637,7 @@ final class WeComTest extends Tests\TestCase
         $user->changePassword('Known-password-123');
         app(Bindings::class)->bind($user, $this->member());
         $this->actingAs($user)->post('/user/wecom/unbind', ['password' => 'wrong'])
-            ->assertForbidden();
+            ->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::BINDINGS, 1);
         $this->post('/user/wecom/unbind', ['password' => 'Known-password-123'])
             ->assertRedirect('/user/wecom');
@@ -584,7 +650,7 @@ final class WeComTest extends Tests\TestCase
         $user = $this->user(['password' => '']);
         app(Bindings::class)->bind($user, $this->member());
         $this->actingAs($user)->post('/user/wecom/unbind', ['password' => 'anything'])
-            ->assertForbidden();
+            ->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
         $this->assertDatabaseCount(Installer::BINDINGS, 1);
     }
 
@@ -596,7 +662,7 @@ final class WeComTest extends Tests\TestCase
         $user->save();
         $this->mockMember();
         $state = $this->start();
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertGuest();
     }
 
@@ -655,7 +721,7 @@ final class WeComTest extends Tests\TestCase
         $this->actingAs($this->user(['permission' => User::ADMIN]))->post('/admin/wecom/config', [
             'corp_id' => 'wwOtherCorp', 'agent_id' => '234',
             'redirect_uri' => 'http://skin.example.test/auth/wecom/callback',
-        ])->assertStatus(422);
+        ])->assertRedirect('/admin/plugins/config/wecom-login')->assertSessionHas('wecom_error');
     }
 
     public function testCallbackConfigurationCsrfIsEnforced(): void
@@ -710,7 +776,7 @@ final class WeComTest extends Tests\TestCase
             throw new RuntimeException('private-test-secret-never-render token=test-access-token');
         }]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertStatus(502)
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error')
             ->assertDontSee('private-test-secret-never-render')->assertDontSee('test-access-token');
     }
 
@@ -718,7 +784,7 @@ final class WeComTest extends Tests\TestCase
     {
         Http::fake(['*' => Http::response('', 302, ['Location' => 'https://evil.example.test/'])]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertStatus(502);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         Http::assertSentCount(1);
     }
 
@@ -726,7 +792,7 @@ final class WeComTest extends Tests\TestCase
     {
         Http::fake(['*' => Http::response('not-json', 200)]);
         $state = $this->start($this->user());
-        $this->oauthCallback($state)->assertStatus(502);
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
     }
 
     public function testUnbindingRevokesPendingLogin(): void
@@ -736,7 +802,7 @@ final class WeComTest extends Tests\TestCase
         $this->mockMember();
         $state = $this->start();
         DB::table(Installer::BINDINGS)->where('user_id', $user->uid)->delete();
-        $this->oauthCallback($state)->assertForbidden();
+        $this->oauthCallback($state)->assertRedirect()->assertSessionHas('wecom_error');
         $this->assertGuest();
     }
 
@@ -744,7 +810,7 @@ final class WeComTest extends Tests\TestCase
     {
         $this->actingAs($this->user());
         for ($i = 0; $i < 5; $i++) {
-            $this->post('/user/wecom/unbind', ['password' => 'wrong'])->assertForbidden();
+            $this->post('/user/wecom/unbind', ['password' => 'wrong'])->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
         }
         $this->post('/user/wecom/unbind', ['password' => 'wrong'])->assertStatus(429);
     }
@@ -881,7 +947,7 @@ final class WeComTest extends Tests\TestCase
     public function testInvalidSettingsDoNotFlashSecretIntoSession(): void
     {
         $this->actingAs($this->user(['permission' => User::ADMIN]))
-            ->post('/admin/wecom/config', ['secret' => 'must-not-be-flashed'])->assertStatus(422);
+            ->post('/admin/wecom/config', ['secret' => 'must-not-be-flashed'])->assertRedirect('/admin/plugins/config/wecom-login')->assertSessionHas('wecom_error');
         self::assertStringNotContainsString('must-not-be-flashed', json_encode(session()->all()));
     }
 
@@ -900,7 +966,7 @@ final class WeComTest extends Tests\TestCase
             'corp_id' => 'wwTestCorp', 'agent_id' => '1000001',
             'redirect_uri' => 'https://skin.example.test/auth/wecom/callback',
             'secret' => 'replacement-secret', 'use_env_secret' => 1,
-        ])->assertStatus(422);
+        ])->assertRedirect('/admin/plugins/config/wecom-login')->assertSessionHas('wecom_error');
         self::assertSame('', option('wecom_secret_encrypted', ''));
     }
 }

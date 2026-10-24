@@ -2,6 +2,7 @@
 {% block title %}企业微信登录配置{% endblock %}
 {% block content %}
 <div class="row"><div class="col-lg-8">
+  {% if session('wecom_error') %}<div class="alert alert-danger" role="alert">{{ session('wecom_error') }}</div>{% endif %}
   {% if session('wecom_notice') %}<div class="alert alert-success">{{ session('wecom_notice') }}</div>{% endif %}
   <div class="card card-outline card-success">
     <div class="card-header"><h2 class="card-title">企业内部自建应用</h2></div>

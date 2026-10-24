@@ -106,13 +106,30 @@ final class WeComClient
         throw new Failure('企业微信授权失败，请重新扫码。', 403);
     }
 
+    private function cardDescription(string $content): string
+    {
+        $description = '';
+        foreach (preg_split('//u', $content, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $character) {
+            $escaped = $character === "\n" ? '<br>' : htmlspecialchars($character, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            // Leave room for an ellipsis, without splitting UTF-8, tags or HTML entities.
+            if (strlen($description) + strlen($escaped) > 509) {return $description.'…';}
+            $description .= $escaped;
+        }
+        return $description;
+    }
+
     public function sendLoginMessage(string $memberId, string $content, array $settings): void
     {
         if ($memberId === '' || strcasecmp($memberId, '@all') === 0 || preg_match('/[|\r\n]/', $memberId)) {
             throw new Failure('登录通知接收者无效。', 422);
         }
-        $payload = ['touser' => $memberId, 'msgtype' => 'text', 'agentid' => (int) $settings['agent_id'],
-            'text' => ['content' => $content], 'safe' => 0];
+        if (!app(Settings::class)->validPublicSettings($settings)) {
+            throw new Failure('登录通知卡片链接配置无效。', 422);
+        }
+        $accountUrl = substr($settings['redirect_uri'], 0, -strlen('/auth/wecom/callback')).'/user/wecom';
+        $payload = ['touser' => $memberId, 'msgtype' => 'textcard', 'agentid' => (int) $settings['agent_id'],
+            'textcard' => ['title' => '皮肤站登录通知', 'description' => $this->cardDescription($content),
+                'url' => $accountUrl, 'btntxt' => '查看账号'], 'safe' => 0];
         for ($attempt = 0; $attempt < 2; $attempt++) {
             $body = $this->request('message/send', ['access_token' => $this->token($settings)], $payload);
             if (in_array((int) $body['errcode'], [40001, 40014, 42001], true) && $attempt === 0) {

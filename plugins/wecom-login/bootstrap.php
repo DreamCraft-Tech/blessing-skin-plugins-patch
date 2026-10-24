@@ -42,6 +42,9 @@ return function (Filter $filter, Dispatcher $events): void {
         ]);
     });
     $filter->add('auth_page_rows:login', function (array $rows): array {
+        if (session('wecom_error')) {
+            array_unshift($rows, 'Blessing\\WeCom::auth-error');
+        }
         if (app(Settings::class)->ready()) {
             $rows[] = 'Blessing\\WeCom::login-row';
         }

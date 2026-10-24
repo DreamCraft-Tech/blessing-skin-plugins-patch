@@ -7,6 +7,7 @@ namespace Blessing\WeCom;
 use App\Events\UserLoggedIn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 final class Controller extends \Illuminate\Routing\Controller
 {
@@ -20,7 +21,8 @@ final class Controller extends \Illuminate\Routing\Controller
 
     private function failure(Failure $failure)
     {
-        return response()->view('Blessing\\WeCom::message', ['message' => $failure->getMessage()], $failure->status);
+        return redirect(request()->user() ? '/user/wecom' : '/auth/login')
+            ->with('wecom_error', $failure->getMessage());
     }
 
     public function login(Request $request)
@@ -91,7 +93,9 @@ final class Controller extends \Illuminate\Routing\Controller
 
     public function notifications(Request $request)
     {
-        $data = $request->validate(['notify_login' => 'required|boolean']);
+        $validator = Validator::make($request->only('notify_login'), ['notify_login' => 'required|boolean']);
+        if ($validator->fails()) {return $this->failure(new Failure('通知设置格式不正确，请重新选择后保存。', 422));}
+        $data = $validator->validated();
         if (!$this->bindings->forUser((int) $request->user()->uid)) {
             return $this->failure(new Failure('请先绑定企业微信。', 409));
         }
@@ -102,7 +106,9 @@ final class Controller extends \Illuminate\Routing\Controller
 
     public function unbind(Request $request)
     {
-        $data = $request->validate(['password' => 'required|string|max:1024']);
+        $validator = Validator::make($request->only('password'), ['password' => 'required|string|max:1024']);
+        if ($validator->fails()) {return $this->failure(new Failure('请输入皮肤站密码，长度不能超过 1024 个字符。', 422));}
+        $data = $validator->validated();
         try {
             $this->bindings->unbind($request->user(), $data['password']);
             $this->states->clear($request);

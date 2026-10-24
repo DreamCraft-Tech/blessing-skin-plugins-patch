@@ -14,11 +14,19 @@ final class Configuration
     {
         $values = $settings->values();
         return view('Blessing\\WeCom::config', [
-            'corp_id' => $values['corp_id'], 'agent_id' => $values['agent_id'],
-            'redirect_uri' => $values['redirect_uri'], 'secret_set' => $values['secret'] !== '',
+            'corp_id' => request()->old('corp_id', $values['corp_id']), 'agent_id' => request()->old('agent_id', $values['agent_id']),
+            'redirect_uri' => request()->old('redirect_uri', $values['redirect_uri']), 'secret_set' => $values['secret'] !== '',
             'secret_source' => $settings->secretSource(),
-            'login_notifications_enabled' => $settings->notificationsEnabled(),
+            'login_notifications_enabled' => (bool) request()->old('login_notifications_enabled', $settings->notificationsEnabled()),
         ]);
+    }
+
+    private function failure(Request $request, string $message)
+    {
+        $input = $request->only(['corp_id', 'agent_id', 'redirect_uri', 'login_notifications_enabled']);
+        $input = array_filter($input, static fn ($value) => is_string($value) || is_bool($value) || is_int($value));
+        $input['login_notifications_enabled'] = $request->boolean('login_notifications_enabled');
+        return redirect('/admin/plugins/config/wecom-login')->with('wecom_error', $message)->withInput($input);
     }
 
     public function save(Request $request, Settings $settings)
@@ -33,22 +41,16 @@ final class Configuration
             'login_notifications_enabled' => 'sometimes|boolean',
         ]);
         if ($validator->fails()) {
-            return response()->view('Blessing\\WeCom::message', [
-                'message' => '配置字段格式不正确，请检查企业 ID、应用 ID、回调地址及 Secret 长度。',
-            ], 422);
+            return $this->failure($request, '配置字段格式不正确，请检查企业 ID、应用 ID、回调地址及 Secret 长度。');
         }
         $values = $validator->validated();
         if (!$settings->validPublicSettings($values)) {
-            return response()->view('Blessing\\WeCom::message', [
-                'message' => 'CorpID / AgentID 或回调地址格式不正确。回调必须为 HTTPS，路径为 /auth/wecom/callback，不能带查询参数。',
-            ], 422);
+            return $this->failure($request, 'CorpID / AgentID 或回调地址格式不正确。回调必须为 HTTPS，路径为 /auth/wecom/callback，不能带查询参数。');
         }
         $secret = trim((string) ($values['secret'] ?? ''));
         $useEnvironment = $request->boolean('use_env_secret');
         if ($secret !== '' && $useEnvironment) {
-            return response()->view('Blessing\\WeCom::message', [
-                'message' => '填写新 Secret 和恢复环境变量配置不能同时选择。',
-            ], 422);
+            return $this->failure($request, '填写新 Secret 和恢复环境变量配置不能同时选择。');
         }
         if ($secret !== '') {
             app('options')->set('wecom_secret_encrypted', Crypt::encryptString($secret));
