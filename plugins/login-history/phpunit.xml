@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" failOnWarning="true" failOnDeprecation="true">
+<testsuites><testsuite name="Login History"><directory>tests</directory></testsuite></testsuites>
+<php><env name="APP_ENV" value="testing"/></php></phpunit>

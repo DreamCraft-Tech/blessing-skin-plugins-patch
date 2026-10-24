@@ -1,0 +1,1 @@
+{"name":"login-history","version":"1.0.0","title":"网页登录与 Yggdrasil 登录记录","description":"在高级功能中查询自己的网页登录、Yggdrasil 认证及角色入服记录，支持同一账号的多个角色。","author":"Custom plugin","license":"MIT","namespace":"Blessing\\LoginHistory","require":{"blessing-skin-server":"^6.0.2","php":"~8.5.0"},"enchants":{"config":"Configuration","icon":{"fa":"history","bg":"info"}}}

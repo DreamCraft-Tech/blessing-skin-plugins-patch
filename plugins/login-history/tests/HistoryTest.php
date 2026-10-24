@@ -1,0 +1,253 @@
+<?php
+
+declare(strict_types=1);
+use App\Events\ConfigureRoutes;
+use App\Models\User;
+use App\Models\Player;
+use App\Services\Plugin;
+use App\Services\PluginManager;
+use Blessing\LoginHistory\Installer;
+use Blessing\LoginHistory\Recorder;
+use Blessing\LoginHistory\Observer;
+use Blessing\LoginHistory\CaptureYggdrasil;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+final class HistoryTest extends Tests\TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Cache::flush();
+        $path = dirname(__DIR__);
+        $plugin = new Plugin($path, json_decode(file_get_contents($path.'/package.json'), true));
+        $manager = app(PluginManager::class);
+        $manager->all()->put('login-history', $plugin);
+        self::assertTrue($manager->enable($plugin));
+        $booted = new ReflectionProperty($manager, 'booted');$booted->setValue($manager, false);$manager->boot();
+        event(new ConfigureRoutes(app('router')));
+        app('router')->getRoutes()->refreshNameLookups();
+        config(['logging.channels.ygg' => ['driver'=>'monolog','handler'=>Monolog\Handler\NullHandler::class]]);
+    }
+    private function user(): User {return User::factory()->create();}
+    private function player(User $user, string $name): Player
+    {
+        return Player::create(['uid'=>$user->uid,'name'=>$name,'tid_skin'=>0,'tid_cape'=>0]);
+    }
+    private function record(User $user, string $source='web', string $action='login', array $profiles=[]): void
+    {
+        $request = Request::create('/test','POST',[],[],[],['REMOTE_ADDR'=>'203.0.113.7','HTTP_USER_AGENT'=>'TestAgent']);
+        app(Recorder::class)->record($user->uid,$source,$action,'test',$request,$profiles);
+    }
+    private function legacyRoutes(): void
+    {
+        require getenv('BLESSING_PLUGINS_PATH').'/plugins/yggdrasil-api/src/Utils/helpers.php';
+        Schema::create('uuid',function($table){$table->increments('id');$table->string('name');$table->string('uuid');});
+        foreach(['ygg_uuid_algorithm'=>'v3','ygg_token_expire_1'=>'259200','ygg_token_expire_2'=>'604800','ygg_tokens_limit'=>'10','ygg_rate_limit'=>'1000'] as $k=>$v){option([$k=>$v]);}
+        Route::namespace('Yggdrasil\\Controllers')->prefix('api/yggdrasil')->group(getenv('BLESSING_PLUGINS_PATH').'/plugins/yggdrasil-api/routes.php');
+    }
+    private function authenticate(User $user, ?string $identification=null)
+    {
+        $user->changePassword('Known-password-123');
+        return $this->postJson('/api/yggdrasil/authserver/authenticate',[
+            'username'=>$identification ?? $user->email,'password'=>'Known-password-123','clientToken'=>'private-client-token',
+        ]);
+    }
+    public function testGuestCannotQuery(): void {$this->get('/user/login-history')->assertRedirect('/auth/login');}
+    public function testMenuIsNestedAndKeepsOAuth(): void
+    {
+        $menu=config('menu');event(new App\Events\ConfigureUserMenu($menu));
+        self::assertNotContains('user/login-history',array_column($menu['user'],'link'));
+        $group=collect($menu['user'])->firstWhere('title','general.developer');
+        self::assertContains('user/login-history',array_column($group['children'],'link'));
+        self::assertContains('user/oauth/manage',array_column($group['children'],'link'));
+    }
+    public function testActualWebLoginIsRecordedOnce(): void
+    {
+        $user=$this->user();$user->changePassword('Known-password-123');
+        $this->post('/auth/login',['identification'=>$user->email,'password'=>'Known-password-123'])->assertOk();
+        $this->assertDatabaseCount(Installer::ENTRIES,1);
+        $this->assertDatabaseHas(Installer::ENTRIES,['user_id'=>$user->uid,'source'=>'web','action'=>'login']);
+        $this->get('/user/login-history')->assertOk();$this->assertDatabaseCount(Installer::ENTRIES,1);
+    }
+    public function testOtherAccountsAndUidQueryAreIsolated(): void
+    {
+        $own=$this->user();$other=$this->user();$this->record($own);$this->record($other);
+        DB::table(Installer::ENTRIES)->where('user_id',$other->uid)->update(['user_agent'=>'SECRET-OTHER-USER']);
+        $this->actingAs($own)->get('/user/login-history?user_id='.$other->uid)->assertOk()->assertDontSee('SECRET-OTHER-USER')->assertSee('共 1 条');
+    }
+    public function testMultiRoleAuthenticationIsNotAssignedToFirstPlayer(): void
+    {
+        $this->legacyRoutes();$user=$this->user();$a=$this->player($user,'Alpha');$b=$this->player($user,'Beta');
+        $this->authenticate($user)->assertOk();
+        $this->assertDatabaseCount(Installer::ENTRIES,1);$this->assertDatabaseCount(Installer::PROFILES,2);
+        self::assertSame(0,DB::table(Installer::PROFILES)->where('selected',true)->count());
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('Alpha')->assertSee('Beta')->assertSee('未选择角色（账号级认证）');
+        $this->get('/user/login-history?player='.$a->pid)->assertOk()->assertSee('没有符合条件');
+    }
+    public function testActualRoleSelectionAndJoinAreRecorded(): void
+    {
+        $this->legacyRoutes();$user=$this->user();$a=$this->player($user,'Alpha');$b=$this->player($user,'Beta');
+        $auth=$this->authenticate($user)->assertOk()->json();$profile=$auth['availableProfiles'][1];
+        $refresh=$this->postJson('/api/yggdrasil/authserver/refresh',[
+            'accessToken'=>$auth['accessToken'],'clientToken'=>$auth['clientToken'],'selectedProfile'=>$profile,
+        ])->assertOk()->json();
+        $this->postJson('/api/yggdrasil/sessionserver/session/minecraft/join',[
+            'accessToken'=>$refresh['accessToken'],'selectedProfile'=>$profile['id'],'serverId'=>'private-server-id',
+        ])->assertNoContent();
+        $this->assertDatabaseCount(Installer::ENTRIES,3);
+        $selected=DB::table(Installer::PROFILES)->where('selected',true)->get();self::assertCount(2,$selected);
+        foreach($selected as $row){self::assertSame($b->pid,(int)$row->player_id);self::assertSame('Beta',$row->player_name);}
+        $this->actingAs($user)->get('/user/login-history?player='.$b->pid)->assertOk()->assertSee('共 2 条');
+        $this->get('/user/login-history?player='.$a->pid)->assertOk()->assertSee('没有符合条件');
+    }
+    public function testSingleRoleAuthenticationSelectsItsActualRole(): void
+    {
+        $this->legacyRoutes();$user=$this->user();$player=$this->player($user,'Solo');$this->authenticate($user)->assertOk();
+        $this->assertDatabaseHas(Installer::PROFILES,['player_id'=>$player->pid,'selected'=>true]);
+    }
+    public function testFailedYggdrasilAuthenticationDoesNotProduceSuccess(): void
+    {
+        $user=$this->user();
+        $request=Request::create('/api/yggdrasil/authserver/authenticate','POST',['username'=>$user->email,'password'=>'wrong']);
+        $request->attributes->set('login_history.backend','yggdrasil-api');$request->attributes->set('login_history.operation','authenticate');
+        app(CaptureYggdrasil::class)->handle($request,fn()=>response()->json(['error'=>'ForbiddenOperationException'],403));
+        $this->assertDatabaseCount(Installer::ENTRIES,0);
+    }
+    public function testSecretsAreNotStoredOrRendered(): void
+    {
+        $this->legacyRoutes();$user=$this->user();$this->player($user,'Solo');$body=$this->authenticate($user)->assertOk()->json();
+        $raw=json_encode(DB::table(Installer::ENTRIES)->get()).json_encode(DB::table(Installer::PROFILES)->get());
+        foreach(['Known-password-123','private-client-token',$body['accessToken']] as $secret){self::assertStringNotContainsString($secret,$raw);}
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertDontSee($body['accessToken'])->assertDontSee('private-client-token');
+    }
+    public function testDeletedRenamedOrTransferredRolesKeepOriginalOwner(): void
+    {
+        $user=$this->user();$other=$this->user();$player=$this->player($user,'OldName');
+        $this->record($user,'yggdrasil','refresh',[['player_id'=>$player->pid,'player_name'=>'OldName','profile_uuid'=>str_repeat('a',32),'selected'=>true]]);
+        $player->uid=$other->uid;$player->name='NewName';$player->save();
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('OldName')->assertDontSee('NewName');
+        $this->actingAs($other)->get('/user/login-history')->assertOk()->assertDontSee('OldName');
+        $player->delete();$this->actingAs($user)->get('/user/login-history?player='.$player->pid)->assertOk()->assertSee('OldName');
+    }
+    public function testPaginationIsBoundedAndPrivate(): void
+    {
+        $user=$this->user();for($i=0;$i<25;$i++){$this->record($user);}
+        $response=$this->actingAs($user)->get('/user/login-history?per_page=10000');$response->assertOk()->assertSee('共 25 条')->assertSee('下一页');
+        $response->assertHeader('Cache-Control','no-store, private');
+        $this->get('/user/login-history?page=2')->assertOk()->assertSee('上一页');
+    }
+    public function testRetentionPrunesOwnTablesOnly(): void
+    {
+        $user=$this->user();$this->record($user);DB::table(Installer::ENTRIES)->update(['occurred_at'=>now('UTC')->subDays(91)]);
+        Cache::flush();$this->record($user);$this->assertDatabaseCount(Installer::ENTRIES,1);
+    }
+    public function testDeletedUserCascadesRecordsAndProfiles(): void
+    {
+        $user=$this->user();$this->record($user,'yggdrasil','refresh',[['player_name'=>'Gone','selected'=>true]]);$user->delete();
+        $this->assertDatabaseCount(Installer::ENTRIES,0);$this->assertDatabaseCount(Installer::PROFILES,0);
+    }
+    public function testHtmlIsEscaped(): void
+    {
+        $user=$this->user();$this->record($user,'yggdrasil','refresh',[['player_name'=>'<script>alert(1)</script>','selected'=>true]]);
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertDontSee('<script>alert(1)</script>',false)->assertSee('&lt;script&gt;',false);
+    }
+    public function testFilterInputsAreValidated(): void
+    {
+        $this->actingAs($this->user())->getJson('/user/login-history?source=evil')->assertStatus(422);
+        $this->getJson('/user/login-history?player=-1')->assertStatus(422);
+        $this->getJson('/user/login-history?from=2026-13-99')->assertStatus(422);
+    }
+    public function testLegacyLogsAreReadOnlyAndExcludeParameters(): void
+    {
+        $user=$this->user();$other=$this->user();
+        Schema::create('ygg_log',function($table){$table->increments('id');$table->string('action');$table->integer('user_id');$table->integer('player_id');$table->text('parameters');$table->string('ip');$table->dateTime('time');});
+        foreach([$user,$other] as $owner){DB::table('ygg_log')->insert(['action'=>'join','user_id'=>$owner->uid,'player_id'=>7,'parameters'=>'{"accessToken":"legacy-secret-token"}','ip'=>'203.0.113.9','time'=>now()]);}
+        $this->actingAs($user)->get('/user/login-history?source=legacy')->assertOk()->assertSee('历史角色编号 #7')->assertSee('共 1 条')->assertDontSee('legacy-secret-token');
+        $this->assertDatabaseCount('ygg_log',2);
+    }
+    public function testNoLegacyTableReturns404(): void {$this->actingAs($this->user())->get('/user/login-history?source=legacy')->assertNotFound();}
+    public function testPluginManagementAndConfigEntry(): void
+    {
+        $user=$this->user();$user->permission=1;$user->save();
+        $this->actingAs($user)->get('/admin/plugins/data')->assertOk()->assertJsonFragment(['name'=>'login-history','enabled'=>true,'config'=>true]);
+        $this->get('/admin/plugins/config/login-history')->assertOk()->assertSee('登录记录插件说明');
+    }
+    public function testRecorderFailureDoesNotBreakLogin(): void
+    {
+        Schema::drop(Installer::PROFILES);Schema::drop(Installer::ENTRIES);
+        $user=$this->user();Auth::login($user);$this->assertAuthenticatedAs($user);
+    }
+    public function testConnectCaptureUsesAuthenticatedOwnerNotCookieOrRoleGuess(): void
+    {
+        $user=$this->user();$other=$this->user();$player=$this->player($user,'ConnectRole');
+        $request=Request::create('/api/yggdrasil/authserver/authenticate','POST',['username'=>'irrelevant@example.test','password'=>'never-save']);
+        $request->setUserResolver(fn()=>$user);
+        $request->attributes->set('login_history.backend','yggdrasil-connect');$request->attributes->set('login_history.operation','authenticate');
+        $response=app(CaptureYggdrasil::class)->handle($request,fn()=>response()->json(['accessToken'=>'must-not-persist','selectedProfile'=>['name'=>'ConnectRole','id'=>str_repeat('b',32)],'availableProfiles'=>[]]));
+        self::assertSame(200,$response->getStatusCode());
+        $this->assertDatabaseHas(Installer::ENTRIES,['user_id'=>$user->uid,'backend'=>'yggdrasil-connect']);
+        $this->assertDatabaseHas(Installer::PROFILES,['player_id'=>$player->pid,'selected'=>true]);
+        self::assertStringNotContainsString('must-not-persist',json_encode(DB::table(Installer::ENTRIES)->get()));
+    }
+
+    public function testFailedRefreshDoesNotAddSuccessRecord(): void
+    {
+        $this->legacyRoutes();$user=$this->user();$this->player($user,'Alpha');$this->player($user,'Beta');
+        $auth=$this->authenticate($user)->assertOk()->json();
+        $request=Request::create('/api/yggdrasil/authserver/refresh','POST',['accessToken'=>$auth['accessToken']]);
+        $request->attributes->set('login_history.backend','yggdrasil-api');$request->attributes->set('login_history.operation','refresh');
+        app(CaptureYggdrasil::class)->handle($request,fn()=>response()->json(['error'=>'invalid'],400));
+        $this->assertDatabaseCount(Installer::ENTRIES,1);
+    }
+    public function testLegacyAuthenticationNeverUsesUnrelatedWebCookieOwner(): void
+    {
+        $this->legacyRoutes();$owner=$this->user();$other=$this->user();$this->player($owner,'OwnerRole');
+        $this->actingAs($other);$this->authenticate($owner)->assertOk();
+        $this->assertDatabaseHas(Installer::ENTRIES,['user_id'=>$owner->uid,'source'=>'yggdrasil']);
+        self::assertSame(0,DB::table(Installer::ENTRIES)->where('user_id',$other->uid)->count());
+    }
+    public function testDateFiltersUseWebsiteTimezoneAndAllowOnlyEndDate(): void
+    {
+        $user=$this->user();$this->record($user);
+        $day=now(config('app.timezone'))->format('Y-m-d');
+        $this->actingAs($user)->get('/user/login-history?to='.$day)->assertOk()->assertSee('共 1 条');
+        $this->get('/user/login-history?from='.$day.'&to='.$day)->assertOk()->assertSee('共 1 条');
+    }
+    public function testIpHeaderCannotSpoofAnUntrustedProxy(): void
+    {
+        $user=$this->user();
+        $request=Request::create('/test','POST',[],[],[],['REMOTE_ADDR'=>'203.0.113.7','HTTP_X_FORWARDED_FOR'=>'198.51.100.99','HTTP_USER_AGENT'=>"Client\r\nInjected"]);
+        Symfony\Component\HttpFoundation\Request::setTrustedProxies([],0);
+        app(Recorder::class)->record($user->uid,'web','login','web',$request);
+        $this->assertDatabaseHas(Installer::ENTRIES,['ip'=>'203.0.113.7','user_agent'=>'ClientInjected']);
+    }
+    public function testUnsupportedControllersCannotRegisterYggCapture(): void
+    {
+        $route=new Illuminate\Routing\Route('POST','fake',['uses'=>App\Http\Controllers\AuthController::class.'@handleLogin']);
+        $request=Request::create('/fake','POST');
+        app(Observer::class)->route(new Illuminate\Routing\Events\RouteMatched($route,$request));
+        self::assertNotContains(CaptureYggdrasil::class,$route->middleware());
+        $route=new Illuminate\Routing\Route('POST','api/yggdrasil/authserver/refresh',['uses'=>\LittleSkin\YggdrasilConnect\Controllers\AuthController::class.'@refresh','controller'=>\LittleSkin\YggdrasilConnect\Controllers\AuthController::class.'@refresh']);
+        app(Observer::class)->route(new Illuminate\Routing\Events\RouteMatched($route,$request));
+        self::assertContains(CaptureYggdrasil::class,$route->middleware(),$route->getActionName().' '.$request->method());
+        self::assertSame('yggdrasil-connect',$request->attributes->get('login_history.backend'));
+    }
+    public function testTablePrefixAndCascadesAreSupported(): void
+    {
+        $old=DB::getDefaultConnection();config(['database.connections.prefixed'=>array_merge(config('database.connections.sqlite'),['database'=>':memory:','prefix'=>'skin_'])]);
+        DB::setDefaultConnection('prefixed');Schema::clearResolvedInstance('db.schema');
+        try {
+            Schema::create('users',function($table){$table->increments('uid');});Installer::install();
+            DB::table('users')->insert(['uid'=>99]);
+            $id=DB::table(Installer::ENTRIES)->insertGetId(['user_id'=>99,'source'=>'web','action'=>'login','backend'=>'web','occurred_at'=>now('UTC')]);
+            DB::table(Installer::PROFILES)->insert(['entry_id'=>$id,'player_name'=>'PrefixRole','selected'=>true]);
+            DB::table('users')->where('uid',99)->delete();
+            self::assertSame(0,DB::table(Installer::ENTRIES)->count());self::assertSame(0,DB::table(Installer::PROFILES)->count());
+        } finally {DB::setDefaultConnection($old);Schema::clearResolvedInstance('db.schema');}
+    }
+}
