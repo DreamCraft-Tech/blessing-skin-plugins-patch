@@ -278,7 +278,8 @@ final class TwoFactorTest extends Tests\TestCase
         $private = openssl_pkey_new(['private_key_type' => OPENSSL_KEYTYPE_EC, 'curve_name' => 'prime256v1']);
         $details = openssl_pkey_get_details($private);
         $id = random_bytes(32);
-        $cose = "\xa5\x01\x02\x03\x26\x20\x01\x21".$this->bytes($details['ec']['x'])."\x22".$this->bytes($details['ec']['y']);
+        // OpenSSL may omit leading zeros; P-256 COSE coordinates require 32 bytes.
+        $cose = "\xa5\x01\x02\x03\x26\x20\x01\x21".$this->bytes(str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT))."\x22".$this->bytes(str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT));
         $auth = hash('sha256', 'skin.example.test', true)."\x45".pack('N', 0).str_repeat("\0", 16).pack('n', strlen($id)).$id.$cose;
         $att = "\xa3".$this->bytes('fmt', 3).$this->bytes('none', 3).$this->bytes('authData', 3).$this->bytes($auth).$this->bytes('attStmt', 3)."\xa0";
         $client = json_encode(['type' => 'webauthn.create', 'challenge' => $options['challenge'], 'origin' => 'https://skin.example.test', 'crossOrigin' => false]);
