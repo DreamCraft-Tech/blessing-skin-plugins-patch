@@ -25,6 +25,7 @@ class ReleaseTest(unittest.TestCase):
   self.assets()
   with patch.object(release,'gh',side_effect=self.fake):release.publish(self.root,'server')
   verbs=[x[1] for x in self.calls];self.assertLess(verbs.index('create'),verbs.index('upload'));self.assertLess(verbs.index('upload'),verbs.index('edit'));self.assertIn('--draft',self.calls[1])
+  create=next(x for x in self.calls if x[1]=='create');self.assertEqual(create[create.index('--title')+1],'Release 1.0.0')
  def test_bad_checksum_and_missing_asset_stop_before_github(self):
   self.assets();(self.root/'server.zip').write_bytes(b'tampered')
   with patch.object(release,'gh') as gh:
@@ -42,7 +43,7 @@ class ReleaseTest(unittest.TestCase):
   self.assertNotIn('edit',[x[1] for x in self.calls])
  def test_existing_public_version_is_immutable(self):
   self.assets()
-  with patch.object(release,'gh',return_value='{"isDraft":false,"targetCommitish":"old"}') as gh:release.publish(self.root,'server');self.assertEqual(gh.call_count,1)
+  with patch.object(release,'gh',return_value='{"isDraft":false,"targetCommitish":"old"}') as gh:release.publish(self.root,'server');self.assertEqual(gh.call_count,2);self.assertEqual(gh.call_args.args,('release','edit','v1.0.0','--repo','DreamCraft-Tech/test','--title','Release 1.0.0'))
  def test_unchanged_plugin_catalog_skips_release(self):
   self.assets('plugins')
   def fake(*args,**kw):return '[{"tagName":"plugins-old","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test"}'
@@ -56,4 +57,23 @@ class ReleaseTest(unittest.TestCase):
   with patch.dict(os.environ,{'GITHUB_SHA':'b'*40}),patch.object(release,'gh') as gh:
    with self.assertRaises(ValueError):release.publish(self.root,'server')
    gh.assert_not_called()
+ def test_release_date_uses_gmt8_at_day_boundary(self):
+  from datetime import datetime,timezone
+  self.assertEqual(release.release_date(datetime(2026,10,24,16,1,tzinfo=timezone.utc)),'20261025')
+  self.assertEqual(release.release_date(datetime(2026,10,24,15,59,tzinfo=timezone.utc)),'20261024')
+ def test_plugin_names_increment_and_resume_own_draft(self):
+  responses=[json.dumps({'isDraft':False,'targetCommitish':'old'}),json.dumps({'isDraft':True,'targetCommitish':'other'}),None]
+  with patch.object(release,'release_date',return_value='20261024'),patch.object(release,'gh',side_effect=responses):
+   self.assertEqual(release.plugin_release_name('repo','a'*40),('20261024-patch-3',None))
+  own=json.dumps({'isDraft':True,'targetCommitish':'a'*40})
+  with patch.object(release,'release_date',return_value='20261024'),patch.object(release,'gh',return_value=own):
+   self.assertEqual(release.plugin_release_name('repo','a'*40),('20261024-patch',own))
+ def test_plugin_title_matches_date_tag(self):
+  self.assets('plugins')
+  with patch.object(release,'release_date',return_value='20261024'),patch.object(release,'gh',side_effect=self.fake):release.publish(self.root,'plugins')
+  create=next(x for x in self.calls if x[1]=='create');self.assertEqual(create[2],'20261024-patch');self.assertEqual(create[create.index('--title')+1],create[2])
+ def test_new_plugin_tag_catalog_skips_duplicate_release(self):
+  self.assets('plugins')
+  def fake(*args,**kw):return '[{"tagName":"20261024-patch-2","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test"}'
+  with patch.object(release,'gh',side_effect=fake) as gh:release.publish(self.root,'plugins');self.assertEqual(gh.call_count,2)
 if __name__=='__main__':unittest.main()

@@ -2,7 +2,7 @@
 
 推送 main、向 main 提交 Pull Request，以及手动运行 Actions 时，检查 PHP / Python / JavaScript 语法、发布工具测试、前端类型和测试、五个自定义插件的主站集成测试，然后验证全部插件的独立安装 ZIP。
 
-每次运行均遍历 plugins/*/package.json 并构建全部插件，清单与源码插件集合必须完全一致。main 检查通过后，插件名称与版本清单发生变化时自动发布；首次运行自动发布当前全部插件。更新某个插件时修改其 package.json 版本号。集合标签由 Actions 生成，格式 plugins-YYYYMMDD-<运行编号>。
+每次运行均遍历 plugins/*/package.json 并构建全部插件，清单与源码插件集合必须完全一致。main 检查通过后，插件名称与版本清单发生变化时自动发布；首次运行自动发布当前全部插件。更新某个插件时修改其 package.json 版本号。Release 标题与标签由 Actions 按发布执行时的 GMT+8 日期生成，格式 YYYYMMDD-patch；同日多次发布依次使用 YYYYMMDD-patch-2、YYYYMMDD-patch-3。相同提交重试时继续上传已有草稿。
 
 每次 Release 分别附上所有插件的独立 ZIP，以及 manifest.json、SHA256SUMS。每个 ZIP 对应一个插件，按站点需要单独选择下载。发布说明列出插件版本和对应下载链接。
 

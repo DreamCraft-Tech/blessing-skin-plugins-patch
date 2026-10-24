@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Publish validated runtime artifacts as an atomic draft-to-public GitHub release."""
 import argparse,hashlib,json,os,re,subprocess,sys
-from datetime import datetime,timezone
+from datetime import datetime,timezone,timedelta
 from pathlib import Path
 
 def gh(*args, optional=False):
@@ -10,6 +10,20 @@ def gh(*args, optional=False):
         if optional and ('HTTP 404' in p.stderr or 'release not found' in p.stderr.lower()):return None
         raise RuntimeError(p.stderr or p.stdout)
     return p.stdout
+
+def release_date(now=None):
+    zone=timezone(timedelta(hours=8))
+    return (now or datetime.now(zone)).astimezone(zone).strftime('%Y%m%d')
+
+def plugin_release_name(repo,sha):
+    base=release_date()+'-patch';number=1
+    while True:
+        tag=base+('-'+str(number) if number>1 else '')
+        existing=gh('release','view',tag,'--repo',repo,'--json','isDraft,targetCommitish',optional=True)
+        if not existing:return tag,None
+        draft=json.loads(existing)
+        if draft['isDraft'] and draft['targetCommitish']==sha:return tag,existing
+        number+=1
 
 def validate_assets(directory):
     files={p.name:p for p in directory.iterdir() if p.is_file()}
@@ -35,20 +49,21 @@ def publish(directory,kind):
         if len(data['packages'])!=1:raise ValueError('Server release requires one complete runtime ZIP')
         version=data['version']
         if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:[._+-][A-Za-z0-9.-]+)?',version):raise ValueError('Invalid version')
-        tag='v'+version;title='Blessing Skin '+version+' · PHP 8.5'
+        tag='v'+version;title='Release '+version
+        existing=gh('release','view',tag,'--repo',repo,'--json','isDraft,targetCommitish',optional=True)
     else:
-        current=gh('release','list','--repo',repo,'--limit','100','--json','tagName,isDraft,isPrerelease')
-        previous=next((r for r in json.loads(current) if not r['isDraft'] and not r['isPrerelease'] and r['tagName'].startswith('plugins-')),None)
+        current=gh('release','list','--repo',repo,'--limit','1000','--json','tagName,isDraft,isPrerelease')
+        previous=next((r for r in json.loads(current) if not r['isDraft'] and not r['isPrerelease'] and (r['tagName'].startswith('plugins-') or re.fullmatch(r'[0-9]{8}-patch(?:-[2-9][0-9]*|-[1-9][0-9]+)?',r['tagName']))),None)
         if previous and os.environ.get('FORCE_RELEASE')!='true':
             body=json.loads(gh('release','view',previous['tagName'],'--repo',repo,'--json','body'))['body']
             if 'Catalog-SHA256: '+data['catalog_sha256'] in body:
                 print('Plugin versions unchanged; release skipped.');return
-        tag='plugins-'+datetime.now(timezone.utc).strftime('%Y%m%d')+'-'+os.environ['GITHUB_RUN_NUMBER']
-        title='PHP 8.5 插件 · '+str(len(data['packages']))+' 个独立安装包'
-    existing=gh('release','view',tag,'--repo',repo,'--json','isDraft,targetCommitish',optional=True)
+        tag,existing=plugin_release_name(repo,sha)
+        title=tag
     if existing:
         existing=json.loads(existing)
         if not existing['isDraft']:
+            if kind=='server':gh('release','edit',tag,'--repo',repo,'--title',title)
             print('Version already published; keeping existing release: '+tag);return
         if existing['targetCommitish']!=sha:raise ValueError('Existing draft belongs to another commit')
     notes=directory.parent/'release-notes.md'
