@@ -395,7 +395,7 @@ final class WeComTest extends Tests\TestCase
         ])->assertForbidden();
     }
 
-    public function testAdminCanSavePublicSettingsButCannotChangeSecretViaForm(): void
+    public function testAdminCanSaveSettingsAndEncryptSecret(): void
     {
         $admin = $this->user(['permission' => User::ADMIN]);
         $this->actingAs($admin)->post('/admin/wecom/config', [
@@ -404,9 +404,13 @@ final class WeComTest extends Tests\TestCase
             'secret' => 'form-must-not-set-secret',
         ])->assertRedirect('/admin/plugins/config/wecom-login');
         self::assertSame('wwOtherCorp', app(Settings::class)->values()['corp_id']);
-        self::assertSame('private-test-secret-never-render', app(Settings::class)->values()['secret']);
+        self::assertSame('form-must-not-set-secret', app(Settings::class)->values()['secret']);
+        $encrypted = DB::table('options')->where('option_name', 'wecom_secret_encrypted')->value('option_value');
+        self::assertNotSame('form-must-not-set-secret', $encrypted);
+        self::assertSame('form-must-not-set-secret', Crypt::decryptString($encrypted));
         $this->get('/admin/plugins/config/wecom-login')->assertOk()
-            ->assertSee('wwOtherCorp')->assertDontSee('private-test-secret-never-render');
+            ->assertSee('wwOtherCorp')->assertDontSee('private-test-secret-never-render')
+            ->assertDontSee('form-must-not-set-secret');
     }
 
     public function testInvalidCallbackConfigurationRejected(): void
@@ -606,5 +610,60 @@ final class WeComTest extends Tests\TestCase
         self::assertTrue(view()->exists('Blessing\\WeCom::account'));
         self::assertTrue(view()->exists('Blessing\\WeCom::widgets.account'));
         self::assertFalse(view()->exists('WeCom::account'));
+    }
+
+    public function testUserEntryIsNestedNextToOAuthWithoutDuplicate(): void
+    {
+        $menu = config('menu');
+        $event = new App\Events\ConfigureUserMenu($menu);
+        event($event);
+        event($event);
+        $topLevel = array_filter($menu['user'], fn ($entry) => ($entry['link'] ?? '') === 'user/wecom');
+        self::assertCount(0, $topLevel);
+        $groups = array_values(array_filter($menu['user'], fn ($entry) => ($entry['title'] ?? '') === 'general.developer'));
+        self::assertCount(1, $groups);
+        $links = array_column($groups[0]['children'], 'link');
+        self::assertContains('user/oauth/manage', $links);
+        self::assertSame(1, count(array_filter($links, fn ($link) => $link === 'user/wecom')));
+        $this->actingAs($this->user())->get('/user/wecom')->assertOk()->assertSee('menu-open');
+    }
+
+    public function testBlankSecretKeepsExistingAndExplicitResetRestoresEnvironment(): void
+    {
+        $this->actingAs($this->user(['permission' => User::ADMIN]));
+        $fields = ['corp_id' => 'wwTestCorp', 'agent_id' => '1000001',
+            'redirect_uri' => 'https://skin.example.test/auth/wecom/callback'];
+        $this->post('/admin/wecom/config', $fields + ['secret' => 'saved-application-secret'])->assertRedirect();
+        $this->post('/admin/wecom/config', $fields + ['secret' => ''])->assertRedirect();
+        self::assertSame('saved-application-secret', app(Settings::class)->values()['secret']);
+        $this->post('/admin/wecom/config', $fields + ['use_env_secret' => 1])->assertRedirect();
+        self::assertSame('private-test-secret-never-render', app(Settings::class)->values()['secret']);
+        self::assertSame('', option('wecom_secret_encrypted'));
+    }
+
+    public function testInvalidSettingsDoNotFlashSecretIntoSession(): void
+    {
+        $this->actingAs($this->user(['permission' => User::ADMIN]))
+            ->post('/admin/wecom/config', ['secret' => 'must-not-be-flashed'])->assertStatus(422);
+        self::assertStringNotContainsString('must-not-be-flashed', json_encode(session()->all()));
+    }
+
+    public function testNormalUserCannotSetSecret(): void
+    {
+        $this->actingAs($this->user())->post('/admin/wecom/config', [
+            'corp_id' => 'wwTestCorp', 'agent_id' => '1000001',
+            'redirect_uri' => 'https://skin.example.test/auth/wecom/callback', 'secret' => 'unauthorized',
+        ])->assertForbidden();
+        self::assertSame('', option('wecom_secret_encrypted', ''));
+    }
+
+    public function testConflictingSecretResetAndReplacementIsRejected(): void
+    {
+        $this->actingAs($this->user(['permission' => User::ADMIN]))->post('/admin/wecom/config', [
+            'corp_id' => 'wwTestCorp', 'agent_id' => '1000001',
+            'redirect_uri' => 'https://skin.example.test/auth/wecom/callback',
+            'secret' => 'replacement-secret', 'use_env_secret' => 1,
+        ])->assertStatus(422);
+        self::assertSame('', option('wecom_secret_encrypted', ''));
     }
 }

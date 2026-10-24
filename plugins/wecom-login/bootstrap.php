@@ -8,8 +8,11 @@ use Blessing\WeCom\Routes;
 use Blessing\WeCom\Bindings;
 use Illuminate\Support\Facades\View;
 use Blessing\WeCom\Settings;
+use Blessing\WeCom\Menus;
+use App\Events\ConfigureUserMenu;
+use Illuminate\Contracts\Events\Dispatcher;
 
-return function (Filter $filter): void {
+return function (Filter $filter, Dispatcher $events): void {
     config(['wecom' => [
         'corp_id' => env('WECOM_CORP_ID', ''),
         'agent_id' => env('WECOM_AGENT_ID', ''),
@@ -17,9 +20,7 @@ return function (Filter $filter): void {
         'secret' => env('WECOM_SECRET', ''),
     ]]);
     Hook::addRoute(fn () => Routes::register());
-    Hook::addMenuItem('user', 1, [
-        'title' => '企业微信绑定', 'link' => 'user/wecom', 'icon' => 'fa-building',
-    ]);
+    $events->listen(ConfigureUserMenu::class, [Menus::class, 'appendUserItem']);
     $filter->add('grid:user.index', function (array $grid): array {
         $grid['widgets'][0][0][] = 'Blessing\\WeCom::widgets.account';
         return $grid;

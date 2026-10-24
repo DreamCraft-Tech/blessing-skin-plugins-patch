@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Blessing\WeCom;
 
+use Illuminate\Support\Facades\Crypt;
+
 final class Settings
 {
     public function values(): array
@@ -12,8 +14,27 @@ final class Settings
             'corp_id' => trim((string) option('wecom_corp_id', config('wecom.corp_id', ''))),
             'agent_id' => trim((string) option('wecom_agent_id', config('wecom.agent_id', ''))),
             'redirect_uri' => trim((string) option('wecom_redirect_uri', config('wecom.redirect_uri', ''))),
-            'secret' => trim((string) config('wecom.secret', '')),
+            'secret' => $this->secret(),
         ];
+    }
+
+    private function secret(): string
+    {
+        $encrypted = (string) option('wecom_secret_encrypted', '');
+        if ($encrypted !== '') {
+            try {
+                return Crypt::decryptString($encrypted);
+            } catch (\Throwable) {
+                // Fail closed after APP_KEY rotation; an admin can replace or reset it.
+                return '';
+            }
+        }
+        return trim((string) config('wecom.secret', ''));
+    }
+
+    public function secretSource(): string
+    {
+        return (string) option('wecom_secret_encrypted', '') !== '' ? '后台加密配置' : '环境变量';
     }
 
     public function requireValid(): array
