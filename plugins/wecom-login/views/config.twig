@@ -27,11 +27,14 @@
         <div class="form-group form-check">
           <input id="wecom-notifications" class="form-check-input" type="checkbox" name="login_notifications_enabled" value="1" {{ login_notifications_enabled ? 'checked' : '' }}>
           <label class="form-check-label" for="wecom-notifications">允许发送网页登录通知</label>
-          <small class="form-text text-muted">默认关闭。开启后，已绑定用户还需自行选择接收。使用当前应用的消息发送 API，失败不影响登录。</small>
+          <small class="form-text text-muted">默认关闭。开启后，已绑定用户可自行选择严格、宽松或关闭。使用当前应用的消息发送 API，失败不影响登录。</small>
         </div>
         <button type="submit" class="btn btn-success">保存配置</button>
       </form>
       <hr>
+      <p>本地 IP 城市库：<strong>{{ geo_ready ? '已准备' : '未准备或超过 62 天未更新' }}</strong>。宽松模式同时使用本地库与 ipwho.is 在线校验。</p>
+      <p>首次部署或每月更新：在网站项目根目录，使用网站 PHP 8.5 执行 <code>php plugins/wecom-login/bin/update-geoip.php --site-root=网站项目绝对路径</code>。只下载城市库，不修改业务数据。</p>
+      <p><a href="https://db-ip.com" target="_blank" rel="noopener noreferrer">IP Geolocation by DB-IP</a>，本地库为 CC BY 4.0 数据；在线服务有请求额度，缓存有效期 24 小时。城市库缺失、过期或校验失败时，宽松模式也会发送提醒。</p>
       <p>应用 Secret：<strong>{{ secret_set ? '已设置' : '尚未设置' }}</strong></p>
       <p>也可以在网站 <code>.env</code> 中配置 <code>WECOM_SECRET</code>；修改环境配置后执行 <code>php artisan config:clear</code>。后台保存的 Secret 优先于环境变量。</p>
       <p>在企业微信管理后台启用自建应用的企业微信 Web 登录，配置授权回调域名、应用可见范围，以及调用接口的服务器可信 IP。</p>

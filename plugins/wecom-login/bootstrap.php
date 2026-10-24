@@ -13,6 +13,7 @@ use App\Events\ConfigureUserMenu;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Filter $filter, Dispatcher $events): void {
+    require_once __DIR__.'/vendor/autoload.php';
     // Enabled installations and interrupted enable callbacks must also repair missing tables.
     \Blessing\WeCom\Installer::install();
 

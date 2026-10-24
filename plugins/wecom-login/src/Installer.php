@@ -11,6 +11,7 @@ final class Installer
 {
     public const BINDINGS = 'wecom_bindings';
     public const STATES = 'wecom_oauth_states';
+    public const GEO_CACHE = 'wecom_geo_cache';
 
     public static function install(): void
     {
@@ -39,6 +40,25 @@ final class Installer
         }
         if (!Schema::hasColumn(self::BINDINGS, 'notify_login')) {
             Schema::table(self::BINDINGS, fn (Blueprint $table) => $table->boolean('notify_login')->default(false));
+        }
+        if (!Schema::hasColumn(self::BINDINGS, 'notification_mode')) {
+            Schema::table(self::BINDINGS, function (Blueprint $table): void {
+                $table->string('notification_mode', 8)->nullable();
+            });
+        }
+        if (!Schema::hasColumn(self::BINDINGS, 'notification_baseline')) {
+            Schema::table(self::BINDINGS, fn (Blueprint $table) => $table->text('notification_baseline')->nullable());
+        }
+        \Illuminate\Support\Facades\DB::table(self::BINDINGS)->whereNull('notification_mode')->update([
+            'notification_mode' => \Illuminate\Support\Facades\DB::raw("CASE WHEN notify_login = 1 THEN 'strict' ELSE 'off' END"),
+        ]);
+        if (!Schema::hasTable(self::GEO_CACHE)) {
+            Schema::create(self::GEO_CACHE, function (Blueprint $table): void {
+                $table->engine = 'InnoDB';
+                $table->char('ip_hash', 64)->primary();
+                $table->text('location_json');
+                $table->unsignedBigInteger('expires_at')->index();
+            });
         }
         // MySQL DDL is not transactional: an earlier failed FK may have left tables without indexes.
         foreach ([

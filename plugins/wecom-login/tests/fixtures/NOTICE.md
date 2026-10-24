@@ -1,0 +1,1 @@
+GeoIP2-City-Test.mmdb comes from https://github.com/maxmind/MaxMind-DB/tree/main/test-data . Copyright (c) 2013-2026 MaxMind, Inc. Distributed under the MIT license included here. Test fixture only; not a production city database.

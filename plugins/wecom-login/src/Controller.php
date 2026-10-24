@@ -84,8 +84,11 @@ final class Controller extends \Illuminate\Routing\Controller
 
     public function account(Request $request)
     {
+        $binding = $this->bindings->forUser((int) $request->user()->uid);
         return view('Blessing\\WeCom::account', [
-            'binding' => $this->bindings->forUser((int) $request->user()->uid),
+            'binding' => $binding,
+            'notification_mode' => $binding ? NotificationPolicy::mode($binding) : 'off',
+            'geo_ready' => app(IpLocation::class)->ready(),
             'ready' => $this->settings->ready(),
             'notifications_enabled' => $this->settings->notificationsEnabled(),
         ]);
@@ -93,14 +96,19 @@ final class Controller extends \Illuminate\Routing\Controller
 
     public function notifications(Request $request)
     {
-        $validator = Validator::make($request->only('notify_login'), ['notify_login' => 'required|boolean']);
+        $input = $request->only(['notification_mode', 'notify_login']);
+        $validator = Validator::make($input, ['notification_mode' => 'required_without:notify_login|in:strict,relaxed,off', 'notify_login' => 'sometimes|boolean']);
         if ($validator->fails()) {return $this->failure(new Failure('通知设置格式不正确，请重新选择后保存。', 422));}
         $data = $validator->validated();
         if (!$this->bindings->forUser((int) $request->user()->uid)) {
             return $this->failure(new Failure('请先绑定企业微信。', 409));
         }
+        $mode = $data['notification_mode'] ?? (!empty($data['notify_login']) ? 'strict' : 'off');
+        $binding = $this->bindings->forUser((int) $request->user()->uid);
+        $update = ['notification_mode' => $mode, 'notify_login' => $mode !== 'off'];
+        if ($mode !== NotificationPolicy::mode($binding)) {$update['notification_baseline'] = null;}
         \Illuminate\Support\Facades\DB::table(Installer::BINDINGS)
-            ->where('user_id', $request->user()->uid)->update(['notify_login' => (bool) $data['notify_login']]);
+            ->where('user_id', $request->user()->uid)->update($update);
         return redirect('/user/wecom')->with('wecom_notice', '登录通知偏好已保存。');
     }
 

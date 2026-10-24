@@ -1,0 +1,11 @@
+{
+  "require": {
+    "maxmind-db/reader": "^1.14"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
+    },
+    "sort-packages": true
+  }
+}

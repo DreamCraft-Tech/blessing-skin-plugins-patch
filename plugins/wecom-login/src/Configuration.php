@@ -17,6 +17,7 @@ final class Configuration
             'corp_id' => request()->old('corp_id', $values['corp_id']), 'agent_id' => request()->old('agent_id', $values['agent_id']),
             'redirect_uri' => request()->old('redirect_uri', $values['redirect_uri']), 'secret_set' => $values['secret'] !== '',
             'secret_source' => $settings->secretSource(),
+            'geo_ready' => app(IpLocation::class)->ready(),
             'login_notifications_enabled' => (bool) request()->old('login_notifications_enabled', $settings->notificationsEnabled()),
         ]);
     }

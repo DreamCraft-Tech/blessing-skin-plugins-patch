@@ -10,3 +10,5 @@ $loader = new Composer\Autoload\ClassLoader();
 $loader->addPsr4('Blessing\\WeCom\\', dirname(__DIR__).'/src');
 $loader->register();
 require_once $server.'/tests/TestCase.php';
+
+require_once dirname(__DIR__).'/vendor/autoload.php';

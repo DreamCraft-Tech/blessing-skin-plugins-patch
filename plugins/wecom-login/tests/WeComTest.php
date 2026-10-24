@@ -304,7 +304,7 @@ final class WeComTest extends Tests\TestCase
     {
         $user = $this->user();$this->notificationBinding($user);
         $this->actingAs($user)->post('/user/wecom/unbind', [])->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
-        $this->get('/user/wecom')->assertOk()->assertSee('请输入皮肤站密码')->assertSee('接收企业微信登录通知');
+        $this->get('/user/wecom')->assertOk()->assertSee('请输入皮肤站密码')->assertSee('登录通知推送时机');
         $this->assertDatabaseCount(Installer::BINDINGS, 1);
     }
 
@@ -351,6 +351,150 @@ final class WeComTest extends Tests\TestCase
         self::assertTrue(mb_check_encoding($description, 'UTF-8'));
         self::assertStringEndsWith('…', $description);
         self::assertDoesNotMatchRegularExpression('/&[^;]*…$/u', $description);
+    }
+
+    public function testUserCanSelectThreeModesAndCannotSelectAnotherUser(): void
+    {
+        $user = $this->user();$this->notificationBinding($user, false);
+        foreach (['strict', 'relaxed', 'off'] as $mode) {
+            $this->actingAs($user)->post('/user/wecom/notifications', ['notification_mode' => $mode, 'user_id' => 99999])->assertRedirect('/user/wecom');
+            self::assertSame($mode, app(Bindings::class)->forUser($user->uid)->notification_mode);
+        }
+        $this->get('/user/wecom')->assertOk()->assertSee('严格：')->assertSee('宽松：')->assertSee('关闭：');
+        $this->post('/user/wecom/notifications', ['notification_mode' => 'invalid'])->assertRedirect('/user/wecom')->assertSessionHas('wecom_error');
+        self::assertSame('off', app(Bindings::class)->forUser($user->uid)->notification_mode);
+    }
+
+    public function testOldBooleanPreferenceMigratesToStrictOrOffWithoutDataLoss(): void
+    {
+        $user = $this->user();$this->notificationBinding($user);
+        Installer::install();
+        self::assertSame('strict', app(Bindings::class)->forUser($user->uid)->notification_mode);
+        self::assertSame('zhangsan', app(Bindings::class)->forUser($user->uid)->member_id);
+    }
+
+    public function testRelaxedChinaModeSendsForDifferentCityEvenNearby(): void
+    {
+        $binding = (object) ['notification_mode' => 'relaxed', 'notification_baseline' => json_encode(['country' => 'CN', 'city' => '广州', 'latitude' => 23.129, 'longitude' => 113.264])];
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'CN', 'city' => '佛山', 'latitude' => 23.021, 'longitude' => 113.121]);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        $result = app(\Blessing\WeCom\NotificationPolicy::class)->decide($binding, '8.8.8.8');
+        self::assertTrue($result['send']);
+    }
+
+    public function testRelaxedChinaModeSuppressesSameCityDespiteChangedIp(): void
+    {
+        $binding = (object) ['notification_mode' => 'relaxed', 'notification_baseline' => json_encode(['country' => 'CN', 'city' => '广州', 'latitude' => 23.129, 'longitude' => 113.264])];
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'CN', 'city' => '广州', 'latitude' => 23.15, 'longitude' => 113.30]);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        self::assertFalse(app(\Blessing\WeCom\NotificationPolicy::class)->decide($binding, '8.8.4.4')['send']);
+    }
+
+    public function testRelaxedFirstLoginAndUncertainLocationAlwaysNotify(): void
+    {
+        $binding = (object) ['notification_mode' => 'relaxed', 'notification_baseline' => null];
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'CN', 'city' => '广州', 'latitude' => 23.129, 'longitude' => 113.264]);
+        $geo->shouldReceive('verified')->once()->andReturn(null);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        $policy = app(\Blessing\WeCom\NotificationPolicy::class);
+        self::assertTrue($policy->decide($binding, '8.8.8.8')['send']);
+        $uncertain = $policy->decide($binding, '8.8.4.4');
+        self::assertTrue($uncertain['send']);self::assertNull($uncertain['point']);
+    }
+
+    public function testRelaxedForeignDistanceAndCountryRules(): void
+    {
+        $binding = (object) ['notification_mode' => 'relaxed', 'notification_baseline' => json_encode(['country' => 'GB', 'city' => 'London', 'latitude' => 51.51, 'longitude' => -0.09])];
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'GB', 'city' => 'Manchester', 'latitude' => 53.48, 'longitude' => -2.24]);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'FR', 'city' => 'Paris', 'latitude' => 48.85, 'longitude' => 2.35]);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        $policy = app(\Blessing\WeCom\NotificationPolicy::class);
+        self::assertFalse($policy->decide($binding, '8.8.8.8')['send']);
+        self::assertTrue($policy->decide($binding, '8.8.4.4')['send']);
+    }
+
+    public function testLocalMmdbIsIndependentlyVerifiedOnlineAndCached(): void
+    {
+        $path = dirname(__DIR__).'/tests/fixtures/GeoIP2-City-Test.mmdb';
+        $geo = new class($path) extends \Blessing\WeCom\IpLocation {
+            public function __construct(private string $path) {}
+            public function databasePath(): string {return $this->path;}
+        };
+        Http::fake(['https://ipwho.is/*' => Http::response(['success' => true, 'ip' => '81.2.69.142', 'country_code' => 'GB', 'latitude' => 51.5142, 'longitude' => -0.0931, 'city' => 'London'])]);
+        $point = $geo->verified('81.2.69.142');
+        self::assertSame('GB', $point['country']);self::assertSame('伦敦', $point['city']);
+        self::assertNotNull($geo->verified('81.2.69.142'));Http::assertSentCount(1);
+        $this->assertDatabaseCount(Installer::GEO_CACHE, 1);
+        self::assertStringNotContainsString('81.2.69.142', json_encode(DB::table(Installer::GEO_CACHE)->get()));
+    }
+
+    public function testPrivateIpIsNeverSentToOnlineService(): void
+    {
+        foreach (['192.168.1.1', '100.64.0.1', '192.0.2.1', '2001:db8::1', '::ffff:127.0.0.1'] as $ip) {
+            self::assertNull(app(\Blessing\WeCom\IpLocation::class)->verified($ip));
+        }
+        Http::assertNothingSent();
+    }
+
+    public function testFailedRelaxedPushDoesNotAdvanceBaseline(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);
+        DB::table(Installer::BINDINGS)->where('user_id', $user->uid)->update(['notification_mode' => 'relaxed']);
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'CN', 'city' => '广州', 'latitude' => 23.129, 'longitude' => 113.264]);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        $this->notificationApi(['errcode' => 81013]);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));app()->terminate();
+        self::assertNull(app(Bindings::class)->forUser($user->uid)->notification_baseline);
+    }
+
+    private function actualTestGeo(): \Blessing\WeCom\IpLocation
+    {
+        return new class(dirname(__DIR__).'/tests/fixtures/GeoIP2-City-Test.mmdb') extends \Blessing\WeCom\IpLocation {
+            public function __construct(private string $path) {}
+            public function databasePath(): string {return $this->path;}
+        };
+    }
+
+    public function testChinaCityRequiresOnlineCityAgreementWithRealLocalDatabase(): void
+    {
+        Http::fake(['https://ipwho.is/*' => Http::response(['success' => true, 'ip' => '175.16.199.1', 'country_code' => 'CN', 'city' => 'Changchun', 'latitude' => 43.88, 'longitude' => 125.3228])]);
+        $point = $this->actualTestGeo()->verified('175.16.199.1');
+        self::assertSame('长春', $point['city']);self::assertSame('CN', $point['country']);
+    }
+
+    public function testChinaOnlineCityMismatchIsUncertainEvenWithNearbyCoordinates(): void
+    {
+        Http::fake(['https://ipwho.is/*' => Http::response(['success' => true, 'ip' => '175.16.199.1', 'country_code' => 'CN', 'city' => 'Another City', 'latitude' => 43.88, 'longitude' => 125.3228])]);
+        self::assertNull($this->actualTestGeo()->verified('175.16.199.1'));
+    }
+
+    public function testOnlineRateLimitIsUncertainAndUsesCooldown(): void
+    {
+        Http::fake(['https://ipwho.is/*' => Http::response([], 429)]);
+        $geo = $this->actualTestGeo();
+        self::assertNull($geo->verified('175.16.199.1'));
+        self::assertNull($geo->verified('81.2.69.142'));
+        Http::assertSentCount(1);
+    }
+
+    public function testRelaxedSameCityDoesNotCallMessageApiAndUpdatesBaseline(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);
+        DB::table(Installer::BINDINGS)->where('user_id', $user->uid)->update(['notification_mode' => 'relaxed',
+            'notification_baseline' => json_encode(['country' => 'CN', 'city' => '广州', 'latitude' => 23.129, 'longitude' => 113.264])]);
+        $geo = Mockery::mock(\Blessing\WeCom\IpLocation::class);
+        $geo->shouldReceive('verified')->once()->andReturn(['country' => 'CN', 'city' => '广州', 'latitude' => 23.15, 'longitude' => 113.30]);
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));app()->terminate();
+        Http::assertNothingSent();
+        self::assertEquals(23.15, json_decode(app(Bindings::class)->forUser($user->uid)->notification_baseline, true)['latitude']);
     }
 
     private function user(array $values = []): User
