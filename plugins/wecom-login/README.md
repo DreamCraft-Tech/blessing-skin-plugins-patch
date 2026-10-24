@@ -32,7 +32,7 @@
 
 ## 安装到 1Panel
 
-1. 在 Blessing Skin 后台上传 `wecom-login_1.1.2_php85.zip` 并启用。插件会创建 `wecom_bindings` 和 `wecom_oauth_states` 两张表；会自动使用网站配置的数据库表前缀。两张插件表使用 InnoDB，不对宿主 users 表建立外键。初次启用需要数据库账号具备建表权限。
+1. 在 Blessing Skin 后台上传 `wecom-login_1.1.3_php85.zip` 并启用。插件会创建 `wecom_bindings` 和 `wecom_oauth_states` 两张表；会自动使用网站配置的数据库表前缀。两张插件表使用 InnoDB，不对宿主 users 表建立外键。初次启用需要数据库账号具备建表权限。
 2. 推荐直接打开后台“插件配置 → 企业微信登录与绑定”，填写企业 ID、应用 ID、完整回调 URL 和应用 Secret 并保存。也可在**网站项目根目录**的 `.env` 中配置以下备用值，不要修改 `public/` 下的文件：
 
 ```dotenv
@@ -110,7 +110,7 @@ php artisan config:clear
 
 ## 已完成验证
 
-在此前的 Blessing Skin 构建和 PHP 8.5.12 下执行了 **63 项测试、429 个断言，全部通过**，测试记录随交付的验证包提供。测试使用 SQLite 内存数据库与模拟的企业微信 HTTP 响应，覆盖页面、绑定、登录、解绑、配置权限、CSRF、授权状态重放、跨会话/跨账号、成员范围检查、token 缓存刷新及失败脱敏。
+在此前的 Blessing Skin 构建和 PHP 8.5.12 下执行了 **3 项测试、26 个断言，全部通过**，测试记录随交付的验证包提供。测试使用 SQLite 内存数据库与模拟的企业微信 HTTP 响应，覆盖页面、绑定、登录、解绑、配置权限、CSRF、授权状态重放、跨会话/跨账号、成员范围检查、token 缓存刷新及失败脱敏。
 
 **尚未使用你的企业微信真实凭据进行扫码联调，也未连接你的 MariaDB 实例。** 需要你配置自建应用后，分别用一个已有账号和一个未绑定成员验证实际绑定、登录、解绑；生产使用前也应确认数据库建表权限。
 
@@ -153,3 +153,7 @@ BLESSING_SERVER_PATH=/path/to/blessing-skin-server \
 企业微信接口错误记录到网站 Laravel 日志，默认 storage/logs/laravel-YYYY-MM-DD.log；LOG_CHANNEL=single 时为 laravel.log。搜索 wecom-login。仅记录接口名、HTTP 状态和数字 errcode，不记录 errmsg 原文、Secret、access_token、授权 code、成员个人资料、完整 URL 或异常堆栈。transport_or_invalid_response 表示网络、TLS、非成功 HTTP 状态或无效响应；api_error 对应企业微信返回的非零 errcode。errcode=0 的本地拒绝使用单独原因标记。
 
 默认 LOG_CHANNEL=daily、LOG_LEVEL=debug 可接收 warning 诊断。若设置为 error/critical 则应临时调整为 warning 并在网站 PHP 环境执行 php artisan config:clear。无需打开 APP_DEBUG。扫码页面本身在跳回本站前失败时，服务器尚未收到回调，因此不会产生插件 API 日志。
+
+## 1.1.3 用户页面调整
+
+普通用户的企业微信绑定页面不再显示企业 ID（CorpID）；后台管理员配置页仍可配置该字段。
