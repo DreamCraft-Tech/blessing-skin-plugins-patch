@@ -22,7 +22,7 @@ final class Configuration
 
     public function save(Request $request)
     {
-        $data = $request->validate(['title' => 'required|string|max:40', 'position' => 'required|in:left,right', 'display' => 'required|in:reveal,visible', 'luck_enabled' => 'sometimes|boolean', 'prank_enabled' => 'sometimes|boolean', 'texts' => 'nullable|string|max:32000', 'effect' => 'sometimes|in:rainbow,paper,fly,shake,pulse,chaos,mixed', 'motion' => 'sometimes|in:gentle,playful', 'duration' => 'sometimes|integer|in:15,30,60']);
+        $data = $request->validate(['title' => 'required|string|max:40', 'position' => 'required|in:left,right', 'display' => 'required|in:reveal,visible', 'luck_enabled' => 'sometimes|boolean', 'prank_enabled' => 'sometimes|boolean', 'texts' => 'nullable|string|max:32000', 'effect' => 'sometimes|in:rainbow,paper,fly,shake,pulse,chaos,dodge,mixed', 'motion' => 'sometimes|in:gentle,playful', 'duration' => 'sometimes|integer|in:15,30,60']);
         $data = array_replace(app(Settings::class)->values(), $data);
         $data['luck_enabled'] = (bool) $data['luck_enabled'];
         $data['prank_enabled'] = (bool) $data['prank_enabled'];

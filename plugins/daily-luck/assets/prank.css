@@ -58,3 +58,9 @@
 @media (prefers-reduced-motion: reduce) {
   .daily-prank-fly .card, .daily-prank-chaos .card, .daily-prank-shake > .content, .daily-prank-pulse > .content, .daily-prank-chaos > .content { animation: none !important; }
 }
+
+.daily-prank-dodger {
+  translate: var(--daily-dodge-x, 0px) var(--daily-dodge-y, 0px);
+  will-change: translate;
+}
+@media (prefers-reduced-motion: reduce) { .daily-prank-dodger { translate: none !important; transition: none; } }

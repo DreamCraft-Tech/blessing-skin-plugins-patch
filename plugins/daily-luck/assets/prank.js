@@ -7,13 +7,67 @@
   const status = document.getElementById('daily-prank-status');
   const area = panel.closest('.content-wrapper');
   if (!trigger || !restore || !status || !area) return;
-  const effects = ['rainbow', 'paper', 'fly', 'shake', 'pulse', 'chaos'];
+  const effects = ['rainbow', 'paper', 'fly', 'shake', 'pulse', 'chaos', 'dodge'];
   const classes = [...effects.map(effect => 'daily-prank-' + effect), 'daily-prank-playful', 'daily-prank-gentle'];
   let count = 0;
   let timer = null;
   let rescue = null;
   let flying = [];
+  let frame = null;
+  let pointer = null;
+  const dodgers = new Map();
+  const clearDodge = () => {
+    document.removeEventListener('pointermove', onPointer);
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    frame = null;
+    pointer = null;
+    dodgers.forEach((state, node) => {
+      node.classList.remove('daily-prank-dodger');
+      for (const [key, value, priority] of state.previous) {
+        if (value) node.style.setProperty(key, value, priority); else node.style.removeProperty(key);
+      }
+    });
+    dodgers.clear();
+  };
+  const dodge = () => {
+    frame = null;
+    if (!pointer) return;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const radius = panel.dataset.motion === 'gentle' ? 65 : 100;
+    const step = panel.dataset.motion === 'gentle' ? 35 : 65;
+    const clamp = (value, low, high) => low <= high ? Math.max(low, Math.min(high, value)) : 0;
+    document.querySelectorAll('.card, .btn, button, input[type="button"], input[type="submit"]').forEach(node => {
+      if (node === restore || node === rescue || node.classList.contains('daily-prank-rescue')) return;
+      const rect = node.getBoundingClientRect();
+      if (!rect.width || !rect.height || rect.bottom < 0 || rect.top > viewportHeight || rect.right < 0 || rect.left > viewportWidth) return;
+      const nearX = clamp(pointer.x, rect.left, rect.right);
+      const nearY = clamp(pointer.y, rect.top, rect.bottom);
+      if (Math.hypot(pointer.x - nearX, pointer.y - nearY) > radius) return;
+      if (!dodgers.has(node)) {
+        dodgers.set(node, {x:0, y:0, previous:['--daily-dodge-x', '--daily-dodge-y'].map(key => [key, node.style.getPropertyValue(key), node.style.getPropertyPriority(key)])});
+        node.classList.add('daily-prank-dodger');
+      }
+      const state = dodgers.get(node);
+      let dx = rect.left + rect.width / 2 - pointer.x;
+      let dy = rect.top + rect.height / 2 - pointer.y;
+      if (Math.hypot(dx, dy) < 1) { dx = dodgers.size % 2 ? 1 : -1; dy = -1; }
+      const length = Math.hypot(dx, dy);
+      const baseX = rect.left - state.x;
+      const baseY = rect.top - state.y;
+      state.x = clamp(state.x + dx / length * step, 12 - baseX, viewportWidth - 12 - rect.width - baseX);
+      state.y = clamp(state.y + dy / length * step, 12 - baseY, viewportHeight - 12 - rect.height - baseY);
+      node.style.setProperty('--daily-dodge-x', state.x + 'px');
+      node.style.setProperty('--daily-dodge-y', state.y + 'px');
+    });
+  };
+  function onPointer(event) {
+    if (event.pointerType === 'touch') return;
+    pointer = {x:event.clientX, y:event.clientY};
+    if (frame === null) frame = window.requestAnimationFrame(dodge);
+  }
   const clearEffects = () => {
+    clearDodge();
     area.classList.remove(...classes);
     flying.forEach((card, index) => card.classList.remove('daily-prank-path-' + index % 6));
     flying = [];
@@ -50,6 +104,7 @@
     area.classList.add('daily-prank-' + effect);
     if (panel.dataset.motion === 'gentle') area.classList.add('daily-prank-gentle');
     if (panel.dataset.motion === 'playful' && !reduced && ['rainbow', 'paper'].includes(effect)) area.classList.add('daily-prank-playful');
+    if (effect === 'dodge') document.addEventListener('pointermove', onPointer, {passive:true});
     if (['fly', 'chaos'].includes(effect)) {
       flying = Array.from(area.querySelectorAll('.card')).filter(card => card.id !== 'daily-luck-card');
       flying.forEach((card, index) => card.classList.add('daily-prank-path-' + index % 6));
