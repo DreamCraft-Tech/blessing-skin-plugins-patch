@@ -125,6 +125,34 @@ final class HistoryTest extends Tests\TestCase
         $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => $channel]);
     }
 
+    public function testUserAgentLabelsPrioritizeMobileAndWeComBeforeDesktopTokens(): void
+    {
+        $parser = app(\Blessing\LoginHistory\ClientAgent::class);
+        foreach ([
+            ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130', '电脑 · Windows'],
+            ['Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) Safari/605', '电脑 · macOS'],
+            ['Mozilla/5.0 (X11; Linux x86_64) Firefox/130', '电脑 · Linux'],
+            ['Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', '手机 · Android'],
+            ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', '手机 · iOS'],
+            ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) Mobile/15E148', '平板 · iPadOS'],
+            ['Mozilla/5.0 (Linux; Android 14) MicroMessenger/8.0 wxwork/4.1.0', '企业微信 · Android'],
+            ['Mozilla/5.0 (Windows NT 10.0) wxwork/4.1.0', '企业微信 · Windows'],
+            ['Mozilla/5.0 (iPhone) MicroMessenger/8.0', '微信 · iOS'],
+            ['Java/21 Minecraft Launcher', '其他客户端'], ['', '未记录'],
+        ] as [$agent, $label]) {self::assertSame($label, $parser->label($agent));}
+    }
+
+    public function testHistoryShowsShortClientLabelWithFullEscapedUaTooltip(): void
+    {
+        $user = $this->user();
+        $agent = 'Mozilla/5.0 (Windows NT 10.0) Chrome/130 " onmouseover="alert(1)<script>';
+        app(Recorder::class)->record($user->uid, 'web', 'login', 'password', Request::create('/test', 'POST', [], [], [], ['HTTP_USER_AGENT' => $agent]), [], 'password');
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('电脑 · Windows')
+            ->assertSee('title="Mozilla/5.0 (Windows NT 10.0) Chrome/130 &quot; onmouseover=&quot;alert(1)&lt;script&gt;"', false)
+            ->assertDontSee('title="Mozilla/5.0 (Windows NT 10.0) Chrome/130 " onmouseover="', false);
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'user_agent' => $agent]);
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {

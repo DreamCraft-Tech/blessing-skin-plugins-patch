@@ -2,8 +2,14 @@
 {% block title %}登录记录插件说明{% endblock %}
 {% block content %}
 <div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">网页登录与 Yggdrasil 登录记录</h2></div><div class="card-body">
-<p>用户入口：高级功能 → 登录记录。普通用户只能查询自己的记录。</p>
-<ul><li>记录成功的网页登录（含企业微信、OAuth 等使用网站标准登录事件的方式）。</li><li>兼容 yggdrasil-api 5.2.1 与 yggdrasil-connect 6.2.0 的认证、刷新 / 选角色及加入服务器请求。</li><li>不依赖 YGG_VERBOSE_LOG 开关，不保存密码、accessToken、clientToken、Cookie 或原始请求参数。</li><li>新记录按 UTC 保存，页面按网站时区显示。保留 90 天，产生新记录时最多每小时清理一次过期数据。</li><li>角色名、UUID 与账号归属按当时情况快照保存，角色改名、删除、转移不会把历史暴露给新所有者。</li><li>旧版 Yggdrasil 日志表：{{ legacy_available ? '已检测到，可由用户查询其本人记录' : '未检测到' }}。不修改或清理其他插件的旧日志。</li></ul>
-<p>插件停用或卸载保留历史表；删除皮肤站账号时通过数据库外键删除该账号的新记录。未安装前的网页登录无法追溯。</p>
+<p>用户可在“高级功能 → 登录记录”查询自己的登录活动。</p>
+<ul>
+<li>记录网页登录渠道，以及 Yggdrasil 认证、刷新令牌、选择角色和加入服务器请求。</li>
+<li>支持按来源、渠道、角色和日期筛选，角色信息按认证时的情况保存。</li>
+<li>客户端显示设备与系统名称，鼠标悬停可查看完整 User-Agent。</li>
+<li>记录保留 90 天，时间按网站时区显示。</li>
+<li>兼容 yggdrasil-api 5.2.1 与 yggdrasil-connect 6.2.0。</li>
+<li>既有 Yggdrasil 日志：{{ legacy_available ? '可查询' : '待接入' }}。</li>
+</ul>
 </div></div>
 {% endblock %}

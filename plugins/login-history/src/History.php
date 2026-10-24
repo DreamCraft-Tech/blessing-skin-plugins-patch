@@ -68,6 +68,7 @@ final class History
             $row->candidate_profiles = $row->profiles->where('selected', false)->values();
             $row->source_label = $legacy ? '旧版 Yggdrasil 日志' : ($row->source === 'web' ? '网页' : 'Yggdrasil');
             $row->user_agent = $legacy ? '' : $row->user_agent;
+            $row->client_label = app(ClientAgent::class)->label($row->user_agent);
             $row->channel_label = $legacy ? '未记录' : ($row->source === 'web'
                 ? WebChannels::label($row->login_channel, $row->backend)
                 : match ($row->backend) {'yggdrasil-api' => 'Yggdrasil API', 'yggdrasil-connect' => 'Yggdrasil Connect', default => 'Yggdrasil'});
