@@ -16,3 +16,45 @@
 .daily-prank-playful #daily-luck-card { animation: daily-prank-sway 2s ease-in-out infinite; }
 @keyframes daily-prank-sway { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(.25deg); } 70% { transform: rotate(-.25deg); } }
 @media (prefers-reduced-motion: reduce) { .daily-prank-playful #daily-luck-card { animation: none; } }
+.daily-prank-rescue {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  right: max(20px, env(safe-area-inset-right));
+  z-index: 2000;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+}
+.daily-prank-fly, .daily-prank-shake, .daily-prank-pulse, .daily-prank-chaos { overflow-x: clip; }
+.daily-prank-fly, .daily-prank-chaos { --daily-prank-travel: 1; }
+.daily-prank-fly.daily-prank-gentle, .daily-prank-chaos.daily-prank-gentle { --daily-prank-travel: .45; }
+.daily-prank-fly .card:not(#daily-luck-card), .daily-prank-chaos .card:not(#daily-luck-card) {
+  animation: daily-prank-flight var(--daily-prank-speed, 3.6s) ease-in-out infinite;
+  transform-origin: center;
+}
+.daily-prank-path-0 { --daily-prank-x: 7vw; --daily-prank-y: -5vh; --daily-prank-angle: 7deg; --daily-prank-speed: 3.6s; }
+.daily-prank-path-1 { --daily-prank-x: -8vw; --daily-prank-y: 6vh; --daily-prank-angle: -9deg; --daily-prank-speed: 4.2s; }
+.daily-prank-path-2 { --daily-prank-x: 6vw; --daily-prank-y: 8vh; --daily-prank-angle: 11deg; --daily-prank-speed: 3.1s; }
+.daily-prank-path-3 { --daily-prank-x: -5vw; --daily-prank-y: -7vh; --daily-prank-angle: -6deg; --daily-prank-speed: 4.6s; }
+.daily-prank-path-4 { --daily-prank-x: 9vw; --daily-prank-y: 4vh; --daily-prank-angle: -8deg; --daily-prank-speed: 3.9s; }
+.daily-prank-path-5 { --daily-prank-x: -7vw; --daily-prank-y: 7vh; --daily-prank-angle: 10deg; --daily-prank-speed: 3.3s; }
+@keyframes daily-prank-flight {
+  0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
+  35% { transform: translate(calc(var(--daily-prank-x) * var(--daily-prank-travel)), calc(var(--daily-prank-y) * var(--daily-prank-travel))) rotate(calc(var(--daily-prank-angle) * var(--daily-prank-travel))) scale(.96); }
+  70% { transform: translate(calc(var(--daily-prank-x) * var(--daily-prank-travel) * -.5), calc(var(--daily-prank-y) * var(--daily-prank-travel) * -.4)) rotate(calc(var(--daily-prank-angle) * var(--daily-prank-travel) * -.5)) scale(1.03); }
+}
+.daily-prank-shake > .content { animation: daily-prank-shake .55s ease-in-out infinite; }
+.daily-prank-shake.daily-prank-gentle > .content { animation-duration: 1.2s; }
+@keyframes daily-prank-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20%, 60% { transform: translate(-5px, 2px) rotate(-.25deg); }
+  40%, 80% { transform: translate(5px, -2px) rotate(.25deg); }
+}
+.daily-prank-pulse > .content { animation: daily-prank-pulse 2s ease-in-out infinite; transform-origin: center 20vh; }
+.daily-prank-pulse.daily-prank-gentle > .content { animation-duration: 4s; }
+@keyframes daily-prank-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(.91); } 75% { transform: scale(1.04); } }
+.daily-prank-chaos > .content { animation: daily-prank-chaos 2.8s ease-in-out infinite; transform-origin: center 20vh; }
+.daily-prank-chaos.daily-prank-gentle > .content { animation-duration: 5s; }
+@keyframes daily-prank-chaos { 0%, 100% { transform: scale(1) rotate(0); } 30% { transform: translate(-4px, 2px) scale(.94) rotate(-.4deg); } 65% { transform: translate(4px, -2px) scale(1.02) rotate(.4deg); } }
+@media (max-width: 575.98px) { .daily-prank-fly, .daily-prank-chaos { --daily-prank-travel: .45; } }
+@media (prefers-reduced-motion: reduce) {
+  .daily-prank-fly .card, .daily-prank-chaos .card, .daily-prank-shake > .content, .daily-prank-pulse > .content, .daily-prank-chaos > .content { animation: none !important; }
+}

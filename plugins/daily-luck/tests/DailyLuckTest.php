@@ -141,7 +141,29 @@ final class DailyLuckTest extends Tests\TestCase
         $s = app(Settings::class)->values();
         self::assertTrue($s['luck_enabled']);
         self::assertTrue($s['prank_enabled']);
-        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.1.0', false);
+        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.2.0', false);
+    }
+
+    public function testFooterPlacesLuckOnLeftAndRedPrankOnRight(): void
+    {
+        $response = $this->actingAs(User::factory()->create())->get('/user')->assertOk();
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<?xml encoding="utf-8" ?>'.$response->getContent());
+        $xpath = new DOMXPath($dom);
+        $footer = '//*[@id="daily-luck-card"]/div[contains(@class,"card-footer")]';
+        self::assertSame(1, $xpath->query($footer.'/form/button[@type="submit"]')->length);
+        self::assertSame(1, $xpath->query($footer.'/button[@id="daily-prank-trigger" and contains(@class,"bg-gradient-danger") and contains(@class,"ml-auto")]')->length);
+        self::assertSame(0, $xpath->query('//*[@id="daily-luck-card"]/div[contains(@class,"card-body")]//button[@id="daily-prank-trigger"]')->length);
+    }
+
+    public function testMotionEffectOptionsCanBeSavedAndRendered(): void
+    {
+        $this->actingAs(User::factory()->superAdmin()->create());
+        foreach (['fly', 'shake', 'pulse', 'chaos'] as $effect) {
+            $this->post('/admin/daily-luck/config', ['title' => '组合', 'position' => 'right', 'display' => 'reveal', 'effect' => $effect, 'motion' => 'playful', 'duration' => 15])->assertRedirect();
+            $this->get('/user')->assertOk()->assertSee('data-effect="'.$effect.'"', false)->assertSee('data-motion="playful"', false);
+        }
+        $this->get('/admin/plugins/config/daily-luck')->assertOk()->assertSee('卡片乱飞')->assertSee('页面抖动')->assertSee('忽大忽小')->assertSee('大闹仪表板');
     }
 
     protected function tearDown(): void

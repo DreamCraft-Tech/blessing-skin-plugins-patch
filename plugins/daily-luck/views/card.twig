@@ -3,28 +3,30 @@
   <div class="card-header"><h2 class="card-title"><i class="fas fa-dice mr-1" aria-hidden="true"></i>{{ luck_settings.title }}</h2><div class="card-tools"><span class="text-muted small">{{ daily_luck ? daily_luck.date : '' }}</span></div></div>
   <div class="card-body">
     {% if daily_luck %}
-    {% if luck_settings.prank_enabled %}<h3 class="h6">今日人品</h3>{% endif %}
-    {% if luck_settings.display == 'reveal' %}
-      {% if not daily_luck.opened %}<p class="text-muted">今天的冒险，会有怎样的好运？</p>{% endif %}
-      <form method="post" action="{{ url('user/daily-luck/reveal') }}">{{ csrf_field() }}
-        <button class="btn bg-gradient-primary pl-4 pr-4" type="submit" {% if daily_luck.opened %}disabled aria-disabled="true"{% endif %}><i class="fas fa-dice mr-1" aria-hidden="true"></i>{{ daily_luck.opened ? '明天再来看看？' : '查看今日人品' }}</button>
-      </form>
-    {% endif %}
-    <div id="daily-luck-result" class="{{ luck_settings.display == 'reveal' ? 'mt-3' : '' }}" {{ luck_settings.display == 'reveal' and not daily_luck.opened ? 'hidden' : '' }}>
-      <div class="d-flex align-items-center mb-2"><span class="display-4 text-{{ daily_luck.color }} mr-2">{{ daily_luck.score }}</span><span class="text-muted mr-3">/ 100</span><span class="badge badge-{{ daily_luck.color }}">{{ daily_luck.label }}</span></div>
-      <p class="mb-2">{{ daily_luck.text }}</p>
-    </div>
-    <p class="text-muted small mb-0 mt-3">每天一份新好运 · {{ daily_luck.timezone }} 每日 00:00 更新</p>
+      {% if luck_settings.display == 'reveal' and not daily_luck.opened %}<p class="text-muted">今天的冒险，会有怎样的好运？</p>{% endif %}
+      <div id="daily-luck-result" class="{{ luck_settings.display == 'reveal' ? 'mt-3' : '' }}" {{ luck_settings.display == 'reveal' and not daily_luck.opened ? 'hidden' : '' }}>
+        <div class="d-flex align-items-center mb-2"><span class="display-4 text-{{ daily_luck.color }} mr-2">{{ daily_luck.score }}</span><span class="text-muted mr-3">/ 100</span><span class="badge badge-{{ daily_luck.color }}">{{ daily_luck.label }}</span></div>
+        <p class="mb-2">{{ daily_luck.text }}</p>
+      </div>
+      <p class="text-muted small mb-0 mt-3">每天一份新好运 · {{ daily_luck.timezone }} 每日 00:00 更新</p>
     {% endif %}
     {% if luck_settings.prank_enabled %}
       {% if daily_luck %}<hr>{% endif %}
       <section id="daily-luck-prank" data-effect="{{ luck_settings.effect }}" data-motion="{{ luck_settings.motion }}" data-duration="{{ luck_settings.duration }}">
-        <h3 class="h6">千万别点</h3>
-        <p class="text-muted" id="daily-prank-status" role="status" aria-live="polite">这里有一个看起来很普通的按钮。</p>
-        <button class="btn btn-warning" type="button" id="daily-prank-trigger">千万别点</button>
-        <button class="btn btn-default ml-2" type="button" id="daily-prank-reset" hidden>恢复原样</button>
+        <p class="text-muted mb-0" id="daily-prank-status" role="status" aria-live="polite">右下角的红色按钮，似乎藏着一点小秘密。</p>
+        <button class="btn btn-default mt-2" type="button" id="daily-prank-reset" hidden>恢复原样</button>
       </section>
     {% endif %}
   </div>
+  {% if (daily_luck and luck_settings.display == 'reveal') or luck_settings.prank_enabled %}
+  <div class="card-footer d-flex align-items-center flex-wrap">
+    {% if daily_luck and luck_settings.display == 'reveal' %}
+      <form class="mb-0 mr-2" method="post" action="{{ url('user/daily-luck/reveal') }}">{{ csrf_field() }}
+        <button class="btn bg-gradient-primary pl-4 pr-4" type="submit" {% if daily_luck.opened %}disabled aria-disabled="true"{% endif %}><i class="fas fa-dice mr-1" aria-hidden="true"></i>{{ daily_luck.opened ? '明天再来看看？' : '查看今日人品' }}</button>
+      </form>
+    {% endif %}
+    {% if luck_settings.prank_enabled %}<button class="btn bg-gradient-danger pl-4 pr-4 ml-auto" type="button" id="daily-prank-trigger">千万别点</button>{% endif %}
+  </div>
+  {% endif %}
 </div>
 {% endif %}
