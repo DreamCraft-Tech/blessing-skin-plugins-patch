@@ -23,6 +23,11 @@
           <input id="wecom-use-env" class="form-check-input" type="checkbox" name="use_env_secret" value="1">
           <label class="form-check-label" for="wecom-use-env">清除后台 Secret，改用环境变量 WECOM_SECRET（勾选时请勿填写新 Secret）</label>
         </div>
+        <div class="form-group form-check">
+          <input id="wecom-notifications" class="form-check-input" type="checkbox" name="login_notifications_enabled" value="1" {{ login_notifications_enabled ? 'checked' : '' }}>
+          <label class="form-check-label" for="wecom-notifications">允许发送网页登录通知</label>
+          <small class="form-text text-muted">默认关闭。开启后，已绑定用户还需自行选择接收。使用当前应用的消息发送 API，失败不影响登录。</small>
+        </div>
         <button type="submit" class="btn btn-success">保存配置</button>
       </form>
       <hr>

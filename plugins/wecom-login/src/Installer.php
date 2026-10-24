@@ -37,6 +37,9 @@ final class Installer
                 $table->unsignedBigInteger('expires_at')->index();
             });
         }
+        if (!Schema::hasColumn(self::BINDINGS, 'notify_login')) {
+            Schema::table(self::BINDINGS, fn (Blueprint $table) => $table->boolean('notify_login')->default(false));
+        }
         // MySQL DDL is not transactional: an earlier failed FK may have left tables without indexes.
         foreach ([
             [self::BINDINGS, ['user_id'], true],

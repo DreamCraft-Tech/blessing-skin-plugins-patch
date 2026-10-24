@@ -28,6 +28,7 @@ return function (Filter $filter, Dispatcher $events): void {
         'secret' => env('WECOM_SECRET', ''),
     ]]);
     Hook::addRoute(fn () => Routes::register());
+    $events->listen(\Illuminate\Auth\Events\Login::class, [\Blessing\WeCom\LoginNotification::class, 'handle']);
     $events->listen(ConfigureUserMenu::class, [Menus::class, 'appendUserItem']);
     $filter->add('grid:user.index', function (array $grid): array {
         $grid['widgets'][0][0][] = 'Blessing\\WeCom::widgets.account';

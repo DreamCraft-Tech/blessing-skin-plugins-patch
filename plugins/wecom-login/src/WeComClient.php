@@ -30,14 +30,16 @@ final class WeComClient
         }
     }
 
-    private function request(string $path, array $parameters): array
+    private function request(string $path, array $parameters, ?array $payload = null): array
     {
         $status = null;
         $errcode = null;
         try {
-            $response = Http::acceptJson()->connectTimeout(5)->timeout(10)
-                ->withOptions(['allow_redirects' => false])
-                ->get('https://qyapi.weixin.qq.com/cgi-bin/'.$path, $parameters);
+            $pending = Http::acceptJson()->connectTimeout(5)->timeout(10)
+                ->withOptions(['allow_redirects' => false]);
+            $url = 'https://qyapi.weixin.qq.com/cgi-bin/'.$path;
+            $response = $payload === null ? $pending->get($url, $parameters)
+                : $pending->withQueryParameters($parameters)->post($url, $payload);
             $status = $response->status();
             $body = $response->json();
             $errcode = is_array($body) && is_numeric($body['errcode'] ?? null) ? (int) $body['errcode'] : null;
@@ -102,6 +104,27 @@ final class WeComClient
             return $body;
         }
         throw new Failure('企业微信授权失败，请重新扫码。', 403);
+    }
+
+    public function sendLoginMessage(string $memberId, string $content, array $settings): void
+    {
+        if ($memberId === '' || strcasecmp($memberId, '@all') === 0 || preg_match('/[|\r\n]/', $memberId)) {
+            throw new Failure('登录通知接收者无效。', 422);
+        }
+        $payload = ['touser' => $memberId, 'msgtype' => 'text', 'agentid' => (int) $settings['agent_id'],
+            'text' => ['content' => $content], 'safe' => 0];
+        for ($attempt = 0; $attempt < 2; $attempt++) {
+            $body = $this->request('message/send', ['access_token' => $this->token($settings)], $payload);
+            if (in_array((int) $body['errcode'], [40001, 40014, 42001], true) && $attempt === 0) {
+                Cache::forget($this->cacheKey($settings));
+                continue;
+            }
+            if ((int) $body['errcode'] !== 0 || !empty($body['invaliduser']) || !empty($body['unlicenseduser'])) {
+                if ((int) $body['errcode'] === 0) {$this->diagnostic('message_recipient_rejected', 'message/send', 200, 0);}
+                throw new Failure('登录通知发送失败。', 502);
+            }
+            return;
+        }
     }
 
     public function member(string $code, array $settings): array

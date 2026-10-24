@@ -13,6 +13,18 @@
         <dt class="col-sm-3">成员账号</dt><dd class="col-sm-9">{{ binding.member_id }}</dd>
       </dl>
       <hr>
+      <form method="post" action="{{ url('user/wecom/notifications') }}">
+        {{ csrf_field() }}
+        <input type="hidden" name="notify_login" value="0">
+        <div class="form-group form-check">
+          <input id="wecom-notify-login" class="form-check-input" type="checkbox" name="notify_login" value="1" {{ binding.notify_login ? 'checked' : '' }}>
+          <label class="form-check-label" for="wecom-notify-login">接收企业微信登录通知</label>
+          <small class="form-text text-muted">开启后，网页登录成功会向已绑定的企业微信发送登录时间、IP 和设备信息。自动恢复登录状态和 Yggdrasil 游戏认证不推送。</small>
+        </div>
+        {% if not notifications_enabled %}<p class="text-muted">管理员尚未开启消息推送；可以先保存偏好，开启后生效。</p>{% endif %}
+        <button class="btn btn-outline-success" type="submit">保存通知设置</button>
+      </form>
+      <hr>
       <p>更换绑定前，请输入当前皮肤站密码解除原绑定。解绑不会删除皮肤站账号。</p>
       <form method="post" action="{{ url('user/wecom/unbind') }}">
         {{ csrf_field() }}

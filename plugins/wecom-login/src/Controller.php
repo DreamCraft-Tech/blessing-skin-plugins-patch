@@ -85,7 +85,19 @@ final class Controller extends \Illuminate\Routing\Controller
         return view('Blessing\\WeCom::account', [
             'binding' => $this->bindings->forUser((int) $request->user()->uid),
             'ready' => $this->settings->ready(),
+            'notifications_enabled' => $this->settings->notificationsEnabled(),
         ]);
+    }
+
+    public function notifications(Request $request)
+    {
+        $data = $request->validate(['notify_login' => 'required|boolean']);
+        if (!$this->bindings->forUser((int) $request->user()->uid)) {
+            return $this->failure(new Failure('请先绑定企业微信。', 409));
+        }
+        \Illuminate\Support\Facades\DB::table(Installer::BINDINGS)
+            ->where('user_id', $request->user()->uid)->update(['notify_login' => (bool) $data['notify_login']]);
+        return redirect('/user/wecom')->with('wecom_notice', '登录通知偏好已保存。');
     }
 
     public function unbind(Request $request)

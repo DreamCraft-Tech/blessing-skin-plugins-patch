@@ -118,6 +118,175 @@ final class WeComTest extends Tests\TestCase
         );
     }
 
+    private function notificationBinding(User $user, bool $optIn = true): void
+    {
+        app(Bindings::class)->bind($user, $this->member());
+        DB::table(Installer::BINDINGS)->where('user_id', $user->uid)->update(['notify_login' => $optIn]);
+    }
+
+    private function notificationApi(array $response = ['errcode' => 0]): void
+    {
+        Http::fake([
+            'https://qyapi.weixin.qq.com/cgi-bin/gettoken*' => Http::response(['errcode' => 0, 'access_token' => 'notify-token-secret', 'expires_in' => 7200]),
+            'https://qyapi.weixin.qq.com/cgi-bin/message/send*' => Http::response($response),
+        ]);
+    }
+
+    public function testNotificationsDefaultOffForExistingBindings(): void
+    {
+        $user = $this->user();
+        app(Bindings::class)->bind($user, $this->member());
+        self::assertFalse(app(Settings::class)->notificationsEnabled());
+        self::assertSame(0, (int) app(Bindings::class)->forUser($user->uid)->notify_login);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        app()->terminate();
+        Http::assertNothingSent();
+    }
+
+    public function testUserCanChangeOnlyTheirNotificationPreference(): void
+    {
+        $user = $this->user();$other = $this->user();
+        $this->notificationBinding($user, false);
+        app(Bindings::class)->bind($other, array_merge($this->member(), ['member_id' => 'other-member']));
+        $this->actingAs($user)->post('/user/wecom/notifications', ['notify_login' => '1', 'user_id' => $other->uid])->assertRedirect('/user/wecom');
+        self::assertSame(1, (int) app(Bindings::class)->forUser($user->uid)->notify_login);
+        self::assertSame(0, (int) app(Bindings::class)->forUser($other->uid)->notify_login);
+        $this->post('/user/wecom/notifications', ['notify_login' => '0'])->assertRedirect();
+        self::assertSame(0, (int) app(Bindings::class)->forUser($user->uid)->notify_login);
+    }
+
+    public function testNotificationPreferenceRequiresAuthenticationAndCsrf(): void
+    {
+        $this->post('/user/wecom/notifications', ['notify_login' => 1])->assertRedirect('/auth/login');
+        $user = $this->user();$this->notificationBinding($user, false);
+        $this->app->bind(VerifyCsrfToken::class, StrictCsrf::class);
+        $this->actingAs($user)->withSession(['_token' => 'correct-token']);
+        $this->post('/user/wecom/notifications', ['notify_login' => 1])->assertStatus(419);
+        self::assertSame(0, (int) app(Bindings::class)->forUser($user->uid)->notify_login);
+    }
+
+    public function testNotificationUsesCurrentAppAndSendsAfterResponseOnlyOnce(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);$this->notificationApi();
+        $event = new \Illuminate\Auth\Events\Login('web', $user, false);
+        event($event);event($event);
+        Http::assertNothingSent();
+        app()->terminate();app()->terminate();
+        Http::assertSentCount(2);
+        Http::assertSent(fn ($request) => $request->method() === 'POST'
+            && str_contains($request->url(), '/message/send?access_token=notify-token-secret')
+            && $request['touser'] === 'zhangsan' && $request['agentid'] === 1000001
+            && $request['msgtype'] === 'text' && str_contains($request['text']['content'], 'UID '.$user->uid)
+            && !str_contains($request['text']['content'], 'wwTestCorp'));
+    }
+
+    public function testPasswordLoginWithRememberCheckedStillNotifies(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);$this->notificationApi();
+        $user->changePassword('Known-password-123');
+        $this->post('/auth/login', ['identification' => $user->email, 'password' => 'Known-password-123', 'keep' => true])->assertSuccessful();
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/message/send'));
+    }
+
+    public function testUserOptOutSuppressesNotifications(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user, false);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));app()->terminate();
+        Http::assertNothingSent();
+    }
+
+    public function testRevokedPreferenceBeforeDeliverySuppressesNotification(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        DB::table(Installer::BINDINGS)->where('user_id', $user->uid)->update(['notify_login' => false]);
+        app()->terminate();Http::assertNothingSent();
+    }
+
+    public function testNotificationFailureDoesNotFailLogin(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);$this->notificationApi(['errcode' => 81013]);
+        $user->changePassword('Known-password-123');
+        $this->post('/auth/login', ['identification' => $user->email, 'password' => 'Known-password-123'])->assertSuccessful();
+        $this->assertAuthenticatedAs($user);
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/message/send'));
+    }
+
+    public function testNotificationTokenExpiryRefreshesAndRetries(): void
+    {
+        $calls = 0;
+        Http::fake([
+            'https://qyapi.weixin.qq.com/cgi-bin/gettoken*' => Http::response(['errcode' => 0, 'access_token' => 'refreshed-token', 'expires_in' => 7200]),
+            'https://qyapi.weixin.qq.com/cgi-bin/message/send*' => function () use (&$calls) {return Http::response(['errcode' => ++$calls === 1 ? 42001 : 0]);},
+        ]);
+        app(WeComClient::class)->sendLoginMessage('zhangsan', 'login', app(Settings::class)->requireValid());
+        self::assertSame(2, $calls);Http::assertSentCount(4);
+    }
+
+    public function testNotificationCannotBroadcast(): void
+    {
+        try {
+            app(WeComClient::class)->sendLoginMessage('@all', 'login', app(Settings::class)->requireValid());
+            self::fail('Broadcast should be rejected.');
+        } catch (\Blessing\WeCom\Failure $error) {self::assertSame(422, $error->status);}
+        Http::assertNothingSent();
+    }
+
+    public function testAdminCanEnableNotificationMasterSwitch(): void
+    {
+        $admin = $this->user(['permission' => User::ADMIN]);
+        $this->actingAs($admin)->post('/admin/wecom/config', [
+            'corp_id' => 'wwTestCorp', 'agent_id' => '1000001',
+            'redirect_uri' => 'https://skin.example.test/auth/wecom/callback', 'login_notifications_enabled' => 1,
+        ])->assertRedirect();
+        self::assertTrue(app(Settings::class)->notificationsEnabled());
+        $this->get('/admin/plugins/config/wecom-login')->assertOk()->assertSee('允许发送网页登录通知');
+    }
+
+    public function testMasterSwitchSuppressesOptedInUser(): void
+    {
+        $user = $this->user();$this->notificationBinding($user);
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        app()->terminate();Http::assertNothingSent();
+    }
+
+    public function testRememberCookieRestorationDoesNotNotify(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);
+        $guard = Auth::guard('web');
+        (new ReflectionProperty($guard, 'viaRemember'))->setValue($guard, true);
+        event(new \Illuminate\Auth\Events\Login('web', $user, true));
+        app()->terminate();Http::assertNothingSent();
+    }
+
+    public function testYggdrasilRequestDoesNotSendWebNotification(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);
+        $this->app->instance('request', \Illuminate\Http\Request::create('/api/yggdrasil/authserver/authenticate', 'POST'));
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        app()->terminate();Http::assertNothingSent();
+    }
+
+    public function testWeComLoginSendsOneLoginNotification(): void
+    {
+        option(['wecom_login_notifications_enabled' => '1']);
+        $user = $this->user();$this->notificationBinding($user);$this->mockMember();
+        Http::fake(['https://qyapi.weixin.qq.com/cgi-bin/message/send*' => Http::response(['errcode' => 0])]);
+        $state = $this->start();
+        $this->oauthCallback($state)->assertRedirect('/user');
+        $this->assertAuthenticatedAs($user);
+        $messages = Http::recorded(fn ($request) => str_contains($request->url(), '/message/send'));
+        self::assertCount(1, $messages);
+        self::assertStringContainsString('企业微信扫码', $messages->first()[0]['text']['content']);
+    }
+
     private function user(array $values = []): User
     {
         return User::factory()->create($values);

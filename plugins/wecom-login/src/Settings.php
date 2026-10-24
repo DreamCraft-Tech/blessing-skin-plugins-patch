@@ -18,6 +18,11 @@ final class Settings
         ];
     }
 
+    public function notificationsEnabled(): bool
+    {
+        return (string) option('wecom_login_notifications_enabled', '0') === '1';
+    }
+
     private function secret(): string
     {
         $encrypted = (string) option('wecom_secret_encrypted', '');

@@ -17,18 +17,20 @@ final class Configuration
             'corp_id' => $values['corp_id'], 'agent_id' => $values['agent_id'],
             'redirect_uri' => $values['redirect_uri'], 'secret_set' => $values['secret'] !== '',
             'secret_source' => $settings->secretSource(),
+            'login_notifications_enabled' => $settings->notificationsEnabled(),
         ]);
     }
 
     public function save(Request $request, Settings $settings)
     {
         // Do not flash submitted application secrets into the session on errors.
-        $validator = Validator::make($request->only(['corp_id', 'agent_id', 'redirect_uri', 'secret', 'use_env_secret']), [
+        $validator = Validator::make($request->only(['corp_id', 'agent_id', 'redirect_uri', 'secret', 'use_env_secret', 'login_notifications_enabled']), [
             'corp_id' => 'required|string|max:128',
             'agent_id' => 'required|string|max:20',
             'redirect_uri' => 'required|string|max:2048',
             'secret' => 'nullable|string|max:512',
             'use_env_secret' => 'sometimes|boolean',
+            'login_notifications_enabled' => 'sometimes|boolean',
         ]);
         if ($validator->fails()) {
             return response()->view('Blessing\\WeCom::message', [
@@ -53,7 +55,8 @@ final class Configuration
         } elseif ($useEnvironment) {
             app('options')->set('wecom_secret_encrypted', '');
         }
-        unset($values['secret'], $values['use_env_secret']);
+        app('options')->set('wecom_login_notifications_enabled', $request->boolean('login_notifications_enabled') ? '1' : '0');
+        unset($values['secret'], $values['use_env_secret'], $values['login_notifications_enabled']);
         foreach ($values as $key => $value) {
             app('options')->set('wecom_'.$key, trim($value));
         }

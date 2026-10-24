@@ -19,6 +19,8 @@ final class Routes
                 Route::get('user/wecom', [Controller::class, 'account'])->name('wecom.account');
                 Route::post('user/wecom/bind', [Controller::class, 'bind'])
                     ->middleware('throttle:10,1')->name('wecom.bind');
+                Route::post('user/wecom/notifications', [Controller::class, 'notifications'])
+                    ->middleware('throttle:10,1')->name('wecom.notifications');
                 Route::post('user/wecom/unbind', [Controller::class, 'unbind'])
                     ->middleware('throttle:5,1')->name('wecom.unbind');
                 Route::post('admin/wecom/config', [Configuration::class, 'save'])
