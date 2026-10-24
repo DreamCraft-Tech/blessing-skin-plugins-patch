@@ -164,6 +164,20 @@ final class HistoryTest extends Tests\TestCase
         $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('参考归属地：英国 · 英格兰 · 伦敦')->assertSee('81.2.69.142');
     }
 
+    public function testWeComAndHistoryAutoloadersCanBeEnabledTogether(): void
+    {
+        $path=dirname(__DIR__,2).'/wecom-login';
+        $plugin=new Plugin($path,json_decode(file_get_contents($path.'/package.json'),true));
+        $manager=app(PluginManager::class);$manager->all()->put('wecom-login',$plugin);
+        self::assertTrue($manager->enable($plugin));
+        $booted=new ReflectionProperty($manager,'booted');$booted->setValue($manager,false);$manager->boot();
+        event(new ConfigureRoutes(app('router')));app('router')->getRoutes()->refreshNameLookups();
+        self::assertTrue(class_exists('ComposerAutoloaderInitBlessingLoginHistory'));
+        self::assertTrue(class_exists('ComposerAutoloaderInitb48eee53571ba794117e44c34328c6f5'));
+        $this->actingAs($this->user())->get('/user/login-history')->assertOk();
+        $this->get('/user/wecom')->assertOk();
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {

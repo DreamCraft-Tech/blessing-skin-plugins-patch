@@ -1,0 +1,6 @@
+{
+  "name": "blessing-custom/login-history",
+  "description": "Blessing Skin login history plugin dependencies",
+  "require": {"php": "~8.5.0", "maxmind-db/reader": "1.14.0"},
+  "config": {"autoloader-suffix": "BlessingLoginHistory"}
+}

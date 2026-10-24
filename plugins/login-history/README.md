@@ -1,11 +1,11 @@
-# 网页登录与 Yggdrasil 登录记录 1.1.2
+# 网页登录与 Yggdrasil 登录记录 1.1.3
 
 ## 运行环境与安装
 
-适用 Blessing Skin Server 6.0.2 开发快照、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码、Twig 模板与 maxmind-db/reader 1.14.0。
+适用 Blessing Skin Server 6.0.2 至 6.0.4_patch、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码、Twig 模板与 maxmind-db/reader 1.14.0。
 
-1. 在插件管理上传 `login-history_1.1.2_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
-2. 更新时覆盖原目录并重新启用插件。数据库账号需具备插件表、字段和索引的创建权限。
+1. 在插件管理上传 `login-history_1.1.3_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
+2. 更新时覆盖原目录的全部文件（包括 `vendor/`）并重新启用插件。遇到旧版自动加载器类重复错误时，通过文件管理部署本运行包，然后重启 PHP 运行环境。数据库账号需具备插件表、字段和索引的创建权限。
 3. 用户入口为“高级功能 → 登录记录”；后台“插件配置 → 网页登录与 Yggdrasil 登录记录”显示功能及既有日志接入状态。
 
 OpenResty 使用网站现有 Laravel 路由规则，运行目录为 `public/`。OPcache 关闭时间戳检查时，更新后重启 PHP 运行环境。
@@ -58,3 +58,5 @@ IP 悬浮提示显示国家、省份和城市作为参考归属地。读取本�
 ## 验证
 
 验证环境为 PHP 8.5.12、Laravel 10.48.25 和 SQLite 测试数据库。测试覆盖标准网页登录事件、第三方渠道识别、Yggdrasil 成功响应、多角色快照、用户归属、筛选、时区、保留期和客户端显示。验证包包含测试日志、JUnit 结果及语法检查记录。
+
+Composer 自动加载器使用插件独立后缀 `BlessingLoginHistory`，可与企业微信插件同时启用。覆盖部署时替换 `login-history/` 全部文件，包括 `vendor/composer/`；更新后重启网站 PHP 运行环境以刷新 OPcache。
