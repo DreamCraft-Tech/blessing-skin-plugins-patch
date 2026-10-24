@@ -1,4 +1,4 @@
-# CDN 真实客户端地址 1.0.0
+# CDN 真实客户端地址 1.0.1
 
 适用 Blessing Skin 6.x（当前 PHP 8.5 分支）。统一 Laravel 的客户端 IP、客户端协议，以及主站 `client_ip` 过滤器；供登录限流、登录记录、企业微信通知和其他使用 Laravel Request 的插件读取。配置保存在主站 options 中，无额外数据库表或 Composer 依赖。
 

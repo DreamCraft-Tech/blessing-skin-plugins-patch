@@ -10,11 +10,11 @@ Blessing Skin PHP 8.5 插件集合，基于上游 bs-community/blessing-skin-plu
 
 | 目录 | 当前版本 | 功能 |
 | --- | --- | --- |
-| plugins/wecom-login | 1.5.2 | 企业微信登录、绑定及登录通知 |
-| plugins/login-history | 1.2.0 | 用户与管理员登录、认证和入服记录 |
-| plugins/two-factor | 1.0.0 | TOTP、通行密钥及两步验证策略 |
-| plugins/cdn-real-ip | 1.0.0 | 多厂商 CDN 客户端 IP 与协议识别 |
-| plugins/daily-luck | 1.2.2 | 今日人品与千万别点 |
+| plugins/wecom-login | 1.5.3 | 企业微信登录、绑定及登录通知 |
+| plugins/login-history | 1.2.1 | 用户与管理员登录、认证和入服记录 |
+| plugins/two-factor | 1.0.1 | TOTP、通行密钥及两步验证策略 |
+| plugins/cdn-real-ip | 1.0.1 | 多厂商 CDN 客户端 IP 与协议识别 |
+| plugins/daily-luck | 1.2.3 | 今日人品与千万别点 |
 
 plugins/ 同时保留适配 PHP 8.5 的上游插件。每个插件只保留一个源码目录，历史版本按原始交付顺序形成独立签名 commit；逐文件 History 和 commit diff 展示每次改动。版本标签留待后续 Actions 发布流程生成。
 

@@ -1,9 +1,9 @@
 {
   "name": "two-factor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "两步验证",
   "description": "使用验证器验证码与通行密钥保护账号，支持通行密钥直接登录。",
-  "author": "Custom plugin",
+  "author": "DreamUniverse843",
   "namespace": "Blessing\\TwoFactor",
   "license": "MIT",
   "require": {

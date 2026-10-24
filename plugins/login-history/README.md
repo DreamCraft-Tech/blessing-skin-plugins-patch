@@ -1,10 +1,10 @@
-# 网页登录与 Yggdrasil 登录记录 1.2.0
+# 网页登录与 Yggdrasil 登录记录 1.2.1
 
 ## 运行环境与安装
 
 适用 Blessing Skin Server 6.0.2 至当前 6.0.6_patch、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码、Twig 模板与 maxmind-db/reader 1.14.0。
 
-1. 在插件管理上传 `login-history_1.2.0_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
+1. 在插件管理上传 `login-history_1.2.1_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
 2. 更新时覆盖原目录的全部文件（包括 `vendor/`）并重新启用插件。遇到旧版自动加载器类重复错误时，通过文件管理部署本运行包，然后重启 PHP 运行环境。数据库账号需具备插件表、字段和索引的创建权限。
 3. 用户入口为“高级功能 → 登录记录”；后台“插件配置 → 网页登录与 Yggdrasil 登录记录”提供管理员全站登录记录查询。
 

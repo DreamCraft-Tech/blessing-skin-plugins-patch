@@ -1,10 +1,10 @@
-# 两步验证 1.0.0
+# 两步验证 1.0.1
 
 适用 Blessing Skin Server 6.0.2 至 6.0.6_patch、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码、前端资源、WebAuthn 验证库及二维码生成依赖。
 
 ## 安装
 
-1. 在插件管理上传 `two-factor_1.0.0_php85.zip` 并启用；手动安装时将压缩包中的 `two-factor/` 放入项目 `plugins/`。
+1. 在插件管理上传 `two-factor_1.0.1_php85.zip` 并启用；手动安装时将压缩包中的 `two-factor/` 放入项目 `plugins/`。
 2. 在“插件配置 → 两步验证”中设置站点 HTTPS 地址及显示名称，再保存策略。站点地址例如 `https://skin.example.com`，RP ID 为该地址的主机名。超级管理员可修改配置，管理员可查看。
 3. 用户菜单新增“两步验证”，与“个人资料”平级。页面分别管理 TOTP 与通行密钥设备。
 
