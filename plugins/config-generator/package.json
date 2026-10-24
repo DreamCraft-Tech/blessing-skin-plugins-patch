@@ -1,13 +1,14 @@
 {
   "name": "config-generator",
-  "version": "3.2.2",
+  "version": "3.2.2+php85.1",
   "title": "Blessing\\ConfigGenerator::general.title",
   "description": "Blessing\\ConfigGenerator::general.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\ConfigGenerator",
   "require": {
-    "blessing-skin-server": "^5|^6"
+    "blessing-skin-server": "^5|^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "config": "Configuration",

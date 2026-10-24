@@ -9,13 +9,13 @@ class InsertToFastLogin
 {
     public function handle($user, $profile)
     {
-        $uuid = Uuid::fromString($profile['id']);
+        $uuid = Uuid::fromString(data_get($profile, 'id'));
 
         DB::connection('fast-login')
             ->table('premium')
             ->insert([
                 'UUID' => $uuid->toString(),
-                'Name' => $profile['name'],
+                'Name' => data_get($profile, 'name'),
                 'Premium' => true,
                 'LastIp' => '0.0.0.0',
             ]);

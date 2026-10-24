@@ -1,13 +1,14 @@
 {
   "name": "texture-type-cast",
   "title": "Blessing\\TextureTypeCast::general.title",
-  "version": "0.4.0",
+  "version": "0.4.0+php85.1",
   "description": "Blessing\\TextureTypeCast::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\TextureTypeCast",
   "require": {
-    "blessing-skin-server": "^6"
+    "blessing-skin-server": "^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "icon": {

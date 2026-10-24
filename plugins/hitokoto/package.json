@@ -1,13 +1,14 @@
 {
   "name": "hitokoto",
-  "version": "1.3.0",
+  "version": "1.3.0+php85.1",
   "title": "一言",
   "description": "在用户中心和管理面板的右上角显示一言。",
   "author": "Little_Qiu",
   "url": "https://www.littleqiu.net",
   "namespace": "Hitokoto",
   "require": {
-    "blessing-skin-server": "*"
+    "blessing-skin-server": "*",
+    "php": "~8.5.0"
   },
   "enchants": {
     "conflicts": {

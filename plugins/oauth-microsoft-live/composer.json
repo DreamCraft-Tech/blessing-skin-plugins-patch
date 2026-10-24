@@ -11,6 +11,11 @@
   ],
   "require": {
     "socialiteproviders/microsoft-live": "^4.1",
-    "psr/log": "^1"
+    "psr/log": "^1 || ^2 || ^3"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
+    }
   }
 }

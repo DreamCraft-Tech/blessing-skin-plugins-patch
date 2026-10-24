@@ -9,7 +9,7 @@ use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 
 return function (Dispatcher $events) {
-    $events->listen('user.mojang.verified', InsertToFastLogin::class);
+    $events->listen('user.mojang-ms.verified', InsertToFastLogin::class);
 
     config(['database.connections.fast-login' => [
         'driver' => env('FAST_LOGIN_DRIVER', 'mysql'),

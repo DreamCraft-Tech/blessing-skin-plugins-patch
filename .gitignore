@@ -8,3 +8,15 @@ plugins/*/assets/**/*.map
 .php-cs-fixer.cache
 composer.lock
 yarn-error.log
+
+# Custom plugin source assets and reproducible dependency locks
+!plugins/wecom-login/assets/*.js
+!plugins/login-history/assets/*.js
+!plugins/two-factor/assets/*.js
+!plugins/cdn-real-ip/assets/*.js
+!plugins/daily-luck/assets/*.js
+!plugins/*/composer.lock
+!build-locks/**/composer.lock
+.DS_Store
+.phpunit.result.cache
+build-php85/

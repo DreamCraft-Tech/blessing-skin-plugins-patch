@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
+  import { onMount } from 'svelte'
 
   const { event, t } = globalThis.blessing
 
@@ -10,7 +10,7 @@
     const off = event.on('beforeFetch', (request: { data: FormData }) => {
       request.data.set('description', description)
     })
-    onDestroy(off)
+    return off
   })
 </script>
 

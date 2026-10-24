@@ -1,5 +1,10 @@
 {
   "require": {
-    "predis/predis": "~1.0"
+    "predis/predis": "^2.0.2"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
+    }
   }
 }

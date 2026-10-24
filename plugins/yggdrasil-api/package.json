@@ -1,12 +1,13 @@
 {
   "name": "yggdrasil-api",
-  "version": "5.2.1",
+  "version": "5.2.1+php85.1",
   "title": "Yggdrasil API",
   "description": "Yggdrasil API + authlib-injector = ✨",
   "author": "printempw",
   "namespace": "Yggdrasil",
   "require": {
-    "blessing-skin-server": "^6"
+    "blessing-skin-server": "^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "config": "Controllers\\ConfigController",

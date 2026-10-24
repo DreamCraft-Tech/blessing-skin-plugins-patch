@@ -1,5 +1,10 @@
 {
-    "require": {
-        "jacobcyl/ali-oss-storage": "^2.1"
+  "require": {
+    "alphasnow/aliyun-oss-laravel": "^4.9"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
     }
+  }
 }

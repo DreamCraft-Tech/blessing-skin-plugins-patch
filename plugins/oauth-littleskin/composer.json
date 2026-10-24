@@ -1,14 +1,21 @@
 {
-    "name": "asnxthaony/oauth-littleskin",
-    "description": "",
-    "type": "project",
-    "license": "MIT",
-    "authors": [{
-        "name": "Asnxthaony",
-        "email": "asnxthaony@outlook.com"
-    }],
-    "require": {
-        "littleskinchina/bs-socialite-provider-littleskin": "dev-master",
-        "psr/log": "^1"
+  "name": "asnxthaony/oauth-littleskin",
+  "description": "",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Asnxthaony",
+      "email": "asnxthaony@outlook.com"
     }
+  ],
+  "require": {
+    "littleskinchina/bs-socialite-provider-littleskin": "dev-master",
+    "psr/log": "^1 || ^2 || ^3"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
+    }
+  }
 }

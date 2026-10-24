@@ -1,0 +1,267 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5805cc96820a27feda8d136bf9a2ebde",
+    "packages": [
+        {
+            "name": "overtrue/flysystem-cos",
+            "version": "5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/flysystem-cos.git",
+                "reference": "34499a3ca0be622440804dda296a77da4f03ca2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/flysystem-cos/zipball/34499a3ca0be622440804dda296a77da4f03ca2d",
+                "reference": "34499a3ca0be622440804dda296a77da4f03ca2d",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "^3.0",
+                "overtrue/qcloud-cos-client": "^2.1.4",
+                "php": ">=8.0.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.6",
+                "league/flysystem-adapter-test-utilities": "^3.0",
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\Flysystem\\Cos\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "i@overtrue.me"
+                }
+            ],
+            "description": "Flysystem adapter for the QCloud COS storage.",
+            "support": {
+                "issues": "https://github.com/overtrue/flysystem-cos/issues",
+                "source": "https://github.com/overtrue/flysystem-cos/tree/5.2.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/overtrue",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-20T20:24:00+00:00"
+        },
+        {
+            "name": "overtrue/laravel-filesystem-cos",
+            "version": "3.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/laravel-filesystem-cos.git",
+                "reference": "ab23e5c9165a7a8ce26658d2361726e84c206f0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/laravel-filesystem-cos/zipball/ab23e5c9165a7a8ce26658d2361726e84c206f0c",
+                "reference": "ab23e5c9165a7a8ce26658d2361726e84c206f0c",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.0|^10.0|^11.0|^12.0",
+                "overtrue/flysystem-cos": "^5.1"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "dev-master",
+                "laravel/pint": "^1.5",
+                "mockery/mockery": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-push": [
+                        "composer check-style"
+                    ],
+                    "pre-commit": [
+                        "composer check-style"
+                    ]
+                },
+                "laravel": {
+                    "providers": [
+                        "Overtrue\\LaravelFilesystem\\Cos\\CosStorageServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\LaravelFilesystem\\Cos\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "i@overtrue.me"
+                }
+            ],
+            "description": "A Cos storage filesystem for Laravel.",
+            "support": {
+                "issues": "https://github.com/overtrue/laravel-filesystem-cos/issues",
+                "source": "https://github.com/overtrue/laravel-filesystem-cos/tree/3.6.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/overtrue",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-25T14:26:34+00:00"
+        },
+        {
+            "name": "overtrue/qcloud-cos-client",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/qcloud-cos-client.git",
+                "reference": "d48db7e823dae93e27d0d4298d7004744cfb3ca3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/qcloud-cos-client/zipball/d48db7e823dae93e27d0d4298d7004744cfb3ca3",
+                "reference": "d48db7e823dae93e27d0d4298d7004744cfb3ca3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.4",
+                "php": ">=8.0.2",
+                "psr/http-message": "^1.0|^2.0",
+                "thenorthmemory/xml": "^1.0"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "^2.8",
+                "friendsofphp/php-cs-fixer": "^3.5",
+                "laravel/pint": "^1.2",
+                "mockery/mockery": "^1.0",
+                "monolog/monolog": "^2.5",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-push": [
+                        "composer test",
+                        "composer check-style"
+                    ],
+                    "pre-commit": [
+                        "composer test",
+                        "composer check-style"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\CosClient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "anzhengchao@gmail.com"
+                }
+            ],
+            "description": "Client of QCloud.com COS",
+            "support": {
+                "issues": "https://github.com/overtrue/qcloud-cos-client/issues",
+                "source": "https://github.com/overtrue/qcloud-cos-client/tree/2.2.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/overtrue",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-20T21:01:35+00:00"
+        },
+        {
+            "name": "thenorthmemory/xml",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TheNorthMemory/xml.git",
+                "reference": "6f50c63450a0b098772423f8bdc3c4ad2c4c30bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TheNorthMemory/xml/zipball/6f50c63450a0b098772423f8bdc3c4ad2c4c30bb",
+                "reference": "6f50c63450a0b098772423f8bdc3c4ad2c4c30bb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "php": ">=7.1.2"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.89 || ^1.0",
+                "phpunit/phpunit": "^7.5 || ^8.5.16 || ^9.3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TheNorthMemory\\Xml\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "James ZHANG",
+                    "homepage": "https://github.com/TheNorthMemory"
+                }
+            ],
+            "description": "A wrapper of the XML parser and builder",
+            "homepage": "https://github.com/TheNorthMemory/xml",
+            "keywords": [
+                "xml-builder",
+                "xml-parser"
+            ],
+            "support": {
+                "issues": "https://github.com/TheNorthMemory/xml/issues",
+                "source": "https://github.com/TheNorthMemory/xml/tree/1.1.1"
+            },
+            "time": "2023-01-15T06:01:13+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.5.0"
+    },
+    "plugin-api-version": "2.9.0"
+}

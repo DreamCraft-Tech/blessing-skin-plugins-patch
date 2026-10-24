@@ -1,13 +1,14 @@
 {
   "name": "204-for-unexisted-players",
   "title": "Blessing\\NoContent::general.title",
-  "version": "0.1.4",
+  "version": "0.1.4+php85.1",
   "description": "Blessing\\NoContent::general.description",
   "author": "GPlane",
   "url": "",
   "namespace": "Blessing\\NoContent",
   "require": {
-    "blessing-skin-server": "^5|^6"
+    "blessing-skin-server": "^5|^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "icon": {

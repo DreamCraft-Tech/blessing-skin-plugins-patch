@@ -1,13 +1,14 @@
 {
   "name": "insane-profile-cache",
-  "version": "4.0.3",
+  "version": "4.0.3+php85.1",
   "title": "Profile 文件缓存",
   "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "InsaneProfileCache",
   "require": {
-    "blessing-skin-server": "^5|^6"
+    "blessing-skin-server": "^5|^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "icon": {

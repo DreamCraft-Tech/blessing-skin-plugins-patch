@@ -1,6 +1,11 @@
 {
-    "require": {
-        "socialiteproviders/manager": "^4.0",
-        "psr/log": "^1"
+  "require": {
+    "socialiteproviders/manager": "^4.0",
+    "psr/log": "^1 || ^2 || ^3"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
     }
+  }
 }

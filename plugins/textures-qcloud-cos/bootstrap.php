@@ -2,21 +2,20 @@
 
 return function () {
     $disk = [
-        'driver' => 'cosv5',
+        'driver' => 'cos',
         'region' => env('COS_REGION', 'ap-shanghai'),
-        'credentials' => [
-            'appId' => env('COS_APP_ID'),
-            'secretId' => env('COS_SECRET_ID'),
-            'secretKey' => env('COS_SECRET_KEY'),
+        'app_id' => env('COS_APP_ID'),
+        'secret_id' => env('COS_SECRET_ID'),
+        'secret_key' => env('COS_SECRET_KEY'),
+        'guzzle' => [
+            'timeout' => (float) env('COS_TIMEOUT', 60),
+            'connect_timeout' => (float) env('COS_CONNECT_TIMEOUT', 60),
         ],
-        'timeout' => env('COS_TIMEOUT', 60),
-        'connect_timeout' => env('COS_CONNECT_TIMEOUT', 60),
         'bucket' => env('COS_BUCKET'),
         'cdn' => env('COS_CDN'),
-        'read_from_cdn' => env('COS_READ_FROM_CDN', true),
-        'scheme' => env('COS_SCHEME', 'https'),
+        'use_https' => env('COS_SCHEME', 'https') === 'https',
     ];
 
-    app()->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);
+    app()->register(Overtrue\LaravelFilesystem\Cos\CosStorageServiceProvider::class);
     config(['filesystems.disks.textures' => $disk]);
 };

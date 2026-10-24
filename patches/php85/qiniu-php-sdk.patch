@@ -1,0 +1,44 @@
+--- a/src/Qiniu/Storage/ArgusManager.php
++++ b/src/Qiniu/Storage/ArgusManager.php
+@@ -22,7 +22,7 @@
+ 
+     public function __construct(
+         Auth $auth,
+-        Config $config = null,
++        ?Config $config = null,
+         $proxy = null,
+         $proxy_auth = null,
+         $proxy_user_password = null
+--- a/src/Qiniu/Storage/BucketManager.php
++++ b/src/Qiniu/Storage/BucketManager.php
+@@ -22,7 +22,7 @@
+ 
+     public function __construct(
+         Auth $auth,
+-        Config $config = null,
++        ?Config $config = null,
+         $proxy = null,
+         $proxy_auth = null,
+         $proxy_user_password = null
+--- a/src/Qiniu/Storage/UploadManager.php
++++ b/src/Qiniu/Storage/UploadManager.php
+@@ -24,7 +24,7 @@
+      * @param Config|null $config
+      * @param RequestOptions|null $reqOpt
+      */
+-    public function __construct(Config $config = null, RequestOptions $reqOpt = null)
++    public function __construct(?Config $config = null, ?RequestOptions $reqOpt = null)
+     {
+         if ($config === null) {
+             $config = new Config();
+--- a/src/Qiniu/Config.php
++++ b/src/Qiniu/Config.php
+@@ -41,7 +41,7 @@
+     public $backupUcHostsRetryTimes;
+ 
+     // 构造函数
+-    public function __construct(Region $z = null)
++    public function __construct(?Region $z = null)
+     {
+         $this->zone = $z;
+         $this->useHTTPS = false;

@@ -1,12 +1,13 @@
 {
   "name": "share-registration-link",
-  "version": "2.0.2",
+  "version": "2.0.2+php85.1",
   "title": "分享注册链接",
   "description": "允许用户分享注册链接并获得积分",
   "author": "GPlane",
   "namespace": "GPlane\\ShareRegistrationLink",
   "require": {
-    "blessing-skin-server": "^5|^6"
+    "blessing-skin-server": "^5|^6",
+    "php": "~8.5.0"
   },
   "enchants": {
     "config": "GPlane\\ShareRegistrationLink\\Configuration",

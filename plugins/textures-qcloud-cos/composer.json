@@ -1,5 +1,10 @@
 {
-    "require": {
-        "freyo/flysystem-qcloud-cos-v5": "^1.1.7"
+  "require": {
+    "overtrue/laravel-filesystem-cos": "^3.6"
+  },
+  "config": {
+    "platform": {
+      "php": "8.5.0"
     }
+  }
 }
