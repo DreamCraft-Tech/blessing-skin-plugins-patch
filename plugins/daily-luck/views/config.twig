@@ -1,0 +1,15 @@
+{% extends 'admin.base' %}
+{% block title %}每日人品{% endblock %}
+{% block content %}
+{% if session('daily_luck.notice') %}<div class="alert alert-success" role="status">{{ session('daily_luck.notice') }}</div>{% endif %}
+{% if errors.any() %}<div class="alert alert-danger" role="alert">{{ errors.first() }}</div>{% endif %}
+<form method="post" action="{{ url('admin/daily-luck/config') }}">{{ csrf_field() }}
+<fieldset {{ not can_save ? 'disabled' : '' }}>
+<div class="row"><div class="col-md-6"><div class="card card-outline card-primary"><div class="card-header"><h2 class="card-title">仪表板卡片</h2></div><div class="card-body">
+<div class="form-group"><label for="luck-title">卡片标题</label><input class="form-control" id="luck-title" name="title" value="{{ old('title', settings.title) }}" maxlength="40" required></div>
+<div class="form-group"><label for="luck-position">显示位置</label><select class="form-control" id="luck-position" name="position">{% for value,label in {'left':'左栏','right':'右栏'} %}<option value="{{ value }}" {{ old('position', settings.position) == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
+<div class="form-group mb-0"><label for="luck-display">结果展示</label><select class="form-control" id="luck-display" name="display">{% for value,label in {'reveal':'点击查看','visible':'直接展示'} %}<option value="{{ value }}" {{ old('display', settings.display) == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
+</div><div class="card-footer"><button class="btn btn-primary" type="submit">保存配置</button></div></div></div>
+<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">每日结果</h2></div><div class="card-body"><p>每位用户每天获得一个 0–100 分的人品结果，搭配 Minecraft 风格短评。</p><p>同一账号当天查看、刷新页面或更换设备，结果保持一致。</p><p class="mb-0">按站点时区 <strong>{{ timezone }}</strong> 每日 00:00 更新，新结果在下次打开或刷新仪表板时展示。</p></div></div></div></div>
+</fieldset></form>
+{% endblock %}

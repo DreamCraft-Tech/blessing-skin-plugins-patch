@@ -1,0 +1,16 @@
+{% if daily_luck %}
+<div class="card card-outline card-info" id="daily-luck-card">
+  <div class="card-header"><h2 class="card-title"><i class="fas fa-dice mr-1" aria-hidden="true"></i>{{ luck_settings.title }}</h2><div class="card-tools"><span class="text-muted small">{{ daily_luck.date }}</span></div></div>
+  <div class="card-body">
+    {% if luck_settings.display == 'reveal' %}
+      <p class="text-muted">今天的冒险，会有怎样的好运？</p>
+      <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#daily-luck-result" aria-expanded="false" aria-controls="daily-luck-result">查看今日人品</button>
+    {% endif %}
+    <div id="daily-luck-result" class="{{ luck_settings.display == 'reveal' ? 'collapse mt-3' : '' }}">
+      <div class="d-flex align-items-center mb-2"><span class="display-4 text-{{ daily_luck.color }} mr-2">{{ daily_luck.score }}</span><span class="text-muted mr-3">/ 100</span><span class="badge badge-{{ daily_luck.color }}">{{ daily_luck.label }}</span></div>
+      <p class="mb-2">{{ daily_luck.text }}</p>
+    </div>
+    <p class="text-muted small mb-0 mt-3">每天一份新好运 · {{ daily_luck.timezone }} 每日 00:00 更新</p>
+  </div>
+</div>
+{% endif %}

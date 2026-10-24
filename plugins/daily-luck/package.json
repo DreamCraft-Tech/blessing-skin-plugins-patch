@@ -1,0 +1,11 @@
+{
+  "name": "daily-luck",
+  "version": "1.0.0",
+  "title": "每日人品",
+  "description": "在用户仪表板展示每天固定的人品分数与 Minecraft 风格短评。",
+  "author": "Custom plugin",
+  "license": "MIT",
+  "namespace": "Blessing\\DailyLuck",
+  "require": {"blessing-skin-server": "^6.0.2", "php": "~8.5.0"},
+  "enchants": {"config": "Configuration", "icon": {"fa": "dice", "bg": "info"}}
+}
