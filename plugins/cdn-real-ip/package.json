@@ -1,0 +1,20 @@
+{
+  "name": "cdn-real-ip",
+  "version": "1.0.0",
+  "title": "CDN 真实客户端地址",
+  "description": "统一识别 CDN 与反向代理后的客户端 IP 和请求协议，支持多厂商、可信代理及请求诊断。",
+  "author": "Custom plugin",
+  "namespace": "Blessing\\CdnRealIp",
+  "license": "MIT",
+  "require": {
+    "blessing-skin-server": "^6.0.2",
+    "php": "~8.5.0"
+  },
+  "enchants": {
+    "config": "Configuration",
+    "icon": {
+      "fa": "network-wired",
+      "bg": "info"
+    }
+  }
+}
