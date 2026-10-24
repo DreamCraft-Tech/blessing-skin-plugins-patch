@@ -6,9 +6,9 @@ namespace Blessing\WeCom;
 final class MessageFormat
 {
     public const DEFAULT_TITLE = '皮肤站登录通知';
-    public const DEFAULT_TEMPLATE = "{reason}\n{site_name} 登录通知\n账号：UID {uid}\n时间：{login_time}\n方式：{login_method}\nIP：{ip}\n设备：{user_agent}\n可在账号页面查看绑定与通知设置。";
-    public const COMPACT_TEMPLATE = "{reason}\n账号：UID {uid}\n时间：{login_time}\nIP：{ip}";
-    public const VARIABLES = ['reason', 'site_name', 'uid', 'login_time', 'login_method', 'ip', 'user_agent'];
+    public const DEFAULT_TEMPLATE = "{reason}\n{site_name} 登录通知\n用户：{username}({uid})\n时间：{login_time}\n方式：{login_method}\nIP：{ip}({city})\n设备：{user_agent}\n可在账号页面查看绑定与通知设置。";
+    public const COMPACT_TEMPLATE = "{reason}\n用户：{username}({uid})\n时间：{login_time}\nIP：{ip}({city})";
+    public const VARIABLES = ['reason', 'site_name', 'username', 'uid', 'login_time', 'login_method', 'ip', 'city', 'user_agent'];
 
     public function settings(): array
     {

@@ -47,7 +47,7 @@
         </div>
         <div class="form-group" id="wecom-template-field"><label for="wecom-message-template">自定义正文模板</label>
           <textarea id="wecom-message-template" class="form-control" name="message_template" rows="7" required maxlength="2000">{{ message_template }}</textarea>
-          <small class="text-muted">可用变量：<code>{reason}</code>、<code>{site_name}</code>、<code>{uid}</code>、<code>{login_time}</code>、<code>{login_method}</code>、<code>{ip}</code>、<code>{user_agent}</code>。选择“自定义模板”后使用此正文；Markdown 类型可在模板中使用 Markdown。</small>
+          <small class="text-muted">可用变量：<code>{reason}</code>、<code>{site_name}</code>、<code>{username}</code>、<code>{uid}</code>、<code>{login_time}</code>、<code>{login_method}</code>、<code>{ip}</code>、<code>{city}</code>、<code>{user_agent}</code>。选择“自定义模板”后使用此正文；Markdown 类型可在模板中使用 Markdown。</small>
         </div>
         <div class="border rounded p-3 mb-3 bg-light" aria-label="消息正文预览">
           <strong id="wecom-preview-title"></strong><pre id="wecom-preview-body" class="mt-2 mb-2" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre><span id="wecom-preview-button" class="text-success"></span>
@@ -76,5 +76,5 @@
 {% endblock %}
 
 {% block before_foot %}
-<script src="{{ url('plugins/wecom-login/assets/config.js?v=1.5.0') }}" defer></script>
+<script src="{{ url('plugins/wecom-login/assets/config.js?v=1.5.1') }}" defer></script>
 {% endblock %}

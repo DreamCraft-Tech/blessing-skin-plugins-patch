@@ -6,10 +6,10 @@
   const title = byId('wecom-message-title');
   const template = byId('wecom-message-template');
   const button = byId('wecom-message-button');
-  const detailed = '{reason}\n{site_name} 登录通知\n账号：UID {uid}\n时间：{login_time}\n方式：{login_method}\nIP：{ip}\n设备：{user_agent}\n可在账号页面查看绑定与通知设置。';
-  const compact = '{reason}\n账号：UID {uid}\n时间：{login_time}\nIP：{ip}';
-  const sample = {reason: '登录城市发生变化，请确认本人操作', site_name: '皮肤站', uid: '123',
-    login_time: '2026-10-24 12:00:00 +08:00', login_method: '企业微信扫码', ip: '203.0.113.10', user_agent: '示例设备：Windows · Chrome'};
+  const detailed = '{reason}\n{site_name} 登录通知\n用户：{username}({uid})\n时间：{login_time}\n方式：{login_method}\nIP：{ip}({city})\n设备：{user_agent}\n可在账号页面查看绑定与通知设置。';
+  const compact = '{reason}\n用户：{username}({uid})\n时间：{login_time}\nIP：{ip}({city})';
+  const sample = {reason: '登录城市发生变化，请确认本人操作', site_name: '皮肤站', username: '张三', uid: '123',
+    login_time: '2026-10-24 12:00:00 +08:00', login_method: '企业微信扫码', ip: '203.0.113.10', city: '上海', user_agent: '示例设备：Windows · Chrome'};
   function preview() {
     if (!type) return;
     byId('wecom-card-fields').hidden = type.value !== 'textcard';

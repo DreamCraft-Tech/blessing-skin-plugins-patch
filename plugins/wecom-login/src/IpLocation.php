@@ -21,6 +21,17 @@ class IpLocation
         return is_file($path) && is_readable($path) && filemtime($path) >= time() - 62 * 86400;
     }
 
+    public function city(string $ip): string
+    {
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE) || !$this->ready()) {return '未知城市';}
+        try {
+            $reader = new Reader($this->databasePath());
+            try {$record = $reader->get($ip);} finally {$reader->close();}
+            $name = $record['city']['names']['zh-CN'] ?? $record['city']['names']['en'] ?? '';
+            return is_string($name) && trim($name) !== '' ? mb_substr(trim($name), 0, 96) : '未知城市';
+        } catch (\Throwable) {return '未知城市';}
+    }
+
     public static function distance(array $a, array $b): float
     {
         $lat = deg2rad($b['latitude'] - $a['latitude']);

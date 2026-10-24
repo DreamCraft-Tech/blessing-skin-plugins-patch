@@ -1,6 +1,6 @@
 {
   "name": "wecom-login",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "title": "企业微信登录与绑定",
   "description": "通过企业微信自建应用扫码登录，支持账号自助绑定、解绑和登录消息通知。",
   "author": "Custom plugin",

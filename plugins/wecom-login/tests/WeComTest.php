@@ -168,7 +168,7 @@ final class WeComTest extends Tests\TestCase
     public function testNotificationUsesCurrentAppAndSendsAfterResponseOnlyOnce(): void
     {
         option(['wecom_login_notifications_enabled' => '1']);
-        $user = $this->user();$this->notificationBinding($user);$this->notificationApi();
+        $user = $this->user();$user->nickname = '张三';$user->save();$this->notificationBinding($user);$this->notificationApi();
         $event = new \Illuminate\Auth\Events\Login('web', $user, false);
         event($event);event($event);
         Http::assertNothingSent();
@@ -177,7 +177,7 @@ final class WeComTest extends Tests\TestCase
         Http::assertSent(fn ($request) => $request->method() === 'POST'
             && str_contains($request->url(), '/message/send?access_token=notify-token-secret')
             && $request['touser'] === 'zhangsan' && $request['agentid'] === 1000001
-            && $request['msgtype'] === 'textcard' && str_contains($request['textcard']['description'], 'UID '.$user->uid)
+            && $request['msgtype'] === 'textcard' && str_contains($request['textcard']['description'], '用户：张三('.$user->uid.')')
             && !str_contains($request['textcard']['description'], 'wwTestCorp'));
     }
 
@@ -432,6 +432,15 @@ final class WeComTest extends Tests\TestCase
         self::assertStringNotContainsString('81.2.69.142', json_encode(DB::table(Installer::GEO_CACHE)->get()));
     }
 
+    public function testNotificationCityUsesLocalDatabase(): void
+    {
+        $geo = $this->actualTestGeo();
+        self::assertSame('伦敦', $geo->city('81.2.69.142'));
+        self::assertSame('未知城市', $geo->city('192.168.1.1'));
+        self::assertSame('未知城市', $geo->city('invalid'));
+        Http::assertNothingSent();
+    }
+
     public function testPrivateIpIsNeverSentToOnlineService(): void
     {
         foreach (['192.168.1.1', '100.64.0.1', '192.0.2.1', '2001:db8::1', '::ffff:127.0.0.1'] as $ip) {
@@ -524,10 +533,10 @@ final class WeComTest extends Tests\TestCase
     public function testAdminMessageFormatSettingsAreValidatedAndSaved(): void
     {
         $fields = ['corp_id' => 'wwTestCorp', 'agent_id' => '1000001', 'redirect_uri' => 'https://skin.example.test/auth/wecom/callback',
-            'message_type' => 'markdown', 'message_style' => 'custom', 'message_title' => '账号提醒', 'message_template' => '**登录** UID {uid}\n{ip}', 'message_button' => '查看详情'];
+            'message_type' => 'markdown', 'message_style' => 'custom', 'message_title' => '账号提醒', 'message_template' => '**登录** {username}({uid})\n{ip}({city})', 'message_button' => '查看详情'];
         $this->actingAs($this->user(['permission' => User::ADMIN]))->post('/admin/wecom/config', $fields)->assertRedirect('/admin/plugins/config/wecom-login');
         self::assertSame('markdown', app(\Blessing\WeCom\MessageFormat::class)->settings()['message_type']);
-        self::assertSame('**登录** UID 42\n8.8.8.8', app(\Blessing\WeCom\MessageFormat::class)->render(['uid' => 42, 'ip' => '8.8.8.8']));
+        self::assertSame('**登录** 张三(42)\n8.8.8.8(上海)', app(\Blessing\WeCom\MessageFormat::class)->render(['username' => '张三', 'uid' => 42, 'ip' => '8.8.8.8', 'city' => '上海']));
         $fields['message_template'] = '{secret}';
         $this->post('/admin/wecom/config', $fields)->assertSessionHas('wecom_error');
         self::assertNotSame('{secret}', app(\Blessing\WeCom\MessageFormat::class)->settings()['message_template']);

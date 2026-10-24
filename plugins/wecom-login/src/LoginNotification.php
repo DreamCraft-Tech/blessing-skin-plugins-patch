@@ -26,6 +26,7 @@ final class LoginNotification
             $clean = static fn (string $text, int $limit): string => mb_substr(preg_replace('/[\x00-\x1f\x7f]/u', ' ', $text) ?? '', 0, $limit);
             $method = $request->is('auth/wecom/callback') ? '企业微信扫码' : '网页登录';
             $message = ['site_name' => $clean((string) option('site_name', '皮肤站'), 24), 'uid' => (string) $uid,
+                'username' => $clean(trim((string) $event->user->nickname) ?: '用户', 50),
                 'login_time' => now()->format('Y-m-d H:i:s P'), 'login_method' => $method,
                 'ip' => $clean((string) $request->ip(), 45), 'user_agent' => $clean((string) $request->userAgent(), 96)];
             $done = false;
@@ -57,6 +58,7 @@ final class LoginNotification
             if ($decision['send']) {
                 // Put the reason near the top so it remains visible within the card's size limit.
                 $message['reason'] = $decision['reason'];
+                $message['city'] = trim((string) ($decision['point']['city'] ?? '')) ?: app(IpLocation::class)->city($ip);
                 $message = app(MessageFormat::class)->render($message);
                 app(WeComClient::class)->sendLoginMessage($binding->member_id, $message, $values);
             }
