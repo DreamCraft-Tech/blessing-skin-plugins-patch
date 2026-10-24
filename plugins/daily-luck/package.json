@@ -1,6 +1,6 @@
 {
   "name": "daily-luck",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "每日人品",
   "description": "在用户仪表板展示每天固定的人品分数与 Minecraft 风格短评。",
   "author": "Custom plugin",

@@ -25,6 +25,60 @@ final class DailyLuckTest extends Tests\TestCase
         config(['app.key' => '12345678901234567890123456789012', 'app.timezone' => 'Asia/Shanghai']);
     }
 
+    public function testOpeningPersistsAcrossRequestsAndDisablesButtonWithResultExpanded(): void
+    {
+        $user = User::factory()->create();
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2026-10-24 12:00:00', 'Asia/Shanghai'));
+        $this->actingAs($user)->get('/user')->assertOk()->assertSee('查看今日人品')->assertDontSee('明天再来看看？');
+        $this->post('/user/daily-luck/reveal')->assertRedirect('/user#daily-luck-card');
+        $this->assertDatabaseHas(Blessing\DailyLuck\Installer::TABLE, ['user_id' => $user->uid, 'viewed_date' => '2026-10-24']);
+        $this->get('/user')->assertOk()->assertSee('明天再来看看？')->assertSee('disabled aria-disabled="true"', false)
+            ->assertSee('id="daily-luck-result" class="mt-3" ', false)->assertDontSee('data-toggle="collapse"', false);
+        $result = app(Blessing\DailyLuck\Viewed::class)->result($user->uid);
+        self::assertTrue($result['opened']);
+        $this->post('/user/daily-luck/reveal')->assertRedirect('/user#daily-luck-card');
+        self::assertSame($result, app(Blessing\DailyLuck\Viewed::class)->result($user->uid));
+        $this->assertDatabaseCount(Blessing\DailyLuck\Installer::TABLE, 1);
+        Illuminate\Support\Facades\Auth::forgetGuards();
+        $this->actingAs($user->fresh())->get('/user')->assertOk()->assertSee('明天再来看看？');
+    }
+
+    public function testNextDayUnlocksWithoutChangingThePreviousScoreAlgorithm(): void
+    {
+        $user = User::factory()->create();
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2026-10-24 23:59:59', 'Asia/Shanghai'));
+        $this->actingAs($user)->post('/user/daily-luck/reveal')->assertRedirect();
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2026-10-25 00:00:00', 'Asia/Shanghai'));
+        $this->get('/user')->assertOk()->assertSee('查看今日人品')->assertDontSee('明天再来看看？');
+        self::assertFalse(app(Blessing\DailyLuck\Viewed::class)->result($user->uid)['opened']);
+        $this->post('/user/daily-luck/reveal')->assertRedirect();
+        $this->assertDatabaseHas(Blessing\DailyLuck\Installer::TABLE, ['user_id' => $user->uid, 'viewed_date' => '2026-10-25']);
+        self::assertTrue(app(Blessing\DailyLuck\Viewed::class)->result($user->uid)['opened']);
+    }
+
+    public function testOpeningUsesAuthenticatedAccountAndGuestCannotOpen(): void
+    {
+        $this->postJson('/user/daily-luck/reveal')->assertUnauthorized();
+        $first = User::factory()->create();
+        $other = User::factory()->create();
+        $this->actingAs($first)->post('/user/daily-luck/reveal', ['uid' => $other->uid, 'user_id' => $other->uid, 'date' => '2099-01-01'])->assertRedirect();
+        self::assertTrue(app(Blessing\DailyLuck\Viewed::class)->result($first->uid)['opened']);
+        self::assertFalse(app(Blessing\DailyLuck\Viewed::class)->result($other->uid)['opened']);
+        $first->delete();
+        $this->assertDatabaseCount(Blessing\DailyLuck\Installer::TABLE, 0);
+    }
+
+    public function testRevealRequiresCsrfAndMissingTableCanBeRepaired(): void
+    {
+        Illuminate\Support\Facades\Schema::drop(Blessing\DailyLuck\Installer::TABLE);
+        Blessing\DailyLuck\Installer::install();
+        self::assertTrue(Illuminate\Support\Facades\Schema::hasTable(Blessing\DailyLuck\Installer::TABLE));
+        $this->actingAs(User::factory()->create());
+        app()->instance('env', 'production');
+        $this->postJson('/user/daily-luck/reveal')->assertStatus(419);
+        $this->assertDatabaseCount(Blessing\DailyLuck\Installer::TABLE, 0);
+    }
+
     protected function tearDown(): void
     {
         CarbonImmutable::setTestNow();
