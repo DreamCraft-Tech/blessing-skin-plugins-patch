@@ -7,6 +7,7 @@ namespace Blessing\WeCom;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 final class WeComClient
 {
@@ -18,19 +19,38 @@ final class WeComClient
         ], '', '&', PHP_QUERY_RFC3986);
     }
 
+    private function diagnostic(string $reason, string $endpoint, ?int $httpStatus = null, ?int $errcode = null): void
+    {
+        try {
+            Log::warning('wecom-login: '.$reason, [
+                'endpoint' => $endpoint, 'http_status' => $httpStatus, 'errcode' => $errcode,
+            ]);
+        } catch (\Throwable) {
+            // A logging failure must never change the authentication result.
+        }
+    }
+
     private function request(string $path, array $parameters): array
     {
+        $status = null;
+        $errcode = null;
         try {
             $response = Http::acceptJson()->connectTimeout(5)->timeout(10)
                 ->withOptions(['allow_redirects' => false])
                 ->get('https://qyapi.weixin.qq.com/cgi-bin/'.$path, $parameters);
+            $status = $response->status();
             $body = $response->json();
+            $errcode = is_array($body) && is_numeric($body['errcode'] ?? null) ? (int) $body['errcode'] : null;
             if (!$response->successful() || !is_array($body) || !array_key_exists('errcode', $body)
                 || !is_numeric($body['errcode'])) {
                 throw new \RuntimeException();
             }
+            if ((int) $body['errcode'] !== 0) {
+                $this->diagnostic('api_error', $path, $status, $errcode);
+            }
             return $body;
         } catch (\Throwable) {
+            $this->diagnostic('transport_or_invalid_response', $path, $status, $errcode);
             // Never propagate HTTP exception URLs: they contain application secrets/tokens.
             throw new Failure('企业微信服务暂时不可用，请稍后重新扫码。', 502);
         }
@@ -60,6 +80,7 @@ final class WeComClient
         ]);
         if ((int) $body['errcode'] !== 0 || !is_string($body['access_token'] ?? null)
             || $body['access_token'] === '' || (int) ($body['expires_in'] ?? 0) <= 0) {
+            if ((int) $body['errcode'] === 0) {$this->diagnostic('invalid_token_response', 'gettoken', 200, 0);}
             throw new Failure('企业微信应用凭据无效或服务器 IP 未获授权，请联系管理员。', 502);
         }
         $ttl = max(1, min(7200, (int) $body['expires_in']) - 60);
@@ -88,6 +109,7 @@ final class WeComClient
         $identity = $this->authenticated('auth/getuserinfo', ['code' => $code], $settings);
         $id = $identity['userid'] ?? $identity['UserId'] ?? null;
         if (!is_string($id) || $id === '' || strlen($id) > 128) {
+            $this->diagnostic('internal_member_identity_missing', 'auth/getuserinfo', 200, 0);
             throw new Failure('仅支持本企业内部成员，外部联系人不能使用此登录方式。', 403);
         }
         // The application's token must be allowed to read this member (visible scope).
@@ -96,6 +118,7 @@ final class WeComClient
         if (!is_string($returned) || strcasecmp($returned, $id) !== 0
             || (isset($member['enable']) && (int) $member['enable'] !== 1)
             || (isset($member['status']) && (int) $member['status'] !== 1)) {
+            $this->diagnostic('member_identity_or_status_rejected', 'user/get', 200, 0);
             throw new Failure('该企业微信成员已停用、未激活或无法访问此应用。', 403);
         }
         return [

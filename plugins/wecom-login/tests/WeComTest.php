@@ -96,6 +96,28 @@ final class WeComTest extends Tests\TestCase
         $this->assertDatabaseHas(Installer::BINDINGS, ['user_id' => $user->uid]);
     }
 
+    public function testApiDiagnosticsContainOnlySafeMetadata(): void
+    {
+        \Illuminate\Support\Facades\Log::spy();
+        $this->mockMember([], ['errcode' => 60111, 'errmsg' => 'sensitive-code-token-url']);
+        $state = $this->start($this->user());
+        $this->oauthCallback($state)->assertForbidden();
+        \Illuminate\Support\Facades\Log::shouldHaveReceived('warning')->once()->with(
+            'wecom-login: api_error', ['endpoint' => 'user/get', 'http_status' => 200, 'errcode' => 60111]
+        );
+    }
+
+    public function testTransportFailureDiagnosticsDoNotLogExceptionUrl(): void
+    {
+        \Illuminate\Support\Facades\Log::spy();
+        Http::fake(fn () => throw new \RuntimeException('https://example.invalid/?corpsecret=never-log-this'));
+        $state = $this->start($this->user());
+        $this->oauthCallback($state)->assertStatus(502);
+        \Illuminate\Support\Facades\Log::shouldHaveReceived('warning')->once()->with(
+            'wecom-login: transport_or_invalid_response', ['endpoint' => 'gettoken', 'http_status' => null, 'errcode' => null]
+        );
+    }
+
     private function user(array $values = []): User
     {
         return User::factory()->create($values);
