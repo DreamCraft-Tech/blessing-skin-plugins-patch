@@ -1,0 +1,29 @@
+{% extends 'admin.base' %}
+{% block title %}企业微信登录配置{% endblock %}
+{% block content %}
+<div class="row"><div class="col-lg-8">
+  {% if session('wecom_notice') %}<div class="alert alert-success">{{ session('wecom_notice') }}</div>{% endif %}
+  <div class="card card-outline card-success">
+    <div class="card-header"><h2 class="card-title">企业内部自建应用</h2></div>
+    <div class="card-body">
+      <p>允许已有皮肤站用户自助绑定企业微信，之后使用扫码登录。不自动注册或按邮箱关联账号。</p>
+      <form method="post" action="{{ url('admin/wecom/config') }}">
+        {{ csrf_field() }}
+        <div class="form-group"><label for="wecom-corp">CorpID（企业 ID）</label>
+          <input id="wecom-corp" class="form-control" name="corp_id" value="{{ corp_id }}" required maxlength="128" autocomplete="off"></div>
+        <div class="form-group"><label for="wecom-agent">AgentID（自建应用 ID）</label>
+          <input id="wecom-agent" class="form-control" name="agent_id" value="{{ agent_id }}" required pattern="[1-9][0-9]*" maxlength="20" inputmode="numeric" autocomplete="off"></div>
+        <div class="form-group"><label for="wecom-redirect">完整回调 URL</label>
+          <input id="wecom-redirect" class="form-control" type="url" name="redirect_uri" value="{{ redirect_uri }}" placeholder="https://skin.example.com/auth/wecom/callback" required maxlength="2048">
+          <small class="text-muted">必须使用本站 HTTPS 域名，路径固定为 /auth/wecom/callback。</small></div>
+        <button type="submit" class="btn btn-success">保存配置</button>
+      </form>
+      <hr>
+      <p>应用 Secret：<strong>{{ secret_set ? '已设置' : '尚未设置' }}</strong></p>
+      <p>在网站的 <code>.env</code> 中设置 <code>WECOM_SECRET</code>，然后执行 <code>php artisan config:clear</code>。Secret 不在网页上显示，也不通过此表单保存。</p>
+      <p>在企业微信管理后台启用自建应用的企业微信 Web 登录，配置授权回调域名、应用可见范围，以及调用接口的服务器可信 IP。</p>
+      <p>配置后，用户可在“企业微信绑定”菜单自行绑定。停用或删除插件会保留绑定数据。</p>
+    </div>
+  </div>
+</div></div>
+{% endblock %}

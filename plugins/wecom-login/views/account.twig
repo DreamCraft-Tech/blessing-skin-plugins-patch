@@ -1,0 +1,42 @@
+{% extends 'user.base' %}
+{% block title %}企业微信绑定{% endblock %}
+{% block content %}
+<div class="row"><div class="col-lg-7">
+  {% if session('wecom_notice') %}<div class="alert alert-success">{{ session('wecom_notice') }}</div>{% endif %}
+  <div class="card card-outline card-success">
+    <div class="card-header"><h2 class="card-title">登录与账号绑定</h2></div>
+    <div class="card-body">
+    {% if binding %}
+      <p><span class="badge badge-success">已绑定</span> 你可以使用企业微信扫码登录当前账号。</p>
+      <dl class="row">
+        <dt class="col-sm-3">企业成员</dt><dd class="col-sm-9">{{ binding.member_name ?: '企业成员' }}</dd>
+        <dt class="col-sm-3">成员账号</dt><dd class="col-sm-9">{{ binding.member_id }}</dd>
+        <dt class="col-sm-3">企业 ID</dt><dd class="col-sm-9">{{ binding.corp_id }}</dd>
+      </dl>
+      <hr>
+      <p>更换绑定前，请输入当前皮肤站密码解除原绑定。解绑不会删除皮肤站账号。</p>
+      <form method="post" action="{{ url('user/wecom/unbind') }}">
+        {{ csrf_field() }}
+        <div class="form-group">
+          <label for="wecom-password">皮肤站密码</label>
+          <input id="wecom-password" class="form-control" type="password" name="password" required autocomplete="current-password" maxlength="1024">
+        </div>
+        <button class="btn btn-outline-danger" type="submit">验证密码并解绑</button>
+      </form>
+      <p class="text-muted mt-3">尚未设置皮肤站密码的账号，请先在个人资料中设置密码。</p>
+    {% else %}
+      <p>绑定后，使用企业微信扫码即可登录当前皮肤站账号。不会创建新账号，也不会更改你的邮箱或密码。</p>
+      <p>同一个企业微信成员只能绑定一个皮肤站账号。请确认当前登录的是你要绑定的账号。</p>
+      {% if ready %}
+      <form method="post" action="{{ url('user/wecom/bind') }}">
+        {{ csrf_field() }}
+        <button class="btn btn-success" type="submit"><i class="fas fa-qrcode mr-1" aria-hidden="true"></i>扫码绑定企业微信</button>
+      </form>
+      {% else %}
+      <div class="alert alert-warning">管理员尚未完成企业微信配置，请稍后再试。</div>
+      {% endif %}
+    {% endif %}
+    </div>
+  </div>
+</div></div>
+{% endblock %}
