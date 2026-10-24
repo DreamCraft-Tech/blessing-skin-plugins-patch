@@ -64,3 +64,29 @@
   will-change: translate;
 }
 @media (prefers-reduced-motion: reduce) { .daily-prank-dodger { translate: none !important; transition: none; } }
+
+.daily-prank-fly.daily-prank-wild, .daily-prank-chaos.daily-prank-wild { --daily-prank-travel: 4; }
+.daily-prank-wild.daily-prank-fly .card:not(#daily-luck-card), .daily-prank-wild.daily-prank-chaos .card:not(#daily-luck-card) {
+  animation-name: daily-prank-wild-flight;
+  animation-duration: 2.4s;
+}
+@keyframes daily-prank-wild-flight {
+  0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
+  30% { transform: translate(calc(var(--daily-prank-x) * 4), calc(var(--daily-prank-y) * 4)) rotate(calc(var(--daily-prank-angle) * 12)) scale(.45); }
+  65% { transform: translate(calc(var(--daily-prank-x) * -3), calc(var(--daily-prank-y) * -3)) rotate(calc(var(--daily-prank-angle) * -14)) scale(1.65); }
+}
+.daily-prank-wild.daily-prank-shake > .content { animation: daily-prank-wild-shake .7s ease-in-out infinite; }
+@keyframes daily-prank-wild-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20%, 65% { transform: translate(-36px, 18px) rotate(-5deg); }
+  45%, 80% { transform: translate(36px, -18px) rotate(5deg); }
+}
+.daily-prank-wild.daily-prank-pulse > .content { animation: daily-prank-wild-pulse 2.6s ease-in-out infinite; }
+@keyframes daily-prank-wild-pulse { 0%, 100% { transform: scale(1) rotate(0); } 35% { transform: scale(.4) rotate(-8deg); } 70% { transform: scale(1.75) rotate(8deg); } }
+.daily-prank-wild.daily-prank-chaos > .content { animation: daily-prank-wild-chaos 3.2s ease-in-out infinite; }
+@keyframes daily-prank-wild-chaos { 0%, 100% { transform: scale(1) rotate(0); } 30% { transform: translate(-30px, 20px) scale(.65) rotate(-10deg); } 65% { transform: translate(30px, -20px) scale(1.35) rotate(10deg); } }
+.daily-prank-wild.daily-prank-playful #daily-luck-card { animation: daily-prank-wild-sway 2s ease-in-out infinite; }
+@keyframes daily-prank-wild-sway { 0%, 100% { transform: rotate(0) scale(1); } 35% { transform: rotate(12deg) scale(.75); } 70% { transform: rotate(-12deg) scale(1.2); } }
+@media (prefers-reduced-motion: reduce) {
+  .daily-prank-wild .card, .daily-prank-wild #daily-luck-card, .daily-prank-wild > .content { animation: none !important; }
+}

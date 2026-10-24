@@ -141,7 +141,7 @@ final class DailyLuckTest extends Tests\TestCase
         $s = app(Settings::class)->values();
         self::assertTrue($s['luck_enabled']);
         self::assertTrue($s['prank_enabled']);
-        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.2.1', false);
+        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.2.2', false);
     }
 
     public function testFooterPlacesLuckOnLeftAndRedPrankOnRight(): void
@@ -164,6 +164,16 @@ final class DailyLuckTest extends Tests\TestCase
             $this->get('/user')->assertOk()->assertSee('data-effect="'.$effect.'"', false)->assertSee('data-motion="playful"', false);
         }
         $this->get('/admin/plugins/config/daily-luck')->assertOk()->assertSee('卡片乱飞')->assertSee('页面抖动')->assertSee('忽大忽小')->assertSee('大闹仪表板')->assertSee('躲避鼠标');
+    }
+
+    public function testWildIsAnIntensityAvailableAcrossEffects(): void
+    {
+        $this->actingAs(User::factory()->superAdmin()->create());
+        foreach(['rainbow','paper','fly','shake','pulse','chaos','dodge','mixed'] as $effect){
+            $this->post('/admin/daily-luck/config',['title'=>'组合','position'=>'right','display'=>'reveal','effect'=>$effect,'motion'=>'wild','duration'=>15])->assertRedirect();
+            $this->get('/user')->assertOk()->assertSee('data-effect="'.$effect.'"',false)->assertSee('data-motion="wild"',false);
+        }
+        $this->get('/admin/plugins/config/daily-luck')->assertOk()->assertSee('邪性');
     }
 
     protected function tearDown(): void

@@ -8,7 +8,7 @@
   const area = panel.closest('.content-wrapper');
   if (!trigger || !restore || !status || !area) return;
   const effects = ['rainbow', 'paper', 'fly', 'shake', 'pulse', 'chaos', 'dodge'];
-  const classes = [...effects.map(effect => 'daily-prank-' + effect), 'daily-prank-playful', 'daily-prank-gentle'];
+  const classes = [...effects.map(effect => 'daily-prank-' + effect), 'daily-prank-playful', 'daily-prank-gentle', 'daily-prank-wild'];
   let count = 0;
   let timer = null;
   let rescue = null;
@@ -34,8 +34,8 @@
     if (!pointer) return;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const radius = panel.dataset.motion === 'gentle' ? 65 : 100;
-    const step = panel.dataset.motion === 'gentle' ? 35 : 65;
+    const radius = panel.dataset.motion === 'wild' ? 180 : (panel.dataset.motion === 'gentle' ? 65 : 100);
+    const step = panel.dataset.motion === 'wild' ? 160 : (panel.dataset.motion === 'gentle' ? 35 : 65);
     const clamp = (value, low, high) => low <= high ? Math.max(low, Math.min(high, value)) : 0;
     document.querySelectorAll('.card, .btn, button, input[type="button"], input[type="submit"]').forEach(node => {
       if (node === restore || node === rescue || node.classList.contains('daily-prank-rescue')) return;
@@ -102,8 +102,9 @@
     if (!effects.includes(effect)) effect = 'rainbow';
     if (reduced && !['rainbow', 'paper'].includes(effect)) effect = 'rainbow';
     area.classList.add('daily-prank-' + effect);
+    if (panel.dataset.motion === 'wild' && !reduced) area.classList.add('daily-prank-wild');
     if (panel.dataset.motion === 'gentle') area.classList.add('daily-prank-gentle');
-    if (panel.dataset.motion === 'playful' && !reduced && ['rainbow', 'paper'].includes(effect)) area.classList.add('daily-prank-playful');
+    if (['playful', 'wild'].includes(panel.dataset.motion) && !reduced && ['rainbow', 'paper'].includes(effect)) area.classList.add('daily-prank-playful');
     if (effect === 'dodge') document.addEventListener('pointermove', onPointer, {passive:true});
     if (['fly', 'chaos'].includes(effect)) {
       flying = Array.from(area.querySelectorAll('.card')).filter(card => card.id !== 'daily-luck-card');
