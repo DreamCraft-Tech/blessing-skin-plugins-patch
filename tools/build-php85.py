@@ -26,10 +26,15 @@ for recipe in sorted((repo/'build-locks').glob('*/composer.lock')):
  shutil.copy2(recipe,target/'composer.lock')
  shutil.copy2(recipe.with_name('composer.json'),target/'composer.json')
  run([php,composer,'install','--no-dev','--no-scripts','--no-interaction','--prefer-dist','--optimize-autoloader'],target)
+for name in ['wecom-login','login-history','two-factor','cdn-real-ip','daily-luck']:
+ target=stage/name
+ if (target/'composer.json').exists():
+  run([php,composer,'install','--no-dev','--no-scripts','--no-interaction','--prefer-dist','--optimize-autoloader'],target)
 run(['patch','-p1','-i',str(repo/'patches/php85/qiniu-php-sdk.patch')],stage/'textures-qiniu-storage/vendor/qiniu/php-sdk')
 for file in stage.rglob('*'):
  if 'vendor' in file.parts:continue
- if file.is_file() and (file.suffix in {'.ts','.tsx','.svelte','.scss'} or file.name=='.gitignore'):file.unlink()
+ if file.is_file() and 'tests' in file.relative_to(stage).parts:file.unlink();continue
+ if file.is_file() and (file.suffix in {'.ts','.tsx','.svelte','.scss'} or file.name in {'.gitignore','phpunit.xml'}):file.unlink()
 packages=out/'packages';packages.mkdir()
 for manifest in sorted(stage.glob('*/package.json')):
  plugin=manifest.parent

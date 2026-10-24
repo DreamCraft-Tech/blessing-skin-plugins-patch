@@ -1,0 +1,232 @@
+[
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "8361262903579b35de5a4d4e68e86f7a8e0cb0a9",
+    "message": "build: adapt upstream plugin collection to PHP 8.5",
+    "version": "php85.1"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "fec54953ee1412c04464708380f18bd25f3cb672",
+    "message": "[wecom-login] release 1.0.0",
+    "version": "wecom-login/v1.0.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.0.0_source.zip",
+    "sha256": "70e8044992b1cea2a803c0b88db10c258291df436debc1be9edbc04e33f9e1d8"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "d25533569517e0610d4d263e0cd120daf96d7663",
+    "message": "[wecom-login] release 1.0.1",
+    "version": "wecom-login/v1.0.1",
+    "artifact": "outputs/wecom-login/wecom-login_1.0.1_source.zip",
+    "sha256": "2b9de172d5b02936926d04e60391093f4d0a614df880ca9bbb2ebb473cdd544c"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "d7b67d4424896a410a5d4fe573faa03503de7234",
+    "message": "[wecom-login] release 1.1.0",
+    "version": "wecom-login/v1.1.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.1.0_source.zip",
+    "sha256": "a9e30f2938036fe38b175a893a6aa363a8298138f7615d39369f1abae5bd594a"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "0d66fe2bc04b8f3d68d72f5e33c51bdbb2d6cdd4",
+    "message": "[login-history] release 1.0.0",
+    "version": "login-history/v1.0.0",
+    "artifact": "outputs/login-history/login-history_1.0.0_source.zip",
+    "sha256": "12ddabac988a759851d819a43dff589b6806333d30ba1b3994c4c633db01ac8d"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "3c0e2267147ada272d7b67c6da6300bd39ee8085",
+    "message": "[wecom-login] release 1.1.1",
+    "version": "wecom-login/v1.1.1",
+    "artifact": "outputs/wecom-login/wecom-login_1.1.1_source.zip",
+    "sha256": "5215a0debba059c24219fc32cc9146fea529de2f66f81fb70742dfe4d2848abc"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "79bc99adb1d492e2f49e7d3c2170eb75e24a024b",
+    "message": "[login-history] release 1.0.1",
+    "version": "login-history/v1.0.1",
+    "artifact": "outputs/login-history/login-history_1.0.1_source.zip",
+    "sha256": "0e4d89d3e7585ff03302ec6892e8c82279627fe02025f4785bfa36a15245beae"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "5742b382b93fa9916ff17b64689bff0fc863712d",
+    "message": "[wecom-login] release 1.1.2",
+    "version": "wecom-login/v1.1.2",
+    "artifact": "outputs/wecom-login/wecom-login_1.1.2_source.zip",
+    "sha256": "238c1d059a7e9da74b09c2eab4455bf7e4eb793f047916c623cb65fdbce6b034"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "db47cff72d749662cab399abe208b2ab15b3ef51",
+    "message": "[wecom-login] release 1.1.3",
+    "version": "wecom-login/v1.1.3",
+    "artifact": "outputs/wecom-login/wecom-login_1.1.3_source.zip",
+    "sha256": "d336acb60b76e15183a94794c0c10963a4480920b22c89029ac51ce8a69cd9e5"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "80d35d28e86cf280ba02289f361c5b4f56c57d60",
+    "message": "[wecom-login] release 1.2.0",
+    "version": "wecom-login/v1.2.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.2.0_source.zip",
+    "sha256": "56f42c94237ff5d480965e3abfafb7c850ee84185940b751f99c6a166d95385c"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "831b7273fabaa16bdbd06a571e1a67e224f41ffc",
+    "message": "[wecom-login] release 1.3.0",
+    "version": "wecom-login/v1.3.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.3.0_source.zip",
+    "sha256": "f4e952b1ca99beb32ba803a29cdc0844dd42b4c9d68ae7542727528ea29d0b8e"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "2f5ac945698773c0a573653b30636c065de7c593",
+    "message": "[login-history] release 1.1.0",
+    "version": "login-history/v1.1.0",
+    "artifact": "outputs/login-history/login-history_1.1.0_source.zip",
+    "sha256": "2eef8b48df231cd71abc1ba18f816588ad0b8ddc9e0fbbf6426667d04b854616"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "c84b45c4d8086a6f8a77d73ac88d8d6ef280b4c6",
+    "message": "[wecom-login] release 1.4.0",
+    "version": "wecom-login/v1.4.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.4.0_source.zip",
+    "sha256": "e6d940a739438de1a8c3a996289f19a86ec40051e54b17011ece24bfbee08c68"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "ca698ebe212ed4c294dd6836989e052b68388d6e",
+    "message": "[login-history] release 1.1.1",
+    "version": "login-history/v1.1.1",
+    "artifact": "outputs/login-history/login-history_1.1.1_source.zip",
+    "sha256": "b75607e1e56821540ed2ede0f8e82ef0b643a785f963b302d86a79a8c4263f0b"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "e65db5fe3f2d691c246d4f59327bb82cf694536f",
+    "message": "[wecom-login] release 1.5.0",
+    "version": "wecom-login/v1.5.0",
+    "artifact": "outputs/wecom-login/wecom-login_1.5.0_source.zip",
+    "sha256": "a879827f5ed493ca8a4ed574029fde1b4c9a2cd31b51dece75d93cdc4a566ed5"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "d2e9ac46890753bb25c35ebe8e8e8a58773eeefe",
+    "message": "[wecom-login] release 1.5.1",
+    "version": "wecom-login/v1.5.1",
+    "artifact": "outputs/wecom-login/wecom-login_1.5.1_source.zip",
+    "sha256": "cad04d3820f43cae49f38703fcd79a4d1568c4df9de15ffd036dc7145356b0dd"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "65ac0b0116e0aa1c7a1e420c49800ed1b4241ee8",
+    "message": "[login-history] release 1.1.2",
+    "version": "login-history/v1.1.2",
+    "artifact": "outputs/login-history/login-history_1.1.2_source.zip",
+    "sha256": "eed5a99e7127ad39ac8844b193db0c2b9aeb92e52db521f5332272d2d94fd91d"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "6a121e7e1a7eb17ab8662301c42606ed84bc0e08",
+    "message": "[wecom-login] release 1.5.2",
+    "version": "wecom-login/v1.5.2",
+    "artifact": "outputs/wecom-login/wecom-login_1.5.2_source.zip",
+    "sha256": "93296597e2138cbbda0d426e61992c536e8a7260eeb954f23bbefc1ce6a72036"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "021aa6b88b13131cd760034cde0b9c2af680ae8c",
+    "message": "[login-history] release 1.1.3",
+    "version": "login-history/v1.1.3",
+    "artifact": "outputs/login-history/login-history_1.1.3_source.zip",
+    "sha256": "899b5e84bc5bba3457346bc078c9a7e6f15e4d46590bd817343e44259a5f6d96"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "35fad7665c51198c860892d37cdf8a3601f37073",
+    "message": "[two-factor] release 1.0.0",
+    "version": "two-factor/v1.0.0",
+    "artifact": "outputs/two-factor/two-factor_1.0.0_source.zip",
+    "sha256": "f1159cc76ef14f642eca72bcb346dfd97ba532742c379fc68b0dfbb9adada51b"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "9e38bed4d7be82a3c2fffd3b8ce0cf297f80c178",
+    "message": "[cdn-real-ip] release 1.0.0",
+    "version": "cdn-real-ip/v1.0.0",
+    "artifact": "outputs/cdn-real-ip/cdn-real-ip_1.0.0_source.zip",
+    "sha256": "416e7d3063a3a723ab1796d34a1bab80f7220721d416463cccd86f638f5618e1"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "cfbce85ce1d411f921df15b11f0940ab3e3f35bd",
+    "message": "[login-history] release 1.1.4",
+    "version": "login-history/v1.1.4",
+    "artifact": "outputs/login-history/login-history_1.1.4_source.zip",
+    "sha256": "fd062fa52b87bc440875226abf435bde1c79460d1415932a4174b0be3a9c76e6"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "18fefb794ef75f7c0abeb9c34698aba9e0461a46",
+    "message": "[login-history] release 1.2.0",
+    "version": "login-history/v1.2.0",
+    "artifact": "outputs/login-history/login-history_1.2.0_source.zip",
+    "sha256": "0c1ac60c06ad29569d0279c51143367133f991677d4910090c40b29e8e62e9b8"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "981a42f67ad8c0f6404b35ad213331a90402ab0e",
+    "message": "[daily-luck] release 1.0.0",
+    "version": "daily-luck/v1.0.0",
+    "artifact": "outputs/daily-luck/daily-luck_1.0.0_source.zip",
+    "sha256": "437eec5ae20f93629431a3e7508105c88c0127975351cf785a5671127eeaee70"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "0f1b12c954837c866ee28d8c82d952981b91dfd2",
+    "message": "[daily-luck] release 1.0.1",
+    "version": "daily-luck/v1.0.1",
+    "artifact": "outputs/daily-luck/daily-luck_1.0.1_source.zip",
+    "sha256": "61a8f08e64e3682b7f898a8ce18aeda609570a1629cb7f81470de050e02d27bf"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "a3145f3f7ec27a0c4039e509948f76fd70462db0",
+    "message": "[daily-luck] release 1.1.0",
+    "version": "daily-luck/v1.1.0",
+    "artifact": "outputs/daily-luck/daily-luck_1.1.0_source.zip",
+    "sha256": "3993ab7049a9c64652fa8e755dcbd92211589ead8d8248d069f79f9b08675748"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "cd8ecbbe1b3edbb0a37901a46cd19b5696a5f437",
+    "message": "[daily-luck] release 1.2.0",
+    "version": "daily-luck/v1.2.0",
+    "artifact": "outputs/daily-luck/daily-luck_1.2.0_source.zip",
+    "sha256": "58b5684341278375eb2c1de8e7bb24783843fde4309352c6ed971e042de3524e"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "0da42cbd71d2a1971e61d1132cb4b965d9b0387b",
+    "message": "[daily-luck] release 1.2.1",
+    "version": "daily-luck/v1.2.1",
+    "artifact": "outputs/daily-luck/daily-luck_1.2.1_source.zip",
+    "sha256": "4ab8a2a825479f4e60b6aa197efe63c9a726e56eb0265a39b467291146cae194"
+  },
+  {
+    "repository": "blessing-skin-plugins-patch",
+    "commit": "b8702e33c17f33c5dacd03b37f4e6e8bce34a11c",
+    "message": "[daily-luck] release 1.2.2",
+    "version": "daily-luck/v1.2.2",
+    "artifact": "outputs/daily-luck/daily-luck_1.2.2_source.zip",
+    "sha256": "7cae354c9169b4381ea1c4dd5e3ec622ee12a98aa8d4e4982f6afc73d994fdc3"
+  }
+]

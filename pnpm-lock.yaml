@@ -93,6 +93,8 @@ importers:
 
   plugins/batch-import: {}
 
+  plugins/cdn-real-ip: {}
+
   plugins/config-generator:
     dependencies:
       highlight.js:
@@ -102,6 +104,8 @@ importers:
       '@types/highlight.js':
         specifier: ^9.12.4
         version: 9.12.4
+
+  plugins/daily-luck: {}
 
   plugins/disable-registration: {}
 
@@ -132,6 +136,8 @@ importers:
   plugins/invitation-codes: {}
 
   plugins/legacy-api: {}
+
+  plugins/login-history: {}
 
   plugins/mojang-verification: {}
 
@@ -181,7 +187,11 @@ importers:
 
   plugins/trust-proxies: {}
 
+  plugins/two-factor: {}
+
   plugins/usm-api: {}
+
+  plugins/wecom-login: {}
 
   plugins/yggdrasil-api: {}
 
