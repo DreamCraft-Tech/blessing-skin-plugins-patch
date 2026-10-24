@@ -23,3 +23,5 @@ build-php85/
 
 __pycache__/
 *.pyc
+
+/pages-site/

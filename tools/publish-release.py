@@ -25,8 +25,8 @@ def plugin_release_name(repo,sha):
         if draft['isDraft'] and draft['targetCommitish']==sha:return tag,existing
         number+=1
 
-def write_feeds(directory,data,kind,repo,tag):
-    base='https://github.com/'+repo+'/releases/download/'+tag+'/'
+def write_feeds(directory,data,kind,repo,tag,base_url=None):
+    base=base_url or 'https://github.com/'+repo+'/releases/download/'+tag+'/'
     if kind=='server':
         row=data['packages'][0]
         feeds={'update.json':{'spec':2,'php':'8.5.0','latest':data['version'],'url':base+row['filename'],'sha256':row['sha256'],'package':'full'}}

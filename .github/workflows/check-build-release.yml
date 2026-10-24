@@ -96,3 +96,29 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           FORCE_RELEASE: ${{ inputs.force_release || false }}
         run: python3 tools/publish-release.py --kind plugins --assets release-assets
+      - name: Publish web-publish branch from released assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_BASE_URL: ${{ vars.PAGES_BASE_URL || 'https://plugin.blessing.dreamcraft.eu.org' }}
+        run: |
+          gh auth setup-git --hostname github.com
+          python3 tools/publish-web.py --kind plugins --base-url "$PAGES_BASE_URL" --output pages-site
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: pages-site
+  pages:
+    name: Deploy web-publish to GitHub Pages
+    needs: release
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy published branch artifact
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
