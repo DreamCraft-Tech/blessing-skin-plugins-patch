@@ -13,6 +13,14 @@ use App\Events\ConfigureUserMenu;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Filter $filter, Dispatcher $events): void {
+    // Enabled installations and interrupted enable callbacks must also repair missing tables.
+    \Blessing\WeCom\Installer::install();
+
+    \App\Models\User::deleted(function ($user): void {
+        \Illuminate\Support\Facades\DB::table(\Blessing\WeCom\Installer::BINDINGS)->where('user_id', $user->uid)->delete();
+        \Illuminate\Support\Facades\DB::table(\Blessing\WeCom\Installer::STATES)->where('user_id', $user->uid)->delete();
+    });
+
     config(['wecom' => [
         'corp_id' => env('WECOM_CORP_ID', ''),
         'agent_id' => env('WECOM_AGENT_ID', ''),

@@ -1,6 +1,6 @@
 {
   "name": "wecom-login",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "企业微信登录与绑定",
   "description": "企业内部自建应用扫码登录；已有皮肤站账号自助绑定与解绑，不自动注册。",
   "author": "Custom plugin",

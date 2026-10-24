@@ -50,6 +50,52 @@ final class WeComTest extends Tests\TestCase
         ]]);
     }
 
+    public function testEnabledPluginBootRepairsMissingSecondTable(): void
+    {
+        $firstSchema = Schema::getColumnListing(Installer::BINDINGS);
+        Schema::drop(Installer::STATES);
+        $manager = app(PluginManager::class);
+        // enable is a no-op for an already-enabled plugin: bootstrap must repair it.
+        self::assertTrue($manager->enable('wecom-login'));
+        self::assertFalse(Schema::hasTable(Installer::STATES));
+        $booted = new ReflectionProperty($manager, 'booted');
+        $booted->setValue($manager, false);
+        $manager->boot();
+        self::assertTrue(Schema::hasTable(Installer::STATES));
+        self::assertSame($firstSchema, Schema::getColumnListing(Installer::BINDINGS));
+        Installer::install();
+        self::assertTrue(Schema::hasTable(Installer::STATES));
+    }
+
+    public function testSchemaDoesNotRequireForeignKeyToHostUsers(): void
+    {
+        $keys = DB::select('PRAGMA foreign_key_list('.Installer::BINDINGS.')');
+        self::assertCount(0, $keys);
+        $keys = DB::select('PRAGMA foreign_key_list('.Installer::STATES.')');
+        self::assertCount(0, $keys);
+    }
+
+    public function testInstallerRepairsIndexesLeftByInterruptedDdl(): void
+    {
+        $user = $this->user();
+        app(Bindings::class)->bind($user, $this->member());
+        Schema::table(Installer::BINDINGS, function ($table): void {
+            $table->dropUnique(['user_id']);
+            $table->dropUnique(['identity_hash']);
+        });
+        Schema::table(Installer::STATES, function ($table): void {
+            $table->dropIndex(['session_hash']);
+            $table->dropIndex(['expires_at']);
+        });
+        Installer::install();
+        self::assertTrue(Schema::hasIndex(Installer::BINDINGS, ['user_id'], 'unique'));
+        self::assertTrue(Schema::hasIndex(Installer::BINDINGS, ['identity_hash'], 'unique'));
+        self::assertTrue(Schema::hasIndex(Installer::STATES, ['state_hash'], 'unique'));
+        self::assertTrue(Schema::hasIndex(Installer::STATES, ['session_hash']));
+        self::assertTrue(Schema::hasIndex(Installer::STATES, ['expires_at']));
+        $this->assertDatabaseHas(Installer::BINDINGS, ['user_id' => $user->uid]);
+    }
+
     private function user(array $values = []): User
     {
         return User::factory()->create($values);

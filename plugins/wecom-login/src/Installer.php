@@ -24,7 +24,6 @@ final class Installer
                 $table->string('member_name', 255)->default('');
                 $table->char('identity_hash', 64)->unique();
                 $table->timestamp('created_at');
-                $table->foreign('user_id')->references('uid')->on('users')->onDelete('cascade');
             });
         }
         if (!Schema::hasTable(self::STATES)) {
@@ -36,8 +35,21 @@ final class Installer
                 $table->string('flow', 8);
                 $table->unsignedInteger('user_id')->nullable();
                 $table->unsignedBigInteger('expires_at')->index();
-                $table->foreign('user_id')->references('uid')->on('users')->onDelete('cascade');
             });
+        }
+        // MySQL DDL is not transactional: an earlier failed FK may have left tables without indexes.
+        foreach ([
+            [self::BINDINGS, ['user_id'], true],
+            [self::BINDINGS, ['identity_hash'], true],
+            [self::STATES, ['state_hash'], true],
+            [self::STATES, ['session_hash'], false],
+            [self::STATES, ['expires_at'], false],
+        ] as [$name, $columns, $unique]) {
+            if (!Schema::hasIndex($name, $columns, $unique ? 'unique' : null)) {
+                Schema::table($name, function (Blueprint $table) use ($columns, $unique): void {
+                    $unique ? $table->unique($columns) : $table->index($columns);
+                });
+            }
         }
     }
 }
