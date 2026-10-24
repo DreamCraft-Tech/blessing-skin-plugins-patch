@@ -1,0 +1,11 @@
+{% if providers|length > 0 or wecom_ready %}
+<div id="wecom-oauth-providers" class="my-3 text-center">
+  <div class="mb-1">第三方账号登录</div>
+  {% for name, provider in providers %}
+  <a href="{{ url('auth/login/' ~ name) }}" class="btn btn-block bg-light border-secondary"><i class="fab fa-{{ provider.icon }}" aria-hidden="true"></i>&nbsp;{{ provider.displayName }}</a>
+  {% endfor %}
+  {% if wecom_ready %}
+  <a href="{{ url('auth/wecom/login') }}" class="btn btn-block bg-light border-secondary"><i class="fab fa-weixin" aria-hidden="true"></i>&nbsp;企业微信扫码登录</a>
+  {% endif %}
+</div>
+{% endif %}

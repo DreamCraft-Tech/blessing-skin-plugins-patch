@@ -127,9 +127,15 @@ final class WeComClient
             throw new Failure('登录通知卡片链接配置无效。', 422);
         }
         $accountUrl = substr($settings['redirect_uri'], 0, -strlen('/auth/wecom/callback')).'/user/wecom';
-        $payload = ['touser' => $memberId, 'msgtype' => 'textcard', 'agentid' => (int) $settings['agent_id'],
-            'textcard' => ['title' => '皮肤站登录通知', 'description' => $this->cardDescription($content),
-                'url' => $accountUrl, 'btntxt' => '查看账号'], 'safe' => 0];
+        $format = app(MessageFormat::class)->settings();
+        $type = $format['message_type'];
+        $payload = ['touser' => $memberId, 'msgtype' => $type, 'agentid' => (int) $settings['agent_id'], 'safe' => 0];
+        if ($type === 'textcard') {
+            $payload['textcard'] = ['title' => mb_strcut($format['message_title'], 0, 128, 'UTF-8'),
+                'description' => $this->cardDescription($content), 'url' => $accountUrl, 'btntxt' => mb_substr($format['message_button'], 0, 4)];
+        } else {
+            $payload[$type] = ['content' => mb_strcut($content, 0, 2048, 'UTF-8')];
+        }
         for ($attempt = 0; $attempt < 2; $attempt++) {
             $body = $this->request('message/send', ['access_token' => $this->token($settings)], $payload);
             if (in_array((int) $body['errcode'], [40001, 40014, 42001], true) && $attempt === 0) {

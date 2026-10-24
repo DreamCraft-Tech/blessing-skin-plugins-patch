@@ -43,12 +43,24 @@ return function (Filter $filter, Dispatcher $events): void {
         ]);
     });
     $filter->add('auth_page_rows:login', function (array $rows): array {
-        if (session('wecom_error')) {
-            array_unshift($rows, 'Blessing\\WeCom::auth-error');
-        }
-        if (app(Settings::class)->ready()) {
-            $rows[] = 'Blessing\\WeCom::login-row';
-        }
+        if (session('wecom_error')) {array_unshift($rows, 'Blessing\\WeCom::auth-error');}
         return $rows;
+    });
+    View::composer('auth.login', function ($view): void {
+        $rows = $view->getData()['rows'] ?? [];
+        $rows = array_values(array_filter($rows, static function ($row): bool {
+            $key = is_string($row) ? str_replace('\\', '', $row) : '';
+            return !in_array($key, ['BlessingOAuthCore::providers', 'BlessingWeCom::login-row', 'BlessingWeCom::login-providers'], true);
+        }));
+        $index = array_search('auth.rows.login.registration-link', $rows, true);
+        if ($index === false) {
+            $form = array_search('auth.rows.login.form', $rows, true);
+            $index = $form === false ? count($rows) : $form + 1;
+        }
+        array_splice($rows, $index, 0, ['Blessing\\WeCom::login-providers']);
+        $view->with('rows', $rows);
+    });
+    View::composer('Blessing\\WeCom::login-providers', function ($view) use ($filter): void {
+        $view->with(['providers' => $filter->apply('oauth_providers', collect()), 'wecom_ready' => app(Settings::class)->ready()]);
     });
 };

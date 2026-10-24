@@ -121,7 +121,7 @@ final class Controller extends \Illuminate\Routing\Controller
             $this->bindings->unbind($request->user(), $data['password']);
             $this->states->clear($request);
             $request->session()->regenerate();
-            return redirect('/user/wecom')->with('wecom_notice', '已解除企业微信绑定，当前皮肤站账号仍可正常使用。');
+            return redirect('/user/wecom')->with('wecom_notice', '企业微信绑定已解除。');
         } catch (Failure $failure) {
             return $this->failure($failure);
         }

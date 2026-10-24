@@ -12,7 +12,7 @@
       <p>尚未绑定企业微信。绑定后可通过企业微信扫码登录你的现有账号。</p>
       <a class="btn btn-success" href="{{ url('user/wecom') }}">绑定企业微信</a>
     {% else %}
-      <p class="text-muted">管理员尚未完成企业微信配置，暂时无法绑定。</p>
+      <p class="text-muted">企业微信服务准备中。</p>
       <a class="btn btn-outline-secondary" href="{{ url('user/wecom') }}">查看绑定设置</a>
     {% endif %}
   </div>

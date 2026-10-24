@@ -23,16 +23,16 @@
             <option value="relaxed" {{ notification_mode == 'relaxed' ? 'selected' : '' }}>宽松：登录地变化较大时推送</option>
             <option value="off" {{ notification_mode == 'off' ? 'selected' : '' }}>关闭：不接收登录通知</option>
           </select>
-          <small class="form-text text-muted">宽松模式使用本地城市库与在线定位复核；中国境内城市不同即提醒，境外相差至少 300 公里或跨国时提醒。首次定位、定位失败或结果冲突也会提醒。自动恢复会话和 Yggdrasil 游戏认证不推送。</small>
-          <small class="form-text text-muted">宽松模式会将登录 IP 发送至 ipwho.is，成功定位缓存 24 小时。IP 地理位置仅供参考。</small>
+          <small class="form-text text-muted">宽松模式在中国境内城市变化、跨国或境外距离变化达到 300 公里时提醒；首次登录及定位待确认时也会发送提醒。</small>
+          <small class="form-text text-muted">定位来源为本地城市库与 ipwho.is。在线校验使用本次登录 IP，结果缓存 24 小时。</small>
           <small class="form-text text-muted"><a href="https://db-ip.com" target="_blank" rel="noopener noreferrer">IP Geolocation by DB-IP</a></small>
-          {% if not geo_ready %}<small class="form-text text-warning">本地城市库尚未准备或已过期，宽松模式会按定位不确定发送提醒。</small>{% endif %}
+          {% if not geo_ready %}<small class="form-text text-warning">城市库待更新，宽松模式当前会在每次登录时发送提醒。</small>{% endif %}
         </div>
-        {% if not notifications_enabled %}<p class="text-muted">管理员尚未开启消息推送；可以先保存偏好，开启后生效。</p>{% endif %}
+        {% if not notifications_enabled %}<p class="text-muted">通知服务待开启；保存的偏好将在服务开启后生效。</p>{% endif %}
         <button class="btn btn-outline-success" type="submit">保存通知设置</button>
       </form>
       <hr>
-      <p>更换绑定前，请输入当前皮肤站密码解除原绑定。解绑不会删除皮肤站账号。</p>
+      <p>输入皮肤站密码以解除绑定，随后可绑定其他企业微信成员。</p>
       <form method="post" action="{{ url('user/wecom/unbind') }}">
         {{ csrf_field() }}
         <div class="form-group">
@@ -41,17 +41,17 @@
         </div>
         <button class="btn btn-outline-danger" type="submit">验证密码并解绑</button>
       </form>
-      <p class="text-muted mt-3">尚未设置皮肤站密码的账号，请先在个人资料中设置密码。</p>
+      <p class="text-muted mt-3">可在个人资料中设置或更新皮肤站密码。</p>
     {% else %}
-      <p>绑定后，使用企业微信扫码即可登录当前皮肤站账号。不会创建新账号，也不会更改你的邮箱或密码。</p>
-      <p>同一个企业微信成员只能绑定一个皮肤站账号。请确认当前登录的是你要绑定的账号。</p>
+      <p>绑定后，可通过企业微信扫码登录当前皮肤站账号。</p>
+      <p>使用你的企业微信扫码完成绑定。</p>
       {% if ready %}
       <form method="post" action="{{ url('user/wecom/bind') }}">
         {{ csrf_field() }}
         <button class="btn btn-success" type="submit"><i class="fas fa-qrcode mr-1" aria-hidden="true"></i>扫码绑定企业微信</button>
       </form>
       {% else %}
-      <div class="alert alert-warning">管理员尚未完成企业微信配置，请稍后再试。</div>
+      <div class="alert alert-warning">企业微信服务准备中，请稍后再试。</div>
       {% endif %}
     {% endif %}
     </div>

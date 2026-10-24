@@ -79,7 +79,7 @@ final class Bindings
                 throw new Failure('当前账号不可进行此操作。', 403);
             }
             if ($locked->password === '' || !$locked->verifyPassword($password)) {
-                throw new Failure('皮肤站密码验证失败。尚未设置密码的账号请先设置密码，再解绑。', 403);
+                throw new Failure('皮肤站密码验证失败，请重新输入；可在个人资料中设置密码。', 403);
             }
             DB::table(Installer::BINDINGS)->where('user_id', $locked->uid)->delete();
         });

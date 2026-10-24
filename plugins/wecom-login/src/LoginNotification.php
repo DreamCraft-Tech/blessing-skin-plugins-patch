@@ -25,11 +25,9 @@ final class LoginNotification
             $request->attributes->set($key, true);
             $clean = static fn (string $text, int $limit): string => mb_substr(preg_replace('/[\x00-\x1f\x7f]/u', ' ', $text) ?? '', 0, $limit);
             $method = $request->is('auth/wecom/callback') ? '企业微信扫码' : '网页登录';
-            $message = $clean((string) option('site_name', '皮肤站'), 24)." 登录通知\n"
-                .'账号：UID '.$uid."\n时间：".now()->format('Y-m-d H:i:s P')
-                ."\n方式：".$method."\nIP：".$clean((string) $request->ip(), 45)
-                ."\n设备：".$clean((string) $request->userAgent(), 96)
-                ."\n若非本人操作，请及时修改皮肤站密码并检查账号。";
+            $message = ['site_name' => $clean((string) option('site_name', '皮肤站'), 24), 'uid' => (string) $uid,
+                'login_time' => now()->format('Y-m-d H:i:s P'), 'login_method' => $method,
+                'ip' => $clean((string) $request->ip(), 45), 'user_agent' => $clean((string) $request->userAgent(), 96)];
             $done = false;
             // Best effort after the HTTP response; no queue worker is required.
             app()->terminating(function () use ($uid, $binding, $message, &$done, $request): void {
@@ -42,7 +40,7 @@ final class LoginNotification
         }
     }
 
-    private function deliver(int $uid, int $bindingId, string $message, string $ip): void
+    private function deliver(int $uid, int $bindingId, array $message, string $ip): void
     {
         try {
             $settings = app(Settings::class);
@@ -58,7 +56,8 @@ final class LoginNotification
             if (!$current || (int) $current->id !== $bindingId || NotificationPolicy::mode($current) !== NotificationPolicy::mode($binding)) {return;}
             if ($decision['send']) {
                 // Put the reason near the top so it remains visible within the card's size limit.
-                $message = $decision['reason']."\n".$message;
+                $message['reason'] = $decision['reason'];
+                $message = app(MessageFormat::class)->render($message);
                 app(WeComClient::class)->sendLoginMessage($binding->member_id, $message, $values);
             }
             if ($decision['point'] !== null) {

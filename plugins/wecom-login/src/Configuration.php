@@ -13,7 +13,9 @@ final class Configuration
     public function render(Settings $settings)
     {
         $values = $settings->values();
-        return view('Blessing\\WeCom::config', [
+        $format = app(MessageFormat::class)->settings();
+        foreach ($format as $key => $value) {$format[$key] = request()->old($key, $value);}
+        return view('Blessing\\WeCom::config', $format + [
             'corp_id' => request()->old('corp_id', $values['corp_id']), 'agent_id' => request()->old('agent_id', $values['agent_id']),
             'redirect_uri' => request()->old('redirect_uri', $values['redirect_uri']), 'secret_set' => $values['secret'] !== '',
             'secret_source' => $settings->secretSource(),
@@ -24,7 +26,7 @@ final class Configuration
 
     private function failure(Request $request, string $message)
     {
-        $input = $request->only(['corp_id', 'agent_id', 'redirect_uri', 'login_notifications_enabled']);
+        $input = $request->only(['corp_id', 'agent_id', 'redirect_uri', 'login_notifications_enabled', 'message_type', 'message_style', 'message_title', 'message_template', 'message_button']);
         $input = array_filter($input, static fn ($value) => is_string($value) || is_bool($value) || is_int($value));
         $input['login_notifications_enabled'] = $request->boolean('login_notifications_enabled');
         return redirect('/admin/plugins/config/wecom-login')->with('wecom_error', $message)->withInput($input);
@@ -33,13 +35,18 @@ final class Configuration
     public function save(Request $request, Settings $settings)
     {
         // Do not flash submitted application secrets into the session on errors.
-        $validator = Validator::make($request->only(['corp_id', 'agent_id', 'redirect_uri', 'secret', 'use_env_secret', 'login_notifications_enabled']), [
+        $validator = Validator::make($request->only(['corp_id', 'agent_id', 'redirect_uri', 'secret', 'use_env_secret', 'login_notifications_enabled', 'message_type', 'message_style', 'message_title', 'message_template', 'message_button']), [
             'corp_id' => 'required|string|max:128',
             'agent_id' => 'required|string|max:20',
             'redirect_uri' => 'required|string|max:2048',
             'secret' => 'nullable|string|max:512',
             'use_env_secret' => 'sometimes|boolean',
             'login_notifications_enabled' => 'sometimes|boolean',
+            'message_type' => 'sometimes|required|in:text,textcard,markdown',
+            'message_style' => 'sometimes|required|in:detailed,compact,custom',
+            'message_title' => 'sometimes|required|string|max:80',
+            'message_template' => 'sometimes|required|string|max:2000',
+            'message_button' => 'sometimes|required|string|max:4',
         ]);
         if ($validator->fails()) {
             return $this->failure($request, '配置字段格式不正确，请检查企业 ID、应用 ID、回调地址及 Secret 长度。');
@@ -47,6 +54,10 @@ final class Configuration
         $values = $validator->validated();
         if (!$settings->validPublicSettings($values)) {
             return $this->failure($request, 'CorpID / AgentID 或回调地址格式不正确。回调必须为 HTTPS，路径为 /auth/wecom/callback，不能带查询参数。');
+        }
+        $format = app(MessageFormat::class);
+        if (isset($values['message_template']) && !$format->validTemplate($values['message_template'])) {
+            return $this->failure($request, '正文包含不支持的变量，请使用页面列出的变量。');
         }
         $secret = trim((string) ($values['secret'] ?? ''));
         $useEnvironment = $request->boolean('use_env_secret');

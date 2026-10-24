@@ -23,6 +23,11 @@ final class Routes
                     ->middleware('throttle:10,1')->name('wecom.notifications');
                 Route::post('user/wecom/unbind', [Controller::class, 'unbind'])
                     ->middleware('throttle:5,1')->name('wecom.unbind');
+                Route::middleware('role:admin')->prefix('admin/wecom/geoip')->group(function (): void {
+                    Route::get('status', [GeoDatabaseController::class, 'status'])->middleware('throttle:60,1');
+                    Route::post('start', [GeoDatabaseController::class, 'start'])->middleware('throttle:5,1');
+                    Route::post('step', [GeoDatabaseController::class, 'step'])->middleware('throttle:180,1');
+                });
                 Route::post('admin/wecom/config', [Configuration::class, 'save'])
                     ->middleware('role:admin')->name('wecom.config.save');
             });

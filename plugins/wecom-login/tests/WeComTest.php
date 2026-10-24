@@ -497,6 +497,123 @@ final class WeComTest extends Tests\TestCase
         self::assertEquals(23.15, json_decode(app(Bindings::class)->forUser($user->uid)->notification_baseline, true)['latitude']);
     }
 
+    public function testThirdPartyButtonsShareGroupBeforeRegistrationRegardlessOfHookOrder(): void
+    {
+        $filter = app(\Blessing\Filter::class);
+        $filter->add('oauth_providers', function ($providers) {return $providers->put('github', ['icon' => 'github', 'displayName' => 'GitHub'])->put('google', ['icon' => 'google', 'displayName' => 'Google']);});
+        // Simulate the actual core OAuth row hook being registered after this plugin.
+        $filter->add('auth_page_rows:login', function ($rows) {array_splice($rows, count($rows) - 1, 0, ['Blessing'.chr(92).'OAuthCore::providers']);return $rows;});
+        $response = $this->get('/auth/login')->assertOk();
+        $html = $response->getContent();
+        self::assertSame(1, substr_count($html, 'id="wecom-oauth-providers"'));
+        $group = substr($html, strpos($html, 'id="wecom-oauth-providers"'));
+        $group = substr($group, 0, strpos($group, '</div>\n') ?: strlen($group));
+        self::assertStringContainsString('GitHub', $html);self::assertStringContainsString('Google', $html);
+        self::assertLessThan(strpos($html, 'href="'.url('auth/register').'"'), strpos($html, 'id="wecom-oauth-providers"'));
+        self::assertLessThan(strpos($html, 'href="'.url('auth/register').'"'), strpos($html, 'href="'.url('auth/wecom/login').'"'));
+        if ($directory = getenv('WECOM_UI_PREVIEW_DIR')) {file_put_contents($directory.'/login.html', $html);}
+    }
+
+    public function testAdminPanelOffersUpdaterAndNotificationFormatting(): void
+    {
+        $response = $this->actingAs($this->user(['permission' => User::ADMIN]))->get('/admin/plugins/config/wecom-login')->assertOk()
+            ->assertSee('下载 / 更新城市库')->assertSee('消息通知类型与样式')->assertSee('Markdown 消息')->assertSee('自定义模板');
+        if ($directory = getenv('WECOM_UI_PREVIEW_DIR')) {file_put_contents($directory.'/config.html', $response->getContent());}
+    }
+
+    public function testAdminMessageFormatSettingsAreValidatedAndSaved(): void
+    {
+        $fields = ['corp_id' => 'wwTestCorp', 'agent_id' => '1000001', 'redirect_uri' => 'https://skin.example.test/auth/wecom/callback',
+            'message_type' => 'markdown', 'message_style' => 'custom', 'message_title' => '账号提醒', 'message_template' => '**登录** UID {uid}\n{ip}', 'message_button' => '查看详情'];
+        $this->actingAs($this->user(['permission' => User::ADMIN]))->post('/admin/wecom/config', $fields)->assertRedirect('/admin/plugins/config/wecom-login');
+        self::assertSame('markdown', app(\Blessing\WeCom\MessageFormat::class)->settings()['message_type']);
+        self::assertSame('**登录** UID 42\n8.8.8.8', app(\Blessing\WeCom\MessageFormat::class)->render(['uid' => 42, 'ip' => '8.8.8.8']));
+        $fields['message_template'] = '{secret}';
+        $this->post('/admin/wecom/config', $fields)->assertSessionHas('wecom_error');
+        self::assertNotSame('{secret}', app(\Blessing\WeCom\MessageFormat::class)->settings()['message_template']);
+    }
+
+    public function testMessageApiSupportsTextAndMarkdownAndCardCustomization(): void
+    {
+        $this->notificationApi();$client = app(WeComClient::class);$settings = app(Settings::class)->requireValid();
+        foreach (['text', 'markdown'] as $type) {
+            option(['wecom_message_type' => $type]);$client->sendLoginMessage('zhangsan', 'login-body', $settings);
+            Http::assertSent(fn ($request) => str_contains($request->url(), '/message/send') && $request['msgtype'] === $type && $request[$type]['content'] === 'login-body');
+        }
+        option(['wecom_message_type' => 'textcard', 'wecom_message_title' => '账号提醒', 'wecom_message_button' => '详情']);
+        $client->sendLoginMessage('zhangsan', 'login-body', $settings);
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/message/send') && $request['msgtype'] === 'textcard' && $request['textcard']['title'] === '账号提醒' && $request['textcard']['btntxt'] === '详情');
+    }
+
+    public function testMarkdownUserAgentCannotInjectMessageLinks(): void
+    {
+        option(['wecom_message_type' => 'markdown', 'wecom_message_style' => 'custom', 'wecom_message_template' => '{user_agent}']);
+        $text = app(\Blessing\WeCom\MessageFormat::class)->render(['user_agent' => '[evil](https://evil.test)']);
+        self::assertStringNotContainsString('[evil](', $text);
+    }
+
+    private function geoSandbox(): string
+    {
+        $directory = sys_get_temp_dir().'/wecom-geo-test-'.bin2hex(random_bytes(6));mkdir($directory);
+        $this->beforeApplicationDestroyed(fn () => (new \Illuminate\Filesystem\Filesystem())->deleteDirectory($directory));
+        $geo = new class($directory.'/geoip-city.mmdb') extends \Blessing\WeCom\IpLocation {
+            public function __construct(private string $path) {}
+            public function databasePath(): string {return $this->path;}
+        };
+        $this->app->instance(\Blessing\WeCom\IpLocation::class, $geo);
+        return $directory;
+    }
+
+    public function testPanelGeoUpdateDownloadsDecompressesValidatesAndReplaces(): void
+    {
+        $directory = $this->geoSandbox();
+        $gzip = gzencode(file_get_contents(__DIR__.'/fixtures/GeoIP2-City-Test.mmdb'));
+        Http::fake(fn ($request) => $request->method() === 'HEAD' ? Http::response('', 200, ['Content-Length' => strlen($gzip), 'ETag' => 'fixture']) : Http::response($gzip, 200));
+        $this->actingAs($this->user(['permission' => User::ADMIN]));
+        $id = $this->postJson('/admin/wecom/geoip/start')->assertOk()->json('id');
+        for ($i = 0; $i < 10; $i++) {
+            $state = $this->postJson('/admin/wecom/geoip/step', ['id' => $id])->assertOk()->json();
+            if ($state['phase'] === 'complete') {break;}
+        }
+        self::assertSame('complete', $state['phase']);
+        self::assertFileExists($directory.'/geoip-city.mmdb');
+        self::assertSame(hash_file('sha256', __DIR__.'/fixtures/GeoIP2-City-Test.mmdb'), hash_file('sha256', $directory.'/geoip-city.mmdb'));
+        $this->getJson('/admin/wecom/geoip/status')->assertJsonPath('progress', 100);
+    }
+
+    public function testPanelInvalidDownloadKeepsExistingCityDatabase(): void
+    {
+        $directory = $this->geoSandbox();copy(__DIR__.'/fixtures/GeoIP2-City-Test.mmdb', $directory.'/geoip-city.mmdb');
+        $before = hash_file('sha256', $directory.'/geoip-city.mmdb');$gzip = gzencode('not-a-city-database');
+        Http::fake(fn ($request) => $request->method() === 'HEAD' ? Http::response('', 200, ['Content-Length' => strlen($gzip)]) : Http::response($gzip, 200));
+        $updater = app(\Blessing\WeCom\GeoDatabaseUpdater::class);$state = $updater->start();
+        for ($i = 0; $i < 10 && $state['phase'] !== 'error'; $i++) {$state = $updater->step($state['id']);}
+        self::assertSame('error', $state['phase']);self::assertSame($before, hash_file('sha256', $directory.'/geoip-city.mmdb'));
+    }
+
+    public function testPanelGeoUpdateResumesRangeDownloadAcrossRequests(): void
+    {
+        $this->geoSandbox();$bytes = str_repeat('x', 4194304 + 100);
+        Http::fake(function ($request) use ($bytes) {
+            if ($request->method() === 'HEAD') {return Http::response('', 200, ['Content-Length' => strlen($bytes)]);}
+            preg_match('/bytes=(\d+)-(\d+)/', $request->header('Range')[0], $match);
+            return Http::response(substr($bytes, (int) $match[1], (int) $match[2] - (int) $match[1] + 1), 206, ['Content-Range' => 'bytes '.$match[1].'-'.$match[2].'/'.strlen($bytes)]);
+        });
+        $updater = app(\Blessing\WeCom\GeoDatabaseUpdater::class);$state = $updater->start();
+        $updater->step($state['id']);$first = $updater->step($state['id']);
+        self::assertSame(4194304, $first['downloaded']);
+        $resumed = (new \Blessing\WeCom\GeoDatabaseUpdater())->start();self::assertSame($state['id'], $resumed['id']);
+        $last = $updater->step($state['id']);self::assertSame('decompressing', $last['phase']);self::assertSame(strlen($bytes), $last['downloaded']);
+    }
+
+    public function testGeoUpdateRequiresAdministratorAndCsrf(): void
+    {
+        $this->actingAs($this->user())->postJson('/admin/wecom/geoip/start')->assertForbidden();
+        $admin = $this->user(['permission' => User::ADMIN]);$this->actingAs($admin);
+        $this->app->bind(VerifyCsrfToken::class, StrictCsrf::class);
+        $this->withSession(['_token' => 'correct-token'])->postJson('/admin/wecom/geoip/start')->assertStatus(419);
+    }
+
     private function user(array $values = []): User
     {
         return User::factory()->create($values);
@@ -1037,7 +1154,7 @@ final class WeComTest extends Tests\TestCase
     {
         config(['wecom.secret' => '']);
         $this->actingAs($this->user())->get('/user')->assertOk()
-            ->assertSee('管理员尚未完成企业微信配置');
+            ->assertSee('企业微信服务准备中');
     }
 
     public function testPluginManagementPublishesMetadataAndConfigEntry(): void
