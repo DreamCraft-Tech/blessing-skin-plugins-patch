@@ -1,0 +1,1220 @@
+{
+  "version": 1,
+  "packages": [
+    {
+      "name": "204-for-unexisted-players",
+      "title": "返回 204",
+      "version": "0.1.4+php85.1",
+      "description": "对请求不存在的角色的 JSON Profile 返回 204",
+      "author": "GPlane",
+      "url": "",
+      "namespace": "Blessing\\NoContent",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "square-root-alt",
+          "bg": "indigo"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/204-for-unexisted-players_0.1.4_php85.zip",
+        "shasum": "3b98f9f7656043a652ef6fdfcfb9a51bc64ac62f",
+        "sha256": "a276b20139b2023f4133832bfb0d986465e93945f56687546a788630eba5c755"
+      }
+    },
+    {
+      "name": "authme-integration",
+      "version": "2.4.3+php85.1",
+      "title": "Authme 数据对接",
+      "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "Integration\\Authme",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "single-player-limit": "^3.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "key",
+          "bg": "maroon"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/authme-integration_2.4.3_php85.zip",
+        "shasum": "32a103be2627708139f5e11afb3096d7322692f2",
+        "sha256": "30f1e5e790a6a14af6bc16a4a7041df677e4a34659a399bf5b2feef937cb7816"
+      }
+    },
+    {
+      "name": "batch-import",
+      "version": "4.1.2+php85.1",
+      "title": "批量导入",
+      "description": "批量导入材质至皮肤库。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "BatchImport",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "database",
+          "bg": "danger"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/batch-import_4.1.2_php85.zip",
+        "shasum": "83363ee750e51e207a0dd98f2666ecff65279fce",
+        "sha256": "477611ea69fdeea6cf61962da9045ce32c951a434cd1ee13fb1b448242732886"
+      }
+    },
+    {
+      "name": "cdn-real-ip",
+      "version": "1.0.0",
+      "title": "CDN 真实客户端地址",
+      "description": "统一识别 CDN 与反向代理后的客户端 IP 和请求协议，支持多厂商、可信代理及请求诊断。",
+      "author": "Custom plugin",
+      "namespace": "Blessing\\CdnRealIp",
+      "license": "MIT",
+      "require": {
+        "blessing-skin-server": "^6.0.2",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "network-wired",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/cdn-real-ip_1.0.0_php85.zip",
+        "shasum": "aabbff17d486e2fdd9298296d27db2312ca4449d",
+        "sha256": "c376b3e7bb25d983a58d58f1163fbbd113f34bc7245c33fc237cbcbfac0c5a1d"
+      }
+    },
+    {
+      "name": "config-generator",
+      "version": "3.2.2+php85.1",
+      "title": "配置生成",
+      "description": "在用户中心添加自动生成皮肤 Mod 配置的页面。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "Blessing\\ConfigGenerator",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "code",
+          "bg": "success"
+        }
+      },
+      "dependencies": {
+        "highlight.js": "^11.7.0"
+      },
+      "devDependencies": {
+        "@types/highlight.js": "^9.12.4"
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/config-generator_3.2.2_php85.zip",
+        "shasum": "00c6883f83202c4fac3d6d56f823a9d9ef4ab29a",
+        "sha256": "43dfc38821a80a5dceae5309c4fde2e9f901b8c46ffd32d674d149af362ab3fd"
+      }
+    },
+    {
+      "name": "daily-luck",
+      "version": "1.2.2",
+      "title": "今日人品与千万别点",
+      "description": "仪表板每日人品与互动彩蛋，支持独立开关、自定义短评和趣味配色。",
+      "author": "Custom plugin",
+      "license": "MIT",
+      "namespace": "Blessing\\DailyLuck",
+      "require": {
+        "blessing-skin-server": "^6.0.2",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "dice",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/daily-luck_1.2.2_php85.zip",
+        "shasum": "4dac1733de2464fefdc5bf687053576615de7787",
+        "sha256": "f48931236e05ab86ed21861c9afddeb0cc198a6ecc8068362025105c4e9f25b7"
+      }
+    },
+    {
+      "name": "disable-registration",
+      "title": "关闭注册功能",
+      "version": "1.0.3+php85.1",
+      "description": "关闭注册功能",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\DisableRegistration",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "bg": "danger",
+          "fa": "ban"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/disable-registration_1.0.3_php85.zip",
+        "shasum": "d44e60937afeed33f98ed22870c21718ddf57cfd",
+        "sha256": "e9c2c10d8e569dbf3b741f0184d8059ef3ca31eb3c3e00be97d28f7521a33af5"
+      }
+    },
+    {
+      "name": "embedded-comment",
+      "title": "嵌入第三方评论",
+      "version": "1.0.4+php85.1",
+      "description": "向材质详情页中嵌入第三方评论系统",
+      "author": "GPlane",
+      "url": "https://gplane.win",
+      "namespace": "Blessing\\EmbeddedComment",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "comment-dots",
+          "bg": "indigo"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/embedded-comment_1.0.4_php85.zip",
+        "shasum": "95230c1e2007d2e1b8a4b4e101d74bcce8999963",
+        "sha256": "71608ab6a68cc52b980f83e7d45e0886843179c3217053dc7b7250a271729d5f"
+      }
+    },
+    {
+      "name": "eruda",
+      "version": "1.0.1+php85.1",
+      "title": "Eruda",
+      "description": "适用于移动端浏览器的开发者工具。",
+      "author": "Little_Qiu",
+      "namespace": "Eruda",
+      "require": {
+        "blessing-skin-server": "*",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "toolbox",
+          "bg": "olive"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/eruda_1.0.1_php85.zip",
+        "shasum": "a7f7c116d6a1304e376cee038bd205f15d40cf4e",
+        "sha256": "b97be8834eb962526c2205ffbb19a5f0cfe0dddde2607849e404824c9863db32"
+      }
+    },
+    {
+      "name": "fast-login",
+      "title": "FastLogin",
+      "version": "0.1.3+php85.1",
+      "description": "当用户通过正版验证时向 FastLogin 增加一条记录",
+      "author": "GPlane",
+      "url": "https://gplane.win",
+      "namespace": "Blessing\\FastLogin",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "mojang-verification": "^2.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "bg": "green",
+          "fa": "sign-in-alt"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/fast-login_0.1.3_php85.zip",
+        "shasum": "08206908d343416aabbedcd7ad2e119d671a196e",
+        "sha256": "7593f85d1909d4564d6a401e11558efde65e782725753cca94e17468134a7d72"
+      }
+    },
+    {
+      "name": "forum-integration",
+      "version": "4.1.1+php85.1",
+      "title": "论坛数据对接",
+      "description": "与 Discuz、Phpwind、Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "Integration\\Forum",
+      "config": "config.blade.php",
+      "require": {
+        "blessing-skin-server": ">=4.0.0",
+        "single-player-limit": ">=2.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "sync",
+          "bg": "gray"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/forum-integration_4.1.1_php85.zip",
+        "shasum": "6ac79f1031c81c293ee243cc68f2fe4a71461bb9",
+        "sha256": "0098d83eef52534c3472444f862bdc3b2f44b71f8c8c1d4f0bee3443e06dfa1a"
+      }
+    },
+    {
+      "name": "google-adsense",
+      "title": "Google Adsense",
+      "version": "0.0.1+php85.1",
+      "description": "为站点加入 Google Adsense 代码来投放广告。",
+      "author": "Big_Cake",
+      "url": "https://bigcake.cakemc.top/",
+      "namespace": "BigCake\\googleadsense",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "google",
+          "faType": "fab",
+          "bg": "success"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/google-adsense_0.0.1_php85.zip",
+        "shasum": "bba340d8f6c2bd340e6598445a513ff53315489d",
+        "sha256": "83faedc7498735012560463a7a43cc408f4a8e3950cbd7fc4878deab9a63c3b8"
+      }
+    },
+    {
+      "name": "gravatar",
+      "title": "Gravatar",
+      "version": "0.1.3+php85.1",
+      "description": "Gravatar 支持",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\Gravatar",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "user-check",
+          "bg": "primary"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/gravatar_0.1.3_php85.zip",
+        "shasum": "87e226954928e296c0f80bf2a1da86d1ac2f7921",
+        "sha256": "1302140a868cdcd7947fb5fc803545351470bb379419988948a665faf2afbb78"
+      }
+    },
+    {
+      "name": "gtag-js",
+      "title": "gtag.js",
+      "version": "0.1.2+php85.1",
+      "description": "用于 Google Analytics、Google Ads 等。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\Gtag",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "google",
+          "faType": "fab",
+          "bg": "orange"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/gtag-js_0.1.2_php85.zip",
+        "shasum": "2f561610ad87facdfe3cd8b6f9d0f83a7a656c19",
+        "sha256": "fe84304417c19ef979d59ffa7147c3ed5e032329220206ceeee708befe3719a9"
+      }
+    },
+    {
+      "name": "hello-dolly",
+      "version": "1.3.0+php85.1",
+      "title": "你好多莉",
+      "description": "这不是普通的插件，它象征着一代人希望和热情，浓缩成Louis Armstrong的四个字：你好，多莉。在启用后，在您站点后台每个页面的右上角都可以看到一句来自《俏红娘》音乐剧的英文原版台词。",
+      "author": "Matt Mullenweg",
+      "url": "https://blessing.studio/",
+      "namespace": "HelloDolly",
+      "require": {
+        "blessing-skin-server": "*",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "conflicts": {
+          "hitokoto": "*"
+        },
+        "icon": {
+          "fa": "quote-left",
+          "bg": "teal"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/hello-dolly_1.3.0_php85.zip",
+        "shasum": "89a02137399bc3cb9d65aa0f98ae4629a9f05a96",
+        "sha256": "7bb26ee06f69709bb0f526009661b97e9c59c469900d77a3d6ed08642df65f85"
+      }
+    },
+    {
+      "name": "hide-advanced-menu",
+      "title": "隐藏「高级功能」菜单",
+      "version": "1.0.1+php85.1",
+      "description": "隐藏左侧的「高级功能」菜单。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\HideAdvancedMenu",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "bg": "info",
+          "fa": "code-branch"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/hide-advanced-menu_1.0.1_php85.zip",
+        "shasum": "8b60274b9406b9152d2124b8280c9b00e86366fa",
+        "sha256": "047a293221a4de97b465aba8b70906c65d760e40b348f818b11ef06ff10a58f3"
+      }
+    },
+    {
+      "name": "hitokoto",
+      "version": "1.3.0+php85.1",
+      "title": "一言",
+      "description": "在用户中心和管理面板的右上角显示一言。",
+      "author": "Little_Qiu",
+      "url": "https://www.littleqiu.net",
+      "namespace": "Hitokoto",
+      "require": {
+        "blessing-skin-server": "*",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "conflicts": {
+          "hello-dolly": "*"
+        },
+        "icon": {
+          "fa": "quote-right",
+          "bg": "teal"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/hitokoto_1.3.0_php85.zip",
+        "shasum": "4ad1834ffc615bb00d28425771a8b80ec33eaac8",
+        "sha256": "92d969e63b2196aac065faa182c32dbe99ad9cb8cfa463bc6ce9a234981424da"
+      }
+    },
+    {
+      "name": "insane-profile-cache",
+      "version": "4.0.3+php85.1",
+      "title": "Profile 文件缓存",
+      "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "InsaneProfileCache",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "running",
+          "bg": "warning"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/insane-profile-cache_4.0.3_php85.zip",
+        "shasum": "ba1fea3c1f6c866785ff8ddafa47c060db1cc2d0",
+        "sha256": "d94146a89557897a07b55a5aa369e2abf1eb6fc77ed93a912d64f1105b77c4bb"
+      }
+    },
+    {
+      "name": "insider",
+      "title": "使用预览版",
+      "description": "自动将 Blessing Skin 更新源切换到包含预览版的地址。",
+      "author": "GPlane",
+      "version": "1.0.2+php85.1",
+      "namespace": "Insider",
+      "require": {
+        "blessing-skin-server": ">=4.4.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "spa",
+          "bg": "olive"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/insider_1.0.2_php85.zip",
+        "shasum": "d88d976fac315aacc399358ba5f0f4ef55ff3b20",
+        "sha256": "5a7a5f823e27d46c8a47abb6fbc282885e6165c485e8ebb75792c2d6487a8bce"
+      }
+    },
+    {
+      "name": "invitation-codes",
+      "version": "3.1.2+php85.1",
+      "title": "注册邀请码",
+      "description": "在管理后台生成邀请码，只有持有邀请码才可以注册成为本站用户。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "InvitationCodes",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "phone",
+          "bg": "gray-dark"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/invitation-codes_3.1.2_php85.zip",
+        "shasum": "7706c808c0aec87718a1f6278d3a9c8672cd38c9",
+        "sha256": "9f8ae410d5f09eaa0af5bd5f999112cabaa70aaf17939910b1004dec86dd1633"
+      }
+    },
+    {
+      "name": "legacy-api",
+      "title": "传统皮肤加载方式",
+      "version": "1.1.3+php85.1",
+      "description": "提供传统的皮肤加载方式，即直接访问角色名。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\Legacy",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "republican",
+          "bg": "purple"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/legacy-api_1.1.3_php85.zip",
+        "shasum": "1ffb6babe89e440e344cd041738306653d0c939e",
+        "sha256": "5b5db15fbf86acb378491a0351b2a1424f69dbae5f4747de6a287c154395df90"
+      }
+    },
+    {
+      "name": "login-history",
+      "version": "1.2.0",
+      "title": "网页登录与 Yggdrasil 登录记录",
+      "description": "在高级功能中查询自己的网页登录、Yggdrasil 认证及角色入服记录，支持同一账号的多个角色。",
+      "author": "Custom plugin",
+      "license": "MIT",
+      "namespace": "Blessing\\LoginHistory",
+      "require": {
+        "blessing-skin-server": "^6.0.2",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "history",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/login-history_1.2.0_php85.zip",
+        "shasum": "88af30de2922d1daf95fd9c53835a630117299c5",
+        "sha256": "c5651f74831f5e7bd063ec7960fef09dcaf33a4e9245c2144c446d32aa14c7b8"
+      }
+    },
+    {
+      "name": "mojang-verification",
+      "version": "2.0.0+php85.1",
+      "title": "正版验证",
+      "description": "为拥有正版账号的用户提供验证、绑定。",
+      "author": "GPlane",
+      "namespace": "GPlane\\Mojang",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "oauth": "^1.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "dragon",
+          "bg": "fuchsia"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/mojang-verification_2.0.0_php85.zip",
+        "shasum": "ab0104694018433d97526dce471923e167f41d80",
+        "sha256": "f96292f76f57068bb170798ce3101eeb4f02bc23e48979e2bf24be92befa86e3"
+      }
+    },
+    {
+      "name": "oauth",
+      "title": "OAuth 客户端核心",
+      "version": "1.0.6+php85.1",
+      "description": "OAuth 客户端核心插件",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\OAuthCore",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "bg": "primary",
+          "fa": "box"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/oauth_1.0.6_php85.zip",
+        "shasum": "2f071f53b6e7c9da968b380b0d61deb893718b84",
+        "sha256": "e27a88a9ff0d9ccf75bcb006b65a725fbf74dc5ffd321784f76c2f439634d4e5"
+      }
+    },
+    {
+      "name": "oauth-github",
+      "title": "使用 GitHub 登录",
+      "version": "0.2.5+php85.1",
+      "description": "用 GitHub 账号来登录皮肤站",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\OAuth\\GitHub",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "oauth": "^1.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "github",
+          "faType": "fab",
+          "bg": "success"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/oauth-github_0.2.5_php85.zip",
+        "shasum": "90531f8cf093e7b534ebc6f897f9f2db03d44b71",
+        "sha256": "4f4990c14d932b5e582fbba34f8692aeeb47f50d3a7778f431d0c2788906cff6"
+      }
+    },
+    {
+      "name": "oauth-google",
+      "title": "使用 Google 登录",
+      "version": "0.1.5+php85.1",
+      "description": "用 Google 账号来登录皮肤站",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\OAuth\\Google",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "oauth": "^1.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "google",
+          "faType": "fab",
+          "bg": "lightblue"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/oauth-google_0.1.5_php85.zip",
+        "shasum": "e1c8c6bdb2fd3f70a32f94be2d3e30616b394404",
+        "sha256": "343d0879a61ab1b701d7addbd73627a4c1a9892de0eb59c901d9ce714b53f173"
+      }
+    },
+    {
+      "name": "oauth-littleskin",
+      "title": "使用 LittleSkin 登录",
+      "version": "0.2.6+php85.1",
+      "description": "用 LittleSkin 账号来登录皮肤站",
+      "author": "Asnxthaony",
+      "url": "https://github.com/Asnxthaony",
+      "namespace": "Blessing\\OAuth\\LittleSkin",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "oauth": "^1.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "rocket",
+          "bg": "pink"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/oauth-littleskin_0.2.6_php85.zip",
+        "shasum": "bc71066f6e9cd9fbd0746f1cc98359d3335d726f",
+        "sha256": "e549c8cc607bd1a712bc87287566ff96d323b1e8b13ab9a7783d084b9675fd32"
+      }
+    },
+    {
+      "name": "oauth-microsoft-live",
+      "title": "使用 Microsoft Live 登录",
+      "version": "0.2.6+php85.1",
+      "description": "通过 Microsoft Live 来登录皮肤站",
+      "author": "GPlane",
+      "url": "",
+      "namespace": "Blessing\\OAuth\\Live",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "oauth": "^1.0.0",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "microsoft",
+          "faType": "fab",
+          "bg": "primary"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/oauth-microsoft-live_0.2.6_php85.zip",
+        "shasum": "b24cdaa5b12aa726b6ddda5dea6fe35dea9b16a5",
+        "sha256": "20de31255e0c60f5227b590a44c2aa66028619494ddc3aeb5fba606a4b795ecf"
+      }
+    },
+    {
+      "name": "password-algorithm-transition",
+      "version": "2.2.1+php85.1",
+      "title": "密码算法切换",
+      "description": "将站点的密码算法进行渐进式的切换。",
+      "author": "GPlane",
+      "namespace": "GPlane\\PasswordTransition",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "star-of-life",
+          "bg": "lime"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/password-algorithm-transition_2.2.1_php85.zip",
+        "shasum": "a4fb2c0033dc6ecc0f3bac315751011530918e9a",
+        "sha256": "b412a1eade5368bcdfd14fae6655ee5d1cc4b598aaee7cfd941ac718ba24c28a"
+      }
+    },
+    {
+      "name": "pray-for-kyoto-animation",
+      "version": "1.0.3+php85.1",
+      "title": "祈福京阿尼",
+      "description": "为京都动画第一工作室祈福。",
+      "author": "GPlane",
+      "namespace": "Pfka",
+      "require": {
+        "blessing-skin-server": "*",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "pray",
+          "bg": "black"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/pray-for-kyoto-animation_1.0.3_php85.zip",
+        "shasum": "3c0536a5279d4e08ecf6fa7aac1d30666042b650",
+        "sha256": "a6e1cb9d097d5dc9fb2f27a195aa39a4812e5fd58b40119a16124899c0016633"
+      }
+    },
+    {
+      "name": "predis",
+      "title": "Predis",
+      "version": "1.0.1+php85.1",
+      "description": "设置 Redis 客户端为 Predis。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\Predis",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "memory",
+          "bg": "danger"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/predis_1.0.1_php85.zip",
+        "shasum": "960c4f44290c6d7ad3aa73b89c288db86392c697",
+        "sha256": "47e18e2061435479225b490a877ba5c2dabd4b914fdff005187f2cb070e72e48"
+      }
+    },
+    {
+      "name": "purge-azure-global-cdn",
+      "version": "1.1.2+php85.1",
+      "title": "刷新 Azure 国际版 CDN",
+      "description": "当资源被更新时，自动刷新 Azure 国际版 CDN 的缓存。不适用于 Azure 中国版。",
+      "author": "Honoka Tech LTD(GB)",
+      "namespace": "Honoka\\PurgeAzureGlobalCdn",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "fire",
+          "bg": "blue"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/purge-azure-global-cdn_1.1.2_php85.zip",
+        "shasum": "7b9d39a0a09507ef62220cc3bf05cc3adfd4cc9f",
+        "sha256": "113867a3d3954def48ea7f181bab3b6f020f9e97adafbd2995f8c6329a0af1af"
+      }
+    },
+    {
+      "name": "refresh-ali-cdn",
+      "version": "1.0.1+php85.1",
+      "title": "刷新阿里云 CDN",
+      "description": "当角色信息被更新时，自动刷新阿里云 CDN 中的 JSON Profile。",
+      "author": "hank9999",
+      "namespace": "Hank9999\\RefreshAliCdn",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "fire",
+          "bg": "lime"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/refresh-ali-cdn_1.0.1_php85.zip",
+        "shasum": "3c92cab05ff6d16241a45ec84ff7c4c641d19b9d",
+        "sha256": "cf1226d7d4ba05b0bb30036b002a68baa0b2274bb6af0d2ec9250ea072e67a79"
+      }
+    },
+    {
+      "name": "refresh-qcloud-cdn",
+      "version": "2.1.3+php85.1",
+      "title": "刷新腾讯云 CDN",
+      "description": "当角色信息被更新时，自动刷新 CDN 中的 JSON Profile。",
+      "author": "GPlane",
+      "namespace": "GPlane\\RefreshQcloudCdn",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "fire",
+          "bg": "orange"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/refresh-qcloud-cdn_2.1.3_php85.zip",
+        "shasum": "f72a12bf01e7654104626b79381f6a047069d92a",
+        "sha256": "4969bcda9064c61d98f0f445afe31782e032ee4f1571c0a12a8b83ba1c3ccf30"
+      }
+    },
+    {
+      "name": "remote-addr",
+      "title": "Remote Addr",
+      "version": "0.1.1+php85.1",
+      "description": "通过 `REMOTE_ADDR` 来获取 IP。使用负载均衡或反向代理的网站请不要使用。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\RemoteAddr",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "ethernet",
+          "bg": "indigo"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/remote-addr_0.1.1_php85.zip",
+        "shasum": "8c76fb26de2d292fd0081b6133e2ef4128c6e6a4",
+        "sha256": "6f301bb74cd6c24a31db71963b09a4c929949f13110495c7631520214bad00c3"
+      }
+    },
+    {
+      "name": "restricted-email-domains",
+      "title": "邮箱域名限制",
+      "version": "0.3.0+php85.1",
+      "description": "限制用户注册时所使用的邮箱",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\RestrictedEmailDomains",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "ConfigController",
+        "icon": {
+          "bg": "purple",
+          "fa": "at"
+        }
+      },
+      "dependencies": {
+        "nanoid": "^4.0.0"
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/restricted-email-domains_0.3.0_php85.zip",
+        "shasum": "874fa6595ce37ea3d03bc1b95a79bcce141e37de",
+        "sha256": "36c0c8af417485cb88d3faff62016df5a4b90218f2496d0ea6d32f155d24c744"
+      }
+    },
+    {
+      "name": "share-registration-link",
+      "version": "2.0.2+php85.1",
+      "title": "分享注册链接",
+      "description": "允许用户分享注册链接并获得积分",
+      "author": "GPlane",
+      "namespace": "GPlane\\ShareRegistrationLink",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "GPlane\\ShareRegistrationLink\\Configuration",
+        "icon": {
+          "fa": "share-alt",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/share-registration-link_2.0.2_php85.zip",
+        "shasum": "013ce8b6f1b98e3df7b98a213f7e8464e07d6218",
+        "sha256": "8bcb3eb323bc2a65c0276e9d2da8759b961851cf0390da94a7a69d36eaaf5b02"
+      }
+    },
+    {
+      "name": "single-player-limit",
+      "version": "3.0.4+php85.1",
+      "title": "单角色限制",
+      "description": "限制一个用户至多只能拥有一个角色。",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "SinglePlayerLimit",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "user-lock",
+          "bg": "yellow"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/single-player-limit_3.0.4_php85.zip",
+        "shasum": "15080fa831c24680d73f2d17a484a1ae6f7b4a9d",
+        "sha256": "a6a17ac0c95b31a9357fa11fc0b717f6823a39659ce8130aa5f53b59ca92b13a"
+      }
+    },
+    {
+      "name": "texture-description",
+      "title": "材质描述",
+      "version": "1.3.2+php85.1",
+      "description": "允许用户为材质添加描述",
+      "author": "Steven Qiu & GPlane",
+      "url": "",
+      "namespace": "Blessing\\TextureDescription",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Controllers\\ConfigController",
+        "icon": {
+          "bg": "olive",
+          "fa": "file-invoice"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/texture-description_1.3.2_php85.zip",
+        "shasum": "e12454bad0b48e30a468ea1473f013b0d07746cd",
+        "sha256": "650b2217d48911f7be0c3f9afd89bda50b4de5f6fab63e3f7eec49196d295ff2"
+      }
+    },
+    {
+      "name": "texture-type-cast",
+      "title": "材质类型强制转换",
+      "version": "0.4.0+php85.1",
+      "description": "强制对全站的材质进行材质类型修改",
+      "author": "GPlane",
+      "url": "https://gplane.win/",
+      "namespace": "Blessing\\TextureTypeCast",
+      "require": {
+        "blessing-skin-server": "^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "bg": "danger",
+          "fa": "file-signature"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/texture-type-cast_0.4.0_php85.zip",
+        "shasum": "dcc533ac051484c333a39eede9fa282812a34dd2",
+        "sha256": "5e2dfc69a6730b8484e2ad4b22927ea56a547d1eb92c34859482183a5d9f9064"
+      }
+    },
+    {
+      "name": "textures-aliyun-oss",
+      "version": "2.0.6+php85.1",
+      "title": "阿里云对象存储 OSS",
+      "description": "将用户上传的材质存储文件至阿里云 OSS 中。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "TextureAliyunOSS",
+      "config": "config.blade.php",
+      "require": {
+        "blessing-skin-server": "^4|^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "spider",
+          "bg": "danger"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/textures-aliyun-oss_2.0.6_php85.zip",
+        "shasum": "f3c26acbd2bf6c01ec5f0160f90ea2ff64f58f3a",
+        "sha256": "9c71eb667bbdf938c7316076a02251e7725cbdfc3b90e3c1ec3923a9e982d213"
+      }
+    },
+    {
+      "name": "textures-qcloud-cos",
+      "version": "2.0.5+php85.1",
+      "title": "腾讯云对象存储 COS",
+      "description": "将用户上传的材质存储文件至腾讯云 COS 中。仅支持 COS v5。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "TextureQcloudCOS",
+      "config": "config.blade.php",
+      "require": {
+        "blessing-skin-server": "^4|^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "subway",
+          "bg": "teal"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/textures-qcloud-cos_2.0.5_php85.zip",
+        "shasum": "6eaa1f07201152c9548ff50288d7ab6554bec468",
+        "sha256": "3a21b93bd5fffd7d8fa1631267c9fe6214c9f65027b4fbc3c992004d40147696"
+      }
+    },
+    {
+      "name": "textures-qiniu-storage",
+      "version": "2.0.5+php85.1",
+      "title": "七牛云存储",
+      "description": "将用户上传的材质存储文件至七牛云存储中。",
+      "author": "printempw",
+      "url": "https://blessing.studio/",
+      "namespace": "TextureQiniuStorage",
+      "config": "config.blade.php",
+      "require": {
+        "blessing-skin-server": "^4|^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "radiation",
+          "bg": "purple"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/textures-qiniu-storage_2.0.5_php85.zip",
+        "shasum": "055cde28d3beb7248255b6050e5ceba2c14f6f05",
+        "sha256": "d435fcbe05c20fbee91ab14f39b0d406e87753566a1067fcc4c65237800b1fdc"
+      }
+    },
+    {
+      "name": "trust-proxies",
+      "version": "0.1.3+php85.1",
+      "title": "代理信任",
+      "description": "当站点使用负载均衡并开启 SSL 时，若遇到 URL 问题，可尝试安装并开启此插件。",
+      "author": "GPlane",
+      "namespace": "GPlane\\TrustProxies",
+      "require": {
+        "blessing-skin-server": "^4.2.0|^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "torii-gate",
+          "bg": "maroon"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/trust-proxies_0.1.3_php85.zip",
+        "shasum": "23a4f24f448091e253144f6c59f569a637733fce",
+        "sha256": "c12794d841d093609308e05f06470149848944f83385e5cf2cbe8ffa0e7710aa"
+      }
+    },
+    {
+      "name": "two-factor",
+      "version": "1.0.0",
+      "title": "两步验证",
+      "description": "使用验证器验证码与通行密钥保护账号，支持通行密钥直接登录。",
+      "author": "Custom plugin",
+      "namespace": "Blessing\\TwoFactor",
+      "license": "MIT",
+      "require": {
+        "blessing-skin-server": "^6.0.2",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "shield-alt",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/two-factor_1.0.0_php85.zip",
+        "shasum": "c91420a7e83c29dc4de4a57738949cdf3291ff2e",
+        "sha256": "46e0c303229362163c33779c8a0e41837cdf32e0d8dd8b50b1f49bb906408af5"
+      }
+    },
+    {
+      "name": "usm-api",
+      "title": "Universal Skin API",
+      "version": "1.2.3+php85.1",
+      "description": "Universal Skin Mod API",
+      "author": "GPlane",
+      "url": "https://gplane.win",
+      "namespace": "Blessing\\Usm",
+      "require": {
+        "blessing-skin-server": "^5|^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "icon": {
+          "fa": "underline",
+          "bg": "success"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/usm-api_1.2.3_php85.zip",
+        "shasum": "67639c60a936b57eb7157529c975eb2cba0b0e3c",
+        "sha256": "8bab086a3b17f2f6881ae672cae89f13796f5762a39c21b7ecb4b516b90afcbd"
+      }
+    },
+    {
+      "name": "wecom-login",
+      "version": "1.5.2",
+      "title": "企业微信登录与绑定",
+      "description": "通过企业微信自建应用扫码登录，支持账号自助绑定、解绑和登录消息通知。",
+      "author": "Custom plugin",
+      "namespace": "Blessing\\WeCom",
+      "require": {
+        "blessing-skin-server": "^6.0.2",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Configuration",
+        "icon": {
+          "fa": "building",
+          "bg": "success"
+        }
+      },
+      "license": "MIT",
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/wecom-login_1.5.2_php85.zip",
+        "shasum": "96cc64d1f0b152ba4117e5f399f4d619cb081d89",
+        "sha256": "bbc68c750e3c6526c8c0e56b7273cd5fd472ee47aaa986a3c88c44be2a512daa"
+      }
+    },
+    {
+      "name": "yggdrasil-api",
+      "version": "5.2.1+php85.1",
+      "title": "Yggdrasil API",
+      "description": "Yggdrasil API + authlib-injector = ✨",
+      "author": "printempw",
+      "namespace": "Yggdrasil",
+      "require": {
+        "blessing-skin-server": "^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Controllers\\ConfigController",
+        "icon": {
+          "fa": "khanda",
+          "bg": "info"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/yggdrasil-api_5.2.1_php85.zip",
+        "shasum": "9385fdda56e74406595f60973cc75bde6b7198db",
+        "sha256": "c848872354d4a6bb3e44a024ed1359f4245992fee626a6de3b2b1faf9a7317ad"
+      }
+    },
+    {
+      "name": "yggdrasil-connect",
+      "version": "6.2.0+php85.1",
+      "title": "Yggdrasil Connect",
+      "description": "重构版 Yggdrasil API 插件，修复了大量 Bug，添加了 Yggdrasil Connect 支持。使用之前请阅读插件 README。",
+      "author": "LittleSkin",
+      "namespace": "LittleSkin\\YggdrasilConnect",
+      "require": {
+        "blessing-skin-server": "^6",
+        "php": "~8.5.0"
+      },
+      "enchants": {
+        "config": "Controllers\\ConfigController",
+        "icon": {
+          "fa": "khanda",
+          "bg": "blue"
+        },
+        "conflicts": {
+          "yggdrasil-api": "*"
+        }
+      },
+      "dist": {
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261025-patch/yggdrasil-connect_6.2.0_php85.zip",
+        "shasum": "6194fabdaaa155e7f879f4be44f28f7e1c1beceb",
+        "sha256": "d064a902b9f465f90d283c513d625b13be2c5df22cdc41b668adc39b9391913c"
+      }
+    }
+  ]
+}
