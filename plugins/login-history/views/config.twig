@@ -1,15 +1,1 @@
-{% extends 'admin.base' %}
-{% block title %}登录记录插件说明{% endblock %}
-{% block content %}
-<div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">网页登录与 Yggdrasil 登录记录</h2></div><div class="card-body">
-<p>用户可在“高级功能 → 登录记录”查询自己的登录活动。</p>
-<ul>
-<li>记录网页登录渠道，以及 Yggdrasil 认证、刷新令牌、选择角色和加入服务器请求。</li>
-<li>支持按来源、渠道、角色和日期筛选，角色信息按认证时的情况保存。</li>
-<li>客户端显示设备与系统名称，鼠标悬停可查看完整 User-Agent。</li>
-<li>记录保留 90 天，时间按网站时区显示。</li>
-<li>兼容 yggdrasil-api 5.2.1 与 yggdrasil-connect 6.2.0。</li>
-<li>既有 Yggdrasil 日志：{{ legacy_available ? '可查询' : '待接入' }}。</li>
-</ul>
-</div></div>
-{% endblock %}
+{% extends 'Blessing\\LoginHistory::history' %}

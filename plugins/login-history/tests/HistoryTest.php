@@ -197,6 +197,75 @@ final class HistoryTest extends Tests\TestCase
         $this->get('/user/wecom')->assertOk();
     }
 
+    public function testAdminConfigurationListsAllUsersAndHasPrivateResponse(): void
+    {
+        $first = $this->user();$second = $this->user();
+        $first->update(['nickname'=>'AdminLogAlice']);$second->update(['nickname'=>'AdminLogBob']);
+        $this->record($first);$this->record($second);
+        $this->actingAs(User::factory()->admin()->create())->get('/admin/plugins/config/login-history')
+            ->assertOk()->assertSee('全站登录记录')->assertSee('AdminLogAlice')->assertSee('AdminLogBob')->assertSee('共 2 条')
+            ->assertHeader('Cache-Control','no-store, private')->assertHeader('Referrer-Policy','same-origin');
+    }
+
+    public function testAdminFiltersUidKeywordIpAndChannelTogether(): void
+    {
+        $first = $this->user();$second = $this->user();$first->update(['nickname'=>'SearchLoginUser']);
+        app(Recorder::class)->record($first->uid,'web','login','web',Request::create('/test','GET',[],[],[],['REMOTE_ADDR'=>'203.0.113.8']),[],'custom:passkey');
+        $this->record($second);
+        $url='/admin/plugins/config/login-history?uid='.$first->uid.'&user=SearchLogin&ip=203.0.113.8&channel=custom:passkey';
+        $this->actingAs(User::factory()->superAdmin()->create())->get($url)->assertOk()->assertSee('共 1 条')->assertSee('SearchLoginUser')->assertSee('通行密钥');
+        $this->get($url.'&source=yggdrasil')->assertOk()->assertSee('共 0 条');
+        $this->get('/admin/plugins/config/login-history?uid='.$second->uid.'&ip=203.0.113.8')->assertOk()->assertSee('共 0 条');
+    }
+
+    public function testAdminRoleFilterUsesSelectedRoleAcrossUsers(): void
+    {
+        $first=$this->user();$second=$this->user();
+        $this->record($first,'yggdrasil','authenticate',[
+            ['player_id'=>101,'player_name'=>'SelectedRole','selected'=>true],
+            ['player_id'=>102,'player_name'=>'CandidateRole','selected'=>false],
+        ]);
+        $this->record($second,'yggdrasil','join',[['player_id'=>102,'player_name'=>'JoinedRole','selected'=>true]]);
+        $this->actingAs(User::factory()->admin()->create())->get('/admin/plugins/config/login-history?source=yggdrasil&player=102')
+            ->assertOk()->assertSee('共 1 条')->assertSee('JoinedRole')->assertDontSee('SelectedRole');
+    }
+
+    public function testAdminPaginationPreservesFiltersAndShowsPageNumbers(): void
+    {
+        $user=$this->user();
+        for($i=0;$i<21;$i++){$this->record($user);}
+        $this->actingAs(User::factory()->admin()->create())->get('/admin/plugins/config/login-history?uid='.$user->uid.'&page=2')
+            ->assertOk()->assertSee('共 21 条')->assertSee('第 2 / 2 页')->assertSee('aria-current="page"',false)->assertSee('rel="prev"',false)
+            ->assertSee('uid='.$user->uid,false)->assertSee('page=1',false);
+    }
+
+    public function testOrdinaryUsersCannotReadAdminAndCannotExpandOwnScope(): void
+    {
+        $first=$this->user();$second=$this->user();$this->record($first);$this->record($second);
+        $this->actingAs($first)->get('/admin/plugins/config/login-history')->assertForbidden();
+        $this->get('/user/login-history?uid='.$second->uid.'&user=anything&ip=203.0.113.7')->assertOk()->assertSee('共 1 条');
+        $records=app(\Blessing\LoginHistory\History::class)->records($first->uid,['source'=>'all','uid'=>$second->uid]);
+        self::assertSame($first->uid,(int)$records->first()->user_id);
+    }
+
+    public function testAdminInvalidFiltersReturnValidationAndEscapeNickname(): void
+    {
+        $user=$this->user();$user->update(['nickname'=>'<script>logTest</script>']);$this->record($user);
+        $this->actingAs(User::factory()->admin()->create())->get('/admin/plugins/config/login-history')->assertOk()
+            ->assertSee('&lt;script&gt;logTest&lt;/script&gt;',false)->assertDontSee('<script>logTest</script>',false);
+        foreach(['ip=bad','uid=-1','source=bad','from=2026-10-24&to=2026-10-23'] as $query){
+            $this->getJson('/admin/plugins/config/login-history?'.$query)->assertStatus(422);
+        }
+    }
+
+    public function testAdminCanQueryExistingLegacyLogsAndDeletedUsers(): void
+    {
+        Schema::create('ygg_log',function($t){$t->increments('id');$t->string('action');$t->unsignedInteger('user_id');$t->unsignedInteger('player_id');$t->string('ip');$t->dateTime('time');});
+        DB::table('ygg_log')->insert(['action'=>'join','user_id'=>99999,'player_id'=>7,'ip'=>'203.0.113.9','time'=>now()]);
+        $this->actingAs(User::factory()->admin()->create())->get('/admin/plugins/config/login-history?source=legacy&uid=99999&player=7')
+            ->assertOk()->assertSee('共 1 条')->assertSee('已删除用户')->assertSee('历史角色编号 #7')->assertSee('203.0.113.9');
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {
@@ -339,7 +408,7 @@ final class HistoryTest extends Tests\TestCase
     {
         $user=$this->user();$user->permission=1;$user->save();
         $this->actingAs($user)->get('/admin/plugins/data')->assertOk()->assertJsonFragment(['name'=>'login-history','enabled'=>true,'config'=>true]);
-        $this->get('/admin/plugins/config/login-history')->assertOk()->assertSee('登录记录插件说明');
+        $this->get('/admin/plugins/config/login-history')->assertOk()->assertSee('全站登录记录');
     }
     public function testRecorderFailureDoesNotBreakLogin(): void
     {

@@ -14,7 +14,7 @@ final class History
         return Schema::hasTable('ygg_log') && Schema::hasColumns('ygg_log', ['id','action','user_id','player_id','ip','time']);
     }
 
-    public function records(int $uid, array $filters)
+    public function records(?int $uid, array $filters)
     {
         $timezone = config('app.timezone', 'UTC');
         $legacy = $filters['source'] === 'legacy';
@@ -25,10 +25,23 @@ final class History
         $time = $legacy ? 'time' : 'occurred_at';
         if ($legacy) {
             $query = DB::table('ygg_log')->select(['id','action','user_id','player_id','ip','time'])
-                ->where('user_id', $uid)->whereIn('action', ['authenticate','refresh','join']);
+                ->whereIn('action', ['authenticate','refresh','join']);
         } else {
-            $query = DB::table(Installer::ENTRIES)->where('user_id', $uid);
+            $query = DB::table(Installer::ENTRIES);
             if ($filters['source'] !== 'all') {$query->where('source', $filters['source']);}
+        }
+        if ($uid !== null) {$query->where('user_id', $uid);}
+        else {
+            if (!empty($filters['uid'])) {$query->where('user_id', (int) $filters['uid']);}
+            if (!empty($filters['ip'])) {$query->where('ip', $filters['ip']);}
+            if (isset($filters['user']) && $filters['user'] !== '') {
+                $keyword = '%'.$filters['user'].'%';
+                $query->whereIn('user_id', function ($sub) use ($keyword) {
+                    $sub->select('uid')->from('users')->where(function ($names) use ($keyword) {
+                        $names->where('nickname', 'like', $keyword)->orWhere('email', 'like', $keyword);
+                    });
+                });
+            }
         }
         if (!empty($filters['channel'])) {
             if ($legacy) {$query->whereRaw('1 = 0');}
@@ -60,9 +73,11 @@ final class History
         }
         $page = $query->orderByDesc($time)->orderByDesc('id')->paginate(20)->withQueryString();
         $profiles = $legacy ? collect() : DB::table(Installer::PROFILES)->whereIn('entry_id', $page->pluck('id'))->get()->groupBy('entry_id');
+        $users = $uid === null ? \App\Models\User::whereIn('uid', $page->pluck('user_id'))->get(['uid', 'nickname'])->keyBy('uid') : collect();
         $labels = ['login'=>'网页登录','authenticate'=>'客户端认证','refresh'=>'刷新令牌 / 选择角色','join'=>'请求加入服务器'];
         $locations = app(GeoLocation::class);
-        $page->getCollection()->transform(function ($row) use ($legacy, $profiles, $labels, $timezone, $locations) {
+        $page->getCollection()->transform(function ($row) use ($legacy, $profiles, $labels, $timezone, $locations, $users, $uid) {
+            if ($uid === null) {$row->user_label = $users->get($row->user_id)?->nickname ?: ($users->has($row->user_id) ? '用户' : '已删除用户');}
             $row->action_label = $labels[$row->action] ?? $row->action;
             $row->profiles = $legacy ? collect() : $profiles->get($row->id, collect());
             $row->selected_profiles = $row->profiles->where('selected', true)->values();
@@ -81,10 +96,10 @@ final class History
         return $page;
     }
 
-    public function channels(int $uid): array
+    public function channels(?int $uid): array
     {
         $values = ['password', 'custom:passkey', 'wecom', 'oauth:github', 'oauth:google', 'oauth:live', 'oauth:littleskin', 'remember', 'unknown', 'legacy'];
-        $historical = DB::table(Installer::ENTRIES)->where('user_id', $uid)->where('source', 'web')
+        $historical = DB::table(Installer::ENTRIES)->when($uid !== null, fn ($query) => $query->where('user_id', $uid))->where('source', 'web')
             ->where('occurred_at', '>=', now('UTC')->subDays(Recorder::DAYS))->whereNotNull('login_channel')
             ->distinct()->pluck('login_channel')->all();
         $result = [];

@@ -1,11 +1,17 @@
-{% extends 'user.base' %}
-{% block title %}登录记录{% endblock %}
+{% extends admin_mode ? 'admin.base' : 'user.base' %}
+{% block title %}{{ admin_mode ? '全站登录记录' : '登录记录' }}{% endblock %}
 {% block content %}
+{% if errors.any() %}<div class="alert alert-danger" role="alert">{{ errors.first() }}</div>{% endif %}
 <div class="card card-outline card-info">
-  <div class="card-header"><h2 class="card-title">我的网页登录与 Yggdrasil 登录记录</h2></div>
+  <div class="card-header"><h2 class="card-title">{{ admin_mode ? '全站网页登录与 Yggdrasil 登录记录' : '我的网页登录与 Yggdrasil 登录记录' }}</h2></div>
   <div class="card-body">
     <p class="text-muted">查看最近 90 天的登录记录。显示时区：{{ timezone }}。</p>
-    <form method="get" action="{{ url('user/login-history') }}" class="mb-3">
+    <form method="get" action="{{ url(admin_mode ? 'admin/plugins/config/login-history' : 'user/login-history') }}" class="mb-3">
+      {% if admin_mode %}<div class="form-row">
+        <div class="form-group col-md-4"><label for="uid">用户 UID</label><input id="uid" name="uid" type="number" min="1" max="4294967295" class="form-control" value="{{ filters.uid }}"></div>
+        <div class="form-group col-md-4"><label for="user">昵称 / 邮箱</label><input id="user" name="user" class="form-control" maxlength="100" value="{{ filters.user }}" placeholder="输入关键词"></div>
+        <div class="form-group col-md-4"><label for="ip">客户端 IP</label><input id="ip" name="ip" class="form-control" value="{{ filters.ip }}" placeholder="IPv4 或 IPv6"></div>
+      </div>{% endif %}
       <div class="form-row">
         <div class="form-group col-md-3"><label for="source">记录来源</label>
           <select id="source" name="source" class="form-control">
@@ -18,10 +24,10 @@
           {% for value,label in {'':'全部操作','login':'网页登录','authenticate':'客户端认证','refresh':'刷新令牌 / 选择角色','join':'请求加入服务器'} %}
           <option value="{{ value }}" {{ filters.action == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}
         </select></div>
-        <div class="form-group col-md-3"><label for="player">实际选择的角色</label><select id="player" name="player" class="form-control">
+        <div class="form-group col-md-3"><label for="player">实际选择的角色</label>{% if admin_mode %}<input id="player" name="player" class="form-control" type="number" min="0" value="{{ filters.player }}" placeholder="角色编号；0 表示未选择角色">{% else %}<select id="player" name="player" class="form-control">
           <option value="">全部角色与账号级记录</option><option value="0" {{ filters.player is same as('0') ? 'selected' : '' }}>未选择角色（账号级）</option>
           {% for player in players %}<option value="{{ player.player_id }}" {{ filters.player == player.player_id and filters.player != '' ? 'selected' : '' }}>{{ player.player_name }} (#{{ player.player_id }})</option>{% endfor %}
-        </select></div>
+        </select>{% endif %}</div>
       </div>
       <div class="form-row align-items-end">
         <div class="form-group col-md-3"><label for="channel">网页登录渠道</label>
@@ -30,14 +36,14 @@
           </select></div>
         <div class="form-group col-md-3"><label for="from">开始日期</label><input id="from" class="form-control" type="date" name="from" value="{{ filters.from }}"></div>
         <div class="form-group col-md-3"><label for="to">结束日期</label><input id="to" class="form-control" type="date" name="to" value="{{ filters.to }}"></div>
-        <div class="form-group col-md-3"><button class="btn btn-info" type="submit">查询</button><a class="btn btn-link" href="{{ url('user/login-history') }}">重置</a></div>
+        <div class="form-group col-md-3"><button class="btn btn-primary" type="submit">查询</button><a class="btn btn-default" href="{{ url(admin_mode ? 'admin/plugins/config/login-history' : 'user/login-history') }}">重置</a></div>
       </div>
     </form>
     <div class="alert alert-light border">可按实际选择的角色查询认证、角色选择及服务器加入请求。展开“当时可用角色”可查看该次认证的角色列表。</div>
     {% if filters.source == 'legacy' %}<div class="alert alert-warning">历史日志包含操作、IP 和角色编号，时间采用网站时区。</div>{% endif %}
-    <div class="table-responsive"><table class="table table-striped"><thead><tr><th>时间</th><th>来源 / 操作</th><th>登录渠道</th><th>角色</th><th>IP</th><th>客户端</th></tr></thead><tbody>
+    <div class="table-responsive"><table class="table table-striped"><thead><tr><th>时间</th>{% if admin_mode %}<th>用户</th>{% endif %}<th>来源 / 操作</th><th>登录渠道</th><th>角色</th><th>IP</th><th>客户端</th></tr></thead><tbody>
     {% for record in records %}
-      <tr><td class="text-nowrap">{{ record.display_time }}</td><td>{{ record.source_label }}<br><small>{{ record.action_label }}</small></td><td>{{ record.channel_label }}</td><td>
+      <tr><td class="text-nowrap">{{ record.display_time }}</td>{% if admin_mode %}<td>{{ record.user_label }}<br><small class="text-muted">UID {{ record.user_id }}</small></td>{% endif %}<td>{{ record.source_label }}<br><small>{{ record.action_label }}</small></td><td>{{ record.channel_label }}</td><td>
         {% if filters.source == 'legacy' %}{{ record.legacy_player > 0 ? '历史角色编号 #' ~ record.legacy_player : '未记录具体角色' }}
         {% elseif record.selected_profiles|length %}
           {% for profile in record.selected_profiles %}<strong>{{ profile.player_name }}</strong>{% if profile.player_id %} (#{{ profile.player_id }}){% endif %}<br><small class="text-muted">{{ profile.profile_uuid }}</small>{% endfor %}
@@ -45,13 +51,11 @@
         {% else %}未选择角色（账号级认证）{% endif %}
         {% if record.candidate_profiles|length %}<details class="mt-1"><summary>当时可用角色（{{ record.candidate_profiles|length }}）</summary>{% for profile in record.candidate_profiles %}<div>{{ profile.player_name }} <small class="text-muted">{{ profile.profile_uuid }}</small></div>{% endfor %}</details>{% endif %}
       </td><td><span title="参考归属地：{{ record.ip_location }}" tabindex="0">{{ record.ip ?: '未记录' }}</span></td><td><span class="badge badge-light" title="{{ record.user_agent }}" tabindex="0">{{ record.client_label }}</span></td></tr>
-    {% else %}<tr><td colspan="6" class="text-center text-muted">没有符合条件的登录记录。</td></tr>{% endfor %}
+    {% else %}<tr><td colspan="{{ admin_mode ? 7 : 6 }}" class="text-center text-muted">没有符合条件的登录记录。</td></tr>{% endfor %}
     </tbody></table></div>
     <p class="small text-muted">IP 参考归属地：<a href="https://db-ip.com" target="_blank" rel="noopener noreferrer">DB-IP</a></p>
-    <div class="d-flex justify-content-between align-items-center"><span>共 {{ records.total() }} 条，第 {{ records.currentPage() }} / {{ records.lastPage() }} 页</span><div>
-      {% if records.previousPageUrl() %}<a class="btn btn-outline-secondary btn-sm" href="{{ records.previousPageUrl() }}">上一页</a>{% endif %}
-      {% if records.nextPageUrl() %}<a class="btn btn-outline-secondary btn-sm" href="{{ records.nextPageUrl() }}">下一页</a>{% endif %}
-    </div></div>
+    <div class="clearfix"><span class="d-inline-block mb-2">共 {{ records.total() }} 条，第 {{ records.currentPage() }} / {{ records.lastPage() }} 页</span>
+    {% include 'Blessing\\LoginHistory::pagination' %}</div>
   </div>
 </div>
 {% endblock %}
