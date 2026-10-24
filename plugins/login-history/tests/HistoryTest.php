@@ -56,6 +56,75 @@ final class HistoryTest extends Tests\TestCase
         self::assertCount(0, $keys);
     }
 
+    public function testPasswordChannelRemainsPasswordWithRememberChecked(): void
+    {
+        $user = $this->user();$user->changePassword('Known-password-123');
+        $this->post('/auth/login', ['identification' => $user->email, 'password' => 'Known-password-123', 'keep' => true])->assertOk();
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'password']);
+        $this->get('/user/login-history')->assertOk()->assertSee('密码登录');
+    }
+
+    public function testActualOAuthControllerCapturesProviderFromRouteNotQuery(): void
+    {
+        if (!getenv('BLESSING_OAUTH_VENDOR_PATH')) {$this->markTestSkipped('Set BLESSING_OAUTH_VENDOR_PATH to the OAuth vendor directory.');}
+        $user = $this->user();
+        Route::middleware('web')->get('auth/login/{driver}/callback', [\Blessing\OAuthCore\AuthController::class, 'callback']);
+        foreach (['github', 'google', 'live', 'littleskin'] as $provider) {
+            $driver = Mockery::mock();$driver->shouldReceive('user')->once()->andReturn((object) ['email' => $user->email]);
+            $factory = Mockery::mock(\Laravel\Socialite\Contracts\Factory::class);
+            $factory->shouldReceive('driver')->with($provider)->once()->andReturn($driver);
+            \Laravel\Socialite\Facades\Socialite::swap($factory);
+            $this->get('/auth/login/'.$provider.'/callback?driver=evil&channel=password')->assertRedirect('/user');
+            $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'oauth:'.$provider]);
+            Auth::logout();
+        }
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('GitHub')->assertSee('Microsoft Live');
+        $this->get('/user/login-history?channel=oauth:github')->assertOk()->assertSee('共 1 条');
+        self::assertSame(0, DB::table(Installer::ENTRIES)->where('login_channel', 'password')->count());
+    }
+
+    public function testWeComChannelUsesExactControllerAndQueryCannotSpoofChannel(): void
+    {
+        $route = new \Illuminate\Routing\Route('GET', 'auth/wecom/callback', ['uses' => 'Blessing\\WeCom\\Controller@callback', 'controller' => 'Blessing\\WeCom\\Controller@callback']);
+        $request = Request::create('/auth/wecom/callback?driver=github&login_channel=password');
+        $request->setRouteResolver(fn () => $route);
+        $this->app->instance('request', $request);
+        $user = $this->user();event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'wecom']);
+    }
+
+    public function testUnknownControllerCannotBeMislabelledFromUrl(): void
+    {
+        $request = Request::create('/auth/login/github/callback?driver=github');
+        $this->app->instance('request', $request);
+        $user = $this->user();event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'unknown']);
+    }
+
+    public function testRememberRestorationIsSeparateFromPasswordLogin(): void
+    {
+        $guard = Auth::guard('web');(new ReflectionProperty($guard, 'viaRemember'))->setValue($guard, true);
+        $user = $this->user();event(new \Illuminate\Auth\Events\Login('web', $user, true));
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'remember']);
+    }
+
+    public function testOldRowsAreNotGuessedAndChannelFilterIsUserScoped(): void
+    {
+        $user = $this->user();$other = $this->user();
+        app(Recorder::class)->record($user->uid, 'web', 'login', 'web', Request::create('/old'));
+        app(Recorder::class)->record($other->uid, 'web', 'login', 'oauth', Request::create('/other'), [], 'oauth:custom-private');
+        $this->actingAs($user)->get('/user/login-history?channel=legacy')->assertOk()->assertSee('旧版记录（渠道信息不完整）')->assertSee('共 1 条')->assertDontSee('custom-private');
+        $this->get('/user/login-history?channel=oauth:custom-private')->assertOk()->assertSee('共 0 条');
+    }
+
+    public function testCustomServerSideChannelSupportsLongProviderIdentifiers(): void
+    {
+        $channel = 'custom:'.str_repeat('a', 50);
+        request()->attributes->set('login_history.web_channel', $channel);
+        $user = $this->user();event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => $channel]);
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {

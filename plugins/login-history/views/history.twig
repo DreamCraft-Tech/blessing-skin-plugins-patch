@@ -24,6 +24,10 @@
         </select></div>
       </div>
       <div class="form-row align-items-end">
+        <div class="form-group col-md-3"><label for="channel">网页登录渠道</label>
+          <select id="channel" name="channel" class="form-control"><option value="">全部渠道</option>
+          {% for value,label in channels %}<option value="{{ value }}" {{ filters.channel == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}
+          </select></div>
         <div class="form-group col-md-3"><label for="from">开始日期</label><input id="from" class="form-control" type="date" name="from" value="{{ filters.from }}"></div>
         <div class="form-group col-md-3"><label for="to">结束日期</label><input id="to" class="form-control" type="date" name="to" value="{{ filters.to }}"></div>
         <div class="form-group col-md-3"><button class="btn btn-info" type="submit">查询</button><a class="btn btn-link" href="{{ url('user/login-history') }}">重置</a></div>
@@ -31,9 +35,9 @@
     </form>
     <div class="alert alert-light border">多角色账号在认证时可能尚未选择角色，此时不会自动归到第一个角色。可用角色列表只表示当时可供选择，不代表每个角色都登录了游戏。角色筛选仅匹配实际选择的角色；服务器加入请求不代表最终进服或持续在线。</div>
     {% if filters.source == 'legacy' %}<div class="alert alert-warning">旧日志仅显示账号归属、操作、IP 和已有角色编号，不读取其中可能包含令牌的原始参数。缺失的历史角色名 / UUID 不做推测；旧日志时间按网站时区解释。</div>{% endif %}
-    <div class="table-responsive"><table class="table table-striped"><thead><tr><th>时间</th><th>来源 / 操作</th><th>角色</th><th>IP</th><th>客户端</th></tr></thead><tbody>
+    <div class="table-responsive"><table class="table table-striped"><thead><tr><th>时间</th><th>来源 / 操作</th><th>登录渠道</th><th>角色</th><th>IP</th><th>客户端</th></tr></thead><tbody>
     {% for record in records %}
-      <tr><td class="text-nowrap">{{ record.display_time }}</td><td>{{ record.source_label }}<br><small>{{ record.action_label }}</small></td><td>
+      <tr><td class="text-nowrap">{{ record.display_time }}</td><td>{{ record.source_label }}<br><small>{{ record.action_label }}</small></td><td>{{ record.channel_label }}</td><td>
         {% if filters.source == 'legacy' %}{{ record.legacy_player > 0 ? '历史角色编号 #' ~ record.legacy_player : '未记录具体角色' }}
         {% elseif record.selected_profiles|length %}
           {% for profile in record.selected_profiles %}<strong>{{ profile.player_name }}</strong>{% if profile.player_id %} (#{{ profile.player_id }}){% endif %}<br><small class="text-muted">{{ profile.profile_uuid }}</small>{% endfor %}
@@ -41,7 +45,7 @@
         {% else %}未选择角色（账号级认证）{% endif %}
         {% if record.candidate_profiles|length %}<details class="mt-1"><summary>当时可用角色（{{ record.candidate_profiles|length }}）</summary>{% for profile in record.candidate_profiles %}<div>{{ profile.player_name }} <small class="text-muted">{{ profile.profile_uuid }}</small></div>{% endfor %}</details>{% endif %}
       </td><td>{{ record.ip ?: '未记录' }}</td><td style="max-width:300px;overflow-wrap:anywhere">{{ record.user_agent ?: '未记录' }}</td></tr>
-    {% else %}<tr><td colspan="5" class="text-center text-muted">没有符合条件的登录记录。</td></tr>{% endfor %}
+    {% else %}<tr><td colspan="6" class="text-center text-muted">没有符合条件的登录记录。</td></tr>{% endfor %}
     </tbody></table></div>
     <div class="d-flex justify-content-between align-items-center"><span>共 {{ records.total() }} 条，第 {{ records.currentPage() }} / {{ records.lastPage() }} 页</span><div>
       {% if records.previousPageUrl() %}<a class="btn btn-outline-secondary btn-sm" href="{{ records.previousPageUrl() }}">上一页</a>{% endif %}

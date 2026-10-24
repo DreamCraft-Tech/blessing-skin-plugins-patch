@@ -30,6 +30,14 @@ final class History
             $query = DB::table(Installer::ENTRIES)->where('user_id', $uid);
             if ($filters['source'] !== 'all') {$query->where('source', $filters['source']);}
         }
+        if (!empty($filters['channel'])) {
+            if ($legacy) {$query->whereRaw('1 = 0');}
+            else {
+                $query->where('source', 'web');
+                if ($filters['channel'] === 'legacy') {$query->whereNull('login_channel');}
+                else {$query->where('login_channel', $filters['channel']);}
+            }
+        }
         $query->where($time, '>=', $oldest);
         if ($from) {$query->where($time, '>=', $from);}
         if ($to) {$query->where($time, '<=', $to);}
@@ -60,11 +68,25 @@ final class History
             $row->candidate_profiles = $row->profiles->where('selected', false)->values();
             $row->source_label = $legacy ? '旧版 Yggdrasil 日志' : ($row->source === 'web' ? '网页' : 'Yggdrasil');
             $row->user_agent = $legacy ? '' : $row->user_agent;
+            $row->channel_label = $legacy ? '未记录' : ($row->source === 'web'
+                ? WebChannels::label($row->login_channel, $row->backend)
+                : match ($row->backend) {'yggdrasil-api' => 'Yggdrasil API', 'yggdrasil-connect' => 'Yggdrasil Connect', default => 'Yggdrasil'});
             $row->display_time = CarbonImmutable::parse($legacy ? $row->time : $row->occurred_at, $legacy ? $timezone : 'UTC')->setTimezone($timezone)->format('Y-m-d H:i:s');
             if ($legacy) {$row->legacy_player = (int) $row->player_id;}
             return $row;
         });
         return $page;
+    }
+
+    public function channels(int $uid): array
+    {
+        $values = ['password', 'wecom', 'oauth:github', 'oauth:google', 'oauth:live', 'oauth:littleskin', 'remember', 'unknown', 'legacy'];
+        $historical = DB::table(Installer::ENTRIES)->where('user_id', $uid)->where('source', 'web')
+            ->where('occurred_at', '>=', now('UTC')->subDays(Recorder::DAYS))->whereNotNull('login_channel')
+            ->distinct()->pluck('login_channel')->all();
+        $result = [];
+        foreach (array_unique(array_merge($values, $historical)) as $value) {$result[$value] = WebChannels::label($value);}
+        return $result;
     }
 
     public function players(int $uid)

@@ -36,6 +36,9 @@ final class Installer
                 $table->foreign('entry_id')->references('id')->on(self::ENTRIES)->onDelete('cascade');
             });
         }
+        if (!Schema::hasColumn(self::ENTRIES, 'login_channel')) {
+            Schema::table(self::ENTRIES, fn ($table) => $table->string('login_channel', 128)->nullable());
+        }
         foreach ([[self::ENTRIES, ['occurred_at']], [self::ENTRIES, ['user_id', 'occurred_at']], [self::PROFILES, ['player_id']]] as [$name, $columns]) {
             if (!Schema::hasIndex($name, $columns)) {
                 Schema::table($name, fn ($table) => $table->index($columns));

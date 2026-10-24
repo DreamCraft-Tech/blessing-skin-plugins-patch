@@ -20,14 +20,15 @@ final class Recorder
     {
         return is_string($value) ? mb_substr(preg_replace('/[\x00-\x1f\x7f]/u', '', $value) ?? '', 0, $length) : '';
     }
-    public function record(int $uid, string $source, string $action, string $backend, Request $request, array $profiles = []): void
+    public function record(int $uid, string $source, string $action, string $backend, Request $request, array $profiles = [], ?string $channel = null): void
     {
         try {
             if (!User::where('uid', $uid)->exists()) {return;}
             $ip = $request->ip();
-            DB::transaction(function () use ($uid, $source, $action, $backend, $request, $profiles, $ip): void {
+            DB::transaction(function () use ($uid, $source, $action, $backend, $request, $profiles, $ip, $channel): void {
                 $id = DB::table(Installer::ENTRIES)->insertGetId([
                     'user_id' => $uid, 'source' => $source, 'action' => $action, 'backend' => $backend,
+                    'login_channel' => $source === 'web' && $channel !== null ? self::text($channel, 128) : null,
                     'ip' => filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '',
                     'user_agent' => self::text($request->userAgent(), 512), 'occurred_at' => now('UTC'),
                 ]);

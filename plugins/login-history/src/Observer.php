@@ -13,10 +13,9 @@ final class Observer
         if ($event->guard !== 'web' || !isset($event->user->uid)) {return;}
         $request = request();
         if ($request->is('api/yggdrasil/*')) {return;}
-        $path = $request->path();
-        $method = $event->remember ? 'remember' : (str_contains($path, 'wecom') ? 'wecom' :
-            (str_contains((string) $request->route()?->getActionName(), 'OAuth') ? 'oauth' : 'web'));
-        app(Recorder::class)->record((int) $event->user->uid, 'web', 'login', $method, $request);
+        $channel = WebChannels::detect($request, \Illuminate\Support\Facades\Auth::guard('web')->viaRemember());
+        $backend = str_starts_with($channel, 'oauth') ? 'oauth' : (in_array($channel, ['password', 'wecom', 'remember'], true) ? $channel : 'web');
+        app(Recorder::class)->record((int) $event->user->uid, 'web', 'login', $backend, $request, [], $channel);
     }
 
     public function route(RouteMatched $event): void

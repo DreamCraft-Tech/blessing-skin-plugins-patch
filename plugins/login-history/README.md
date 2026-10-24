@@ -4,7 +4,7 @@
 
 ## 安装与入口
 
-1. 在后台上传 `login-history_1.0.1_php85.zip` 并启用。
+1. 在后台上传 `login-history_1.1.0_php85.zip` 并启用。
 2. 用户在 **高级功能 → 登录记录** 查询本人记录。原有 OAuth 应用和企业微信绑定菜单不会被替换。
 3. 后台 **插件配置 → 网页登录与 Yggdrasil 登录记录** 显示采集范围和旧日志检测情况；本版为说明页，不提供查看他人记录的接口。
 
@@ -84,3 +84,13 @@ Yggdrasil 仓库应包含 `plugins/yggdrasil-api` 和 `plugins/yggdrasil-connect
 已核对当前主系统安装迁移：users.uid 使用 increments，即 MariaDB INT UNSIGNED 自增主键；原插件 user_id 同为 unsignedInteger，源码定义的位数与符号一致。主系统 database.php 的 engine 为 null，建 users 表时也没有强制指定引擎。因此 errno 150 的实际原因需通过 SHOW CREATE TABLE users 和 SHOW TABLE STATUS 确认，不能仅凭异常认定为字段类型不一致。
 
 已根据现场 SHOW CREATE TABLE 确认 users 使用 MyISAM，插件表使用 InnoDB，导致跨引擎外键创建失败。新版本取消该外键，并补建缺失索引（包含企业微信绑定唯一约束和授权状态唯一约束）；不会清空已有数据。若已有重复绑定导致唯一索引无法建立，会明确报错，不自动删除或合并绑定。
+
+## 1.1.0 网页登录渠道
+
+记录表新增可空 login_channel 字段，升级时自动补列（需要 ALTER 权限），保留已有记录。页面新增「登录渠道」列和筛选，识别主系统密码登录、本企业微信插件，以及官方 OAuth 核心插件路由中的实际 driver，如 GitHub、Google、Microsoft Live、LittleSkin。不会依据用户提交的 query/body 中的 driver、channel 来判断渠道。
+
+密码登录勾选「记住我」仍记为密码登录；真正通过记住我 Cookie 自动恢复会话单独标注。未知控制器的登录不猜测为密码。自定义第三方插件可在调用 Auth::login 前设置服务端 request()->attributes->set('login_history.web_channel', 'custom:provider-name')，也可使用 oauth:provider-name，标识仅允许小写英文、数字、下划线和连字符，provider 部分最多 64 字符。
+
+旧数据不补猜：原先只记 web 的显示「旧版记录（渠道信息不完整）」；旧 OAuth 记录没有 driver，不能恢复为具体服务商。原先已有的 wecom 标记可显示为旧版企业微信记录。Yggdrasil 多角色逻辑保持一致。
+
+测试使用真实官方 OAuth 回调控制器和模拟 Socialite 身份响应，涵盖四种 provider；运行该集成测试还需设置 BLESSING_OAUTH_VENDOR_PATH 指向已安装依赖的官方 OAuth 插件 vendor 目录。没有访问真实第三方登录站点。
