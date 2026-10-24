@@ -587,7 +587,8 @@ final class WeComTest extends Tests\TestCase
         self::assertSame('complete', $state['phase']);
         self::assertFileExists($directory.'/geoip-city.mmdb');
         self::assertSame(hash_file('sha256', __DIR__.'/fixtures/GeoIP2-City-Test.mmdb'), hash_file('sha256', $directory.'/geoip-city.mmdb'));
-        $this->getJson('/admin/wecom/geoip/status')->assertJsonPath('progress', 100);
+        $this->getJson('/admin/wecom/geoip/status')->assertJsonPath('progress', 100)->assertJsonPath('database.ready', true)
+            ->assertJsonPath('database.updated_at', filemtime($directory.'/geoip-city.mmdb'));
     }
 
     public function testPanelInvalidDownloadKeepsExistingCityDatabase(): void

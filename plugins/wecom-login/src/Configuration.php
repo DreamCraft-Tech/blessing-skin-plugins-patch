@@ -20,6 +20,7 @@ final class Configuration
             'redirect_uri' => request()->old('redirect_uri', $values['redirect_uri']), 'secret_set' => $values['secret'] !== '',
             'secret_source' => $settings->secretSource(),
             'geo_ready' => app(IpLocation::class)->ready(),
+            'geo_database' => app(IpLocation::class)->databaseInfo(),
             'login_notifications_enabled' => (bool) request()->old('login_notifications_enabled', $settings->notificationsEnabled()),
         ]);
     }

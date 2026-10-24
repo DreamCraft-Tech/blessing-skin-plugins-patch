@@ -21,6 +21,15 @@ class IpLocation
         return is_file($path) && is_readable($path) && filemtime($path) >= time() - 62 * 86400;
     }
 
+    public function databaseInfo(): array
+    {
+        $path = $this->databasePath();
+        clearstatcache(true, $path);
+        $timestamp = is_file($path) ? filemtime($path) : false;
+        return ['ready' => $this->ready(), 'updated_at' => $timestamp ?: null,
+            'updated_at_label' => $timestamp ? \Carbon\CarbonImmutable::createFromTimestamp($timestamp, config('app.timezone', 'UTC'))->format('Y-m-d H:i:s T') : '尚未更新'];
+    }
+
     public function city(string $ip): string
     {
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE) || !$this->ready()) {return '未知城市';}

@@ -29,6 +29,10 @@
   const pause = byId('wecom-geo-pause');
   const message = byId('wecom-geo-message');
   let running = false;
+  let currentPhase = 'idle';
+  const loading = byId('wecom-geo-loading');
+  const status = byId('wecom-geo-status');
+  const activePhases = ['preparing', 'downloading', 'decompressing', 'validating'];
   async function request(action, payload) {
     const response = await fetch(panel.dataset.base + '/' + action, {
       method: payload ? 'POST' : 'GET', credentials: 'same-origin',
@@ -40,6 +44,15 @@
     return response.json();
   }
   function show(state) {
+    currentPhase = state.phase;
+    status.textContent = ({idle: '空闲', preparing: '检查下载', downloading: '下载中', decompressing: '解压中', validating: '校验中', complete: '更新完成', error: '更新失败'})[state.phase] || '读取完成';
+    loading.hidden = !running || !activePhases.includes(state.phase);
+    if (!running && activePhases.includes(state.phase)) status.textContent = '已暂停，可继续更新';
+    if (state.database) {
+      if (state.phase === 'idle') status.textContent = state.database.ready ? '已加载' : '待下载';
+      byId('wecom-geo-ready').textContent = state.database.ready ? '已准备' : '待更新';
+      byId('wecom-geo-updated').textContent = state.database.updated_at_label;
+    }
     message.textContent = state.message || '';
     message.className = 'mt-3 alert ' + (state.phase === 'error' ? 'alert-danger' : state.phase === 'complete' ? 'alert-success' : 'alert-info');
     if (state.phase === 'downloading') message.textContent += ' 已下载 ' + (state.downloaded / 1048576).toFixed(1) + ' / ' + (state.total / 1048576).toFixed(1) + ' MiB';
@@ -52,16 +65,16 @@
   }
   start.addEventListener('click', async () => {
     if (running) return;
-    running = true;start.disabled = true;pause.hidden = false;
+    running = true;start.disabled = true;pause.hidden = false;loading.hidden = false;status.textContent = '连接中…';
     try {
       let state = await request('start', {});show(state);
       while (running && !['complete', 'error'].includes(state.phase)) {
         state = await request('step', {id: state.id});show(state);
         await new Promise(resolve => setTimeout(resolve, 400));
       }
-    } catch (error) {message.textContent = error.message;message.className = 'mt-3 alert alert-danger';}
-    finally {running = false;start.disabled = false;pause.hidden = true;}
+    } catch (error) {status.textContent = '请求失败';message.textContent = error.message;message.className = 'mt-3 alert alert-danger';}
+    finally {running = false;start.disabled = false;pause.hidden = true;loading.hidden = true;if (activePhases.includes(currentPhase) && status.textContent !== '请求失败') status.textContent = '已暂停，可继续更新';}
   });
   pause.addEventListener('click', () => {running = false;pause.hidden = true;});
-  request('status').then(show).catch(() => {message.textContent = '暂时无法读取更新进度，可以点击更新按钮重试。';});
+  request('status').then(show).catch(() => {status.textContent = '读取失败';message.textContent = '暂时无法读取更新进度，可以点击更新按钮重试。';}).finally(() => {loading.hidden = true;});
 })();

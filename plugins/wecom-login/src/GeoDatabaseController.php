@@ -16,7 +16,7 @@ final class GeoDatabaseController
     }
     private function result(callable $callback)
     {
-        try {return response()->json($callback())->header('Cache-Control', 'no-store');}
+        try {return response()->json($callback() + ['database' => app(IpLocation::class)->databaseInfo()])->header('Cache-Control', 'no-store');}
         catch (\Throwable) {return response()->json(['phase' => 'error', 'message' => '无法处理城市库更新，请检查目录权限或稍后重试。'], 409)->header('Cache-Control', 'no-store');}
     }
 }
