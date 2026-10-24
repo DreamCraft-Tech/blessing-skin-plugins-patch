@@ -1,0 +1,1 @@
+{"name":"blessing-custom/two-factor","type":"library","license":"MIT","require":{"php":"~8.5.0","lbuchs/webauthn":"2.2.0","bacon/bacon-qr-code":"^3.0"},"autoload":{"psr-4":{"Blessing\\TwoFactor\\":"src/"}},"config":{"autoloader-suffix":"BlessingTwoFactor","platform":{"php":"8.5.12"},"sort-packages":true}}

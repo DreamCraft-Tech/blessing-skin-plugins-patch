@@ -1,0 +1,30 @@
+{% extends 'user.base' %}
+{% block title %}两步验证{% endblock %}
+{% block content %}
+{% include 'Blessing\\TwoFactor::messages' %}
+{% if required %}<div class="alert alert-info">站点要求此账号开启两步验证，请添加至少一种验证设备。</div>{% endif %}
+{% if recovery_codes|length %}<div class="card card-warning"><div class="card-header"><h2 class="card-title">保存恢复码</h2></div><div class="card-body"><p>设备不可用时，可用恢复码完成验证，每个恢复码可使用一次。</p><pre id="two-factor-recovery">{% for code in recovery_codes %}{{ code }}
+{% endfor %}</pre><p class="mb-0">请将本次显示的恢复码保存到安全的位置。</p></div></div>{% endif %}
+<div class="row"><div class="col-md-6"><div class="card card-outline card-primary"><div class="card-header"><h2 class="card-title">登录保护</h2></div><div class="card-body">
+<p>当前状态：<strong>{{ account.enabled or (required and has_factors) ? '已开启' : '未开启' }}</strong></p><p class="text-muted">密码或第三方登录后，使用验证码或通行密钥完成第二步验证。通行密钥也可用于直接登录。</p>
+{% if not recent %}
+<form method="post" action="{{ url('user/two-factor/confirm') }}">{{ csrf_field() }}<div class="form-group"><label for="identity-proof">{{ has_factors and (account.enabled or required) ? '验证码或恢复码' : '当前账号密码' }}</label><input id="identity-proof" name="current_password" type="password" class="form-control" maxlength="255" autocomplete="off" required></div><button type="submit" class="btn btn-primary">确认身份</button></form>
+{% if passkey_devices|length %}<button type="button" class="btn btn-default mt-2" data-passkey-purpose="manage">使用通行密钥确认身份</button>{% endif %}
+{% endif %}
+{% if has_factors %}<form method="post" action="{{ url('user/two-factor/toggle') }}" class="mt-3">{{ csrf_field() }}<input type="hidden" name="enabled" value="{{ account.enabled or required ? '0' : '1' }}"><button type="submit" class="btn btn-default" {{ not recent or required ? 'disabled' : '' }}>{{ account.enabled or required ? '关闭两步验证' : '开启两步验证' }}</button></form>{% endif %}
+</div></div></div>
+<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">恢复码</h2></div><div class="card-body"><p>恢复码可用于登录验证和设备管理。重新生成后，原恢复码由新码替换。</p><form method="post" action="{{ url('user/two-factor/recovery') }}" data-security-confirm="重新生成恢复码后，原恢复码将被替换。确认重新生成？">{{ csrf_field() }}<button type="submit" class="btn btn-default" {{ not recent or not has_factors ? 'disabled' : '' }}>重新生成恢复码</button></form></div></div></div></div>
+<div class="row"><div class="col-md-6"><div class="card card-outline card-primary"><div class="card-header"><h2 class="card-title">TOTP 验证设备</h2></div><div class="card-body">
+<p class="text-muted">使用支持 TOTP 的验证器获取每 30 秒更新的六位验证码。</p>
+{% if settings.allow_totp %}<form method="post" action="{{ url('user/two-factor/totp/start') }}">{{ csrf_field() }}<div class="form-group"><label for="totp-name">设备名称</label><input class="form-control" id="totp-name" name="name" maxlength="80" placeholder="例如：手机验证器" required></div><button type="submit" class="btn btn-primary" {{ not recent ? 'disabled' : '' }}>添加 TOTP 设备</button></form>{% endif %}
+{% if setup %}<div class="border rounded p-3 mt-3"><div class="text-center">{{ qr|raw }}</div><p>手动输入密钥：<code style="overflow-wrap:anywhere">{{ setup.secret }}</code></p><form method="post" action="{{ url('user/two-factor/totp/confirm') }}">{{ csrf_field() }}<div class="form-group"><label for="totp-confirm">验证器验证码</label><input id="totp-confirm" name="current_password" class="form-control" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></div><button type="submit" class="btn btn-primary">验证并添加</button></form></div>{% endif %}
+</div>
+{% set device_kind = 'totp' %}{% set devices = totp_devices %}{% include 'Blessing\\TwoFactor::devices' %}
+</div></div>
+<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">通行密钥验证设备</h2></div><div class="card-body"><p class="text-muted">使用设备指纹、面容、PIN 或安全密钥完成验证。</p>
+{% if settings.allow_passkeys %}<div class="form-group"><label for="passkey-name">设备名称</label><input id="passkey-name" class="form-control" maxlength="80" placeholder="例如：Mac 通行密钥"></div><button type="button" class="btn btn-primary" data-passkey-register {{ not recent ? 'disabled' : '' }}>添加通行密钥</button>{% endif %}
+</div>{% set device_kind = 'passkey' %}{% set devices = passkey_devices %}{% include 'Blessing\\TwoFactor::devices' %}</div></div></div>
+<button id="two-factor-modal-open" type="button" data-toggle="modal" data-target="#two-factor-confirm-modal" hidden></button>
+<div class="modal fade" id="two-factor-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="two-factor-confirm-title" aria-modal="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h2 id="two-factor-confirm-title" class="modal-title h5">确认操作</h2><button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button></div><div class="modal-body" id="two-factor-confirm-text"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">取消</button><button type="button" class="btn btn-danger" id="two-factor-confirm-submit">确认</button></div></div></div></div>
+{% endblock %}
+{% block before_foot %}<script data-base="{{ url('/') }}" src="{{ url('plugins/two-factor/assets/passkeys.js?v=1.0.0') }}" defer></script>{% endblock %}

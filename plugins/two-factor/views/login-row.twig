@@ -1,0 +1,10 @@
+{% if providers|length > 0 or wecom_ready or passkey_login %}
+<div id="two-factor-login-methods" class="my-3 text-center">
+  <div class="mb-1">其他登录方式</div>
+  {% for name,provider in providers %}<a href="{{ url('auth/login/' ~ name) }}" class="btn btn-block bg-light border-secondary"><i class="fab fa-{{ provider.icon }}" aria-hidden="true"></i>&nbsp;{{ provider.displayName }}</a>{% endfor %}
+  {% if wecom_ready %}<a href="{{ url('auth/wecom/login') }}" class="btn btn-block bg-light border-secondary"><i class="fab fa-weixin" aria-hidden="true"></i>&nbsp;企业微信扫码登录</a>{% endif %}
+  {% if passkey_login %}<button type="button" class="btn btn-block bg-light border-secondary" data-passkey-purpose="login"><i class="fas fa-key" aria-hidden="true"></i>&nbsp;通行密钥登录</button>{% endif %}
+  <div class="alert alert-danger mt-2 text-left" role="alert" data-passkey-error hidden></div>
+</div>
+<script data-base="{{ url('/') }}" src="{{ url('plugins/two-factor/assets/passkeys.js?v=1.0.0') }}" defer></script>
+{% endif %}

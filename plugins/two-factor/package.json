@@ -1,0 +1,20 @@
+{
+  "name": "two-factor",
+  "version": "1.0.0",
+  "title": "两步验证",
+  "description": "使用验证器验证码与通行密钥保护账号，支持通行密钥直接登录。",
+  "author": "Custom plugin",
+  "namespace": "Blessing\\TwoFactor",
+  "license": "MIT",
+  "require": {
+    "blessing-skin-server": "^6.0.2",
+    "php": "~8.5.0"
+  },
+  "enchants": {
+    "config": "Configuration",
+    "icon": {
+      "fa": "shield-alt",
+      "bg": "info"
+    }
+  }
+}

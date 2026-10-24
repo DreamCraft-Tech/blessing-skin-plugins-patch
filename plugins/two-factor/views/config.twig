@@ -1,0 +1,27 @@
+{% extends 'admin.base' %}
+{% block title %}两步验证配置{% endblock %}
+{% block content %}
+{% include 'Blessing\\TwoFactor::messages' %}
+<form method="post" action="{{ url('admin/two-factor/config') }}">{{ csrf_field() }}
+<fieldset {{ not can_save ? 'disabled' : '' }}>
+<div class="row"><div class="col-md-6">
+<div class="card card-outline card-primary"><div class="card-header"><h2 class="card-title">用户两步验证策略</h2></div><div class="card-body">
+<div class="form-group"><label for="tf-policy">启用范围</label><select id="tf-policy" name="policy" class="form-control">{% for value,label in {'optional':'用户自行开启','admins':'管理员与超级管理员必须开启','all':'所有用户必须开启'} %}<option value="{{ value }}" {{ settings.policy == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
+{% for key,label in {'allow_totp':'允许添加 TOTP 验证设备','allow_passkeys':'允许添加通行密钥设备','direct_login':'允许通行密钥直接登录'} %}<div class="form-group"><label for="tf-{{ key }}">{{ label }}</label><select id="tf-{{ key }}" name="{{ key }}" class="form-control"><option value="1" {{ attribute(settings,key) ? 'selected' : '' }}>开启</option><option value="0" {{ not attribute(settings,key) ? 'selected' : '' }}>关闭</option></select></div>{% endfor %}
+<p class="text-muted mb-0">必须开启时，尚未添加设备的用户登录后会进入两步验证设置页。</p>
+</div></div>
+<div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">验证码与身份确认</h2></div><div class="card-body">
+<div class="form-group"><label for="tf-window">TOTP 时间容差</label><select id="tf-window" name="totp_window" class="form-control"><option value="0" {{ settings.totp_window == 0 ? 'selected' : '' }}>仅当前 30 秒</option><option value="1" {{ settings.totp_window == 1 ? 'selected' : '' }}>前后各 30 秒</option></select></div>
+{% for key,label in {'max_totp':'每个用户的 TOTP 设备上限','reauth_seconds':'设备管理身份确认有效期（秒）'} %}<div class="form-group"><label for="tf-{{ key }}">{{ label }}</label><input id="tf-{{ key }}" type="number" class="form-control" name="{{ key }}" value="{{ attribute(settings,key) }}" min="{{ key == 'max_totp' ? 1 : 60 }}" max="{{ key == 'max_totp' ? 10 : 600 }}" required></div>{% endfor %}
+</div></div></div>
+<div class="col-md-6"><div class="card card-outline card-info"><div class="card-header"><h2 class="card-title">通行密钥与站点身份</h2></div><div class="card-body">
+<div class="form-group"><label for="tf-origin">站点地址（Origin）</label><input id="tf-origin" class="form-control" name="origin" type="url" maxlength="300" value="{{ settings.origin }}" required><small class="text-muted">例如 https://skin.example.com。RP ID 使用此地址的主机名，通行密钥与该域名关联。</small></div>
+<div class="form-group"><label for="tf-name">设备注册时显示的站点名称</label><input id="tf-name" class="form-control" name="rp_name" maxlength="100" value="{{ settings.rp_name }}" required></div>
+<div class="form-group"><label for="tf-uv">设备注册与第二步验证的身份校验</label><select id="tf-uv" class="form-control" name="user_verification"><option value="required" {{ settings.user_verification == 'required' ? 'selected' : '' }}>要求设备解锁验证</option><option value="preferred" {{ settings.user_verification == 'preferred' ? 'selected' : '' }}>优先使用设备解锁验证</option></select><small class="text-muted">通行密钥直接登录始终要求设备解锁验证。</small></div>
+<div class="form-group"><label for="tf-attachment">可注册的设备类型</label><select id="tf-attachment" class="form-control" name="attachment">{% for value,label in {'any':'所有支持的设备','platform':'当前设备（平台验证器）','cross-platform':'跨设备或外置安全密钥'} %}<option value="{{ value }}" {{ settings.attachment == value ? 'selected' : '' }}>{{ label }}</option>{% endfor %}</select></div>
+{% for key,label in {'max_passkeys':'每个用户的通行密钥上限','timeout':'浏览器验证等待时间（秒）','challenge_ttl':'服务端验证请求有效期（秒）'} %}<div class="form-group"><label for="tf-{{ key }}">{{ label }}</label><input id="tf-{{ key }}" type="number" class="form-control" name="{{ key }}" value="{{ attribute(settings,key) }}" min="{{ key == 'max_passkeys' ? 1 : (key == 'timeout' ? 15 : 60) }}" max="{{ key == 'max_passkeys' ? 50 : (key == 'timeout' ? 120 : 300) }}" required></div>{% endfor %}
+<p class="text-muted mb-0">通行密钥使用可发现凭据，支持在登录页直接选择设备账号。</p>
+</div></div></div></div>
+<button type="submit" class="btn btn-primary">保存配置</button>
+</fieldset></form>
+{% endblock %}

@@ -1,0 +1,4 @@
+{% if session('two_factor_notice') %}<div class="alert alert-success" role="status">{{ session('two_factor_notice') }}</div>{% endif %}
+{% if session('two_factor_error') %}<div class="alert alert-danger" role="alert">{{ session('two_factor_error') }}</div>{% endif %}
+{% if errors.any() %}<div class="alert alert-danger" role="alert">{{ errors.first() }}</div>{% endif %}
+<div class="alert alert-danger" data-passkey-error hidden role="alert"></div>
