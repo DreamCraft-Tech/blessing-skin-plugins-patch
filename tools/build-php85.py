@@ -35,6 +35,8 @@ for file in stage.rglob('*'):
  if 'vendor' in file.relative_to(stage).parts:continue
  if file.is_file() and 'tests' in file.relative_to(stage).parts:file.unlink();continue
  if file.is_file() and (file.suffix in {'.ts','.tsx','.svelte','.scss'} or file.name in {'.gitignore','phpunit.xml'}):file.unlink()
+host=Path(os.environ.get('BLESSING_SERVER_PATH',str(repo.parent/'blessing-skin-server-patch')))
+metadata=json.loads(subprocess.check_output([php,str(repo/'tools/plugin-metadata.php'),str(stage),str(host/'vendor/autoload.php')],text=True))
 packages=out/'packages';packages.mkdir();entries=[]
 for manifest in sorted(stage.glob('*/package.json')):
  plugin=manifest.parent
@@ -46,6 +48,7 @@ for manifest in sorted(stage.glob('*/package.json')):
    if file.is_file() and file.name!='.DS_Store':z.write(file,file.relative_to(stage))
  filename=f"{data['name']}_{version}_php85.zip"
  entries.append({'name':data['name'],'version':data['version'],'filename':filename,'sha256':hashlib.sha256((packages/filename).read_bytes()).hexdigest()})
+for row in entries:row['metadata']=metadata[row['name']]
 entries.sort(key=lambda row:row['name'])
 assert len(entries)==len(list((repo/'plugins').glob('*/package.json'))),'Every plugin must be built'
 catalog=hashlib.sha256(json.dumps({row['name']:row['version'] for row in entries},sort_keys=True).encode()).hexdigest()

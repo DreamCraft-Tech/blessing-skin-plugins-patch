@@ -11,3 +11,11 @@
 检查使用固定提交的配套主站作为测试宿主，版本在工作流的第二个 checkout 步骤维护。生产依赖安装在构建目录内，自定义插件测试通过临时链接读取对应 vendor。Actions 内部构建产物供发布任务读取，Release 附件按插件分别提供。
 
 GITHUB_TOKEN 由 GitHub 自动提供；检查任务仅有 contents:read，发布任务有 contents:write。PR 代码仅运行检查，main 才可发布。第三方 Actions 固定到提交 SHA。
+
+## 客户端更新源
+
+主站更新地址：`https://github.com/DreamCraft-Tech/blessing-skin-server-patch/releases/latest/download/update.json`。使用原版 spec 2 协议，包含最低 PHP 版本、最新主站版本、完整运行包 URL 和 SHA-256。客户端校验后进入确认安装。
+
+插件仓库地址：`https://github.com/DreamCraft-Tech/blessing-skin-plugins-patch/releases/latest/download/registry_{lang}.json`。使用原版 version 1 / packages 协议，提供 en 与 zh_CN 的插件名称、描述、依赖与各自 ZIP 下载地址。索引和安装包都是公开 Release 附件，可直接通过 HTTPS 获取。
+
+在“站点配置”的“更新与插件仓库”卡片保存地址后生效；留空时使用 config/app.php 与 config/plugins.php 的默认地址，UPDATE_SOURCE 和 PLUGINS_REGISTRY 环境变量可覆盖默认值。发布任务在全部 ZIP 校验后生成 JSON，并与所有安装包一起上传后公开。

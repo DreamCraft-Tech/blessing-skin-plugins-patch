@@ -11,6 +11,7 @@ class ReleaseTest(unittest.TestCase):
   rows=[]
   for name in (['server'] if kind=='server' else ['one','two']):
    f=self.root/(name+'.zip');f.write_bytes(b'package');rows.append({'name':name,'version':'1.0.0','filename':f.name,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()})
+  for row in rows:row['metadata']={locale:{'name':row['name'],'version':row['version'],'title':row['name'],'description':'A plugin','author':'Author','require':{'php':'~8.5.0'}} for locale in ['en','zh_CN']}
   data={'version':'1.0.0','commit':'a'*40,'catalog_sha256':'catalog-test','packages':rows};(self.root/'manifest.json').write_text(json.dumps(data))
   (self.root/'SHA256SUMS').write_text(''.join(hashlib.sha256(f.read_bytes()).hexdigest()+'  '+f.name+'\n' for f in self.root.iterdir() if f.name!='SHA256SUMS'))
   return data
@@ -46,7 +47,7 @@ class ReleaseTest(unittest.TestCase):
   with patch.object(release,'gh',return_value='{"isDraft":false,"targetCommitish":"old"}') as gh:release.publish(self.root,'server');self.assertEqual(gh.call_count,2);self.assertEqual(gh.call_args.args,('release','edit','v1.0.0','--repo','DreamCraft-Tech/test','--title','Release 1.0.0'))
  def test_unchanged_plugin_catalog_skips_release(self):
   self.assets('plugins')
-  def fake(*args,**kw):return '[{"tagName":"plugins-old","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test"}'
+  def fake(*args,**kw):return '[{"tagName":"plugins-old","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test\\nRegistry-Spec: 1"}'
   with patch.object(release,'gh',side_effect=fake) as gh:release.publish(self.root,'plugins');self.assertEqual(gh.call_count,2)
  def test_plugins_upload_every_individual_package_without_bundle(self):
   self.assets('plugins')
@@ -74,6 +75,26 @@ class ReleaseTest(unittest.TestCase):
   create=next(x for x in self.calls if x[1]=='create');self.assertEqual(create[2],'20261024-patch');self.assertEqual(create[create.index('--title')+1],create[2])
  def test_new_plugin_tag_catalog_skips_duplicate_release(self):
   self.assets('plugins')
-  def fake(*args,**kw):return '[{"tagName":"20261024-patch-2","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test"}'
+  def fake(*args,**kw):return '[{"tagName":"20261024-patch-2","isDraft":false,"isPrerelease":false}]' if args[1]=='list' else '{"body":"Catalog-SHA256: catalog-test\\nRegistry-Spec: 1"}'
   with patch.object(release,'gh',side_effect=fake) as gh:release.publish(self.root,'plugins');self.assertEqual(gh.call_count,2)
+ def test_server_feed_matches_original_protocol_and_complete_zip(self):
+  data=self.assets()
+  with patch.object(release,'gh',side_effect=self.fake):release.publish(self.root,'server')
+  feed=json.loads((self.root/'update.json').read_text());self.assertEqual(feed['spec'],2);self.assertEqual(feed['latest'],'1.0.0');self.assertEqual(feed['package'],'full');self.assertEqual(feed['sha256'],data['packages'][0]['sha256']);self.assertTrue(feed['url'].endswith('/v1.0.0/server.zip'))
+  release.validate_assets(self.root)
+ def test_plugin_feeds_include_every_package_with_localized_metadata(self):
+  data=self.assets('plugins')
+  with patch.object(release,'release_date',return_value='20261025'),patch.object(release,'gh',side_effect=self.fake):release.publish(self.root,'plugins')
+  for locale in ['en','zh_CN']:
+   feed=json.loads((self.root/('registry_'+locale+'.json')).read_text());self.assertEqual(feed['version'],1);self.assertEqual(len(feed['packages']),2)
+   for row in feed['packages']:self.assertEqual(row['require'],{'php':'~8.5.0'});self.assertIn('/20261025-patch/',row['dist']['url']);self.assertEqual(len(row['dist']['shasum']),40);self.assertEqual(len(row['dist']['sha256']),64)
+  release.validate_assets(self.root)
+ def test_legacy_catalog_is_republished_to_introduce_registry(self):
+  self.assets('plugins')
+  def fake(*args,**kw):
+   if args[1]=='list':return '[{"tagName":"plugins-old","isDraft":false,"isPrerelease":false}]'
+   if args[-1]=='body':return '{"body":"Catalog-SHA256: catalog-test"}'
+   return self.fake(*args,**kw)
+  with patch.object(release,'gh',side_effect=fake):release.publish(self.root,'plugins')
+  self.assertTrue((self.root/'registry_en.json').exists())
 if __name__=='__main__':unittest.main()
