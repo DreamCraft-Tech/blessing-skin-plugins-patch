@@ -2,6 +2,10 @@
 
 Blessing Skin PHP 8.5 插件集合，基于上游 bs-community/blessing-skin-plugins 的 `de016f4`，适用于配套 Laravel 10 / PHP 8.5 主站分支。
 
+## 自动检查与发布
+
+工作流和发布产物说明见 [docs/CI-RELEASES.md](docs/CI-RELEASES.md)。
+
 ## 自定义插件
 
 | 目录 | 当前版本 | 功能 |

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild the PHP 8.5 plugin packages from the supplied dependency locks."""
 from pathlib import Path
-import argparse,json,shutil,subprocess,zipfile
+import argparse,json,shutil,subprocess,zipfile,hashlib,os
 p=argparse.ArgumentParser()
 p.add_argument('--php',default='php')
 p.add_argument('--composer',default='composer')
@@ -32,15 +32,24 @@ for name in ['wecom-login','login-history','two-factor','cdn-real-ip','daily-luc
   run([php,composer,'install','--no-dev','--no-scripts','--no-interaction','--prefer-dist','--optimize-autoloader'],target)
 run(['patch','-p1','-i',str(repo/'patches/php85/qiniu-php-sdk.patch')],stage/'textures-qiniu-storage/vendor/qiniu/php-sdk')
 for file in stage.rglob('*'):
- if 'vendor' in file.parts:continue
+ if 'vendor' in file.relative_to(stage).parts:continue
  if file.is_file() and 'tests' in file.relative_to(stage).parts:file.unlink();continue
  if file.is_file() and (file.suffix in {'.ts','.tsx','.svelte','.scss'} or file.name in {'.gitignore','phpunit.xml'}):file.unlink()
-packages=out/'packages';packages.mkdir()
+packages=out/'packages';packages.mkdir();entries=[]
 for manifest in sorted(stage.glob('*/package.json')):
  plugin=manifest.parent
  for file in plugin.rglob('*.php'):run([php,'-l',str(file)])
  if (plugin/'composer.json').exists():run([php,composer,'check-platform-reqs','--no-dev'],plugin)
  data=json.loads(manifest.read_text());version=data['version'].split('+')[0]
  with zipfile.ZipFile(packages/f"{data['name']}_{version}_php85.zip",'w',zipfile.ZIP_DEFLATED) as z:
-  for file in sorted(plugin.rglob('*')):z.write(file,file.relative_to(stage))
+  for file in sorted(plugin.rglob('*')):
+   if file.is_file() and file.name!='.DS_Store':z.write(file,file.relative_to(stage))
+ filename=f"{data['name']}_{version}_php85.zip"
+ entries.append({'name':data['name'],'version':data['version'],'filename':filename,'sha256':hashlib.sha256((packages/filename).read_bytes()).hexdigest()})
+entries.sort(key=lambda row:row['name'])
+assert len(entries)==len(list((repo/'plugins').glob('*/package.json'))),'Every plugin must be built'
+catalog=hashlib.sha256(json.dumps({row['name']:row['version'] for row in entries},sort_keys=True).encode()).hexdigest()
+manifest={'commit':os.environ.get('GITHUB_SHA') or subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip(),'php':'8.5','catalog_sha256':catalog,'packages':entries}
+(packages/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+(packages/'SHA256SUMS').write_text(''.join(hashlib.sha256(f.read_bytes()).hexdigest()+'  '+f.name+'\n' for f in sorted(packages.iterdir()) if f.is_file() and f.name!='SHA256SUMS'))
 print(packages)

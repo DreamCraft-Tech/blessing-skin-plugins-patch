@@ -1,0 +1,98 @@
+name: Check, build and release all plugins
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: Publish all plugins even when their versions are unchanged
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: plugins-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  check-build:
+    name: Check and build every plugin
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      BLESSING_SERVER_PATH: ${{ github.workspace }}/.host
+      BLESSING_PLUGINS_PATH: ${{ github.workspace }}
+      BLESSING_OAUTH_VENDOR_PATH: ${{ github.workspace }}/build-php85/plugins/oauth/vendor
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: DreamCraft-Tech/blessing-skin-server-patch
+          ref: 00004e451ff95e42bb3bc659e1d77c0db1df655d
+          path: .host
+          persist-credentials: false
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea
+        with:
+          php-version: '8.5'
+          extensions: ctype, dom, fileinfo, gd, imagick, intl, mbstring, openssl, pdo_mysql, pdo_sqlite, sqlite3, tokenizer, xml, zip
+          tools: composer:v2
+          coverage: none
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install build and host tools
+        run: |
+          npm install --global pnpm@8.15.9
+          composer install --working-dir=.host --no-interaction --prefer-dist
+      - name: Syntax and release integrity tests
+        run: |
+          python3 tools/check-source.py
+          python3 -m unittest discover -s tools/tests -v
+      - name: Build all independent plugin packages
+        run: python3 tools/build-php85.py --output build-php85
+      - name: Custom plugin integration tests
+        run: |
+          for plugin in wecom-login login-history two-factor; do
+            ln -s "$GITHUB_WORKSPACE/build-php85/plugins/$plugin/vendor" "plugins/$plugin/vendor"
+          done
+          for plugin in wecom-login login-history two-factor cdn-real-ip daily-luck; do
+            "$BLESSING_SERVER_PATH/vendor/bin/phpunit" -c "$GITHUB_WORKSPACE/plugins/$plugin/phpunit.xml"
+          done
+          node --test plugins/daily-luck/tests/prank.test.cjs
+      - name: Verify every plugin is present and installable
+        run: python3 tools/verify-packages.py --kind plugins --assets build-php85/packages
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: individual-plugin-packages
+          path: |
+            build-php85/packages/*.zip
+            build-php85/packages/manifest.json
+            build-php85/packages/SHA256SUMS
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+  release:
+    name: Publish every plugin as a separate download
+    needs: check-build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: individual-plugin-packages
+          path: release-assets
+      - name: Publish all independent ZIP assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE_RELEASE: ${{ inputs.force_release || false }}
+        run: python3 tools/publish-release.py --kind plugins --assets release-assets
