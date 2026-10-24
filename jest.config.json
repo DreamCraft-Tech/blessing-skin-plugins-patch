@@ -9,5 +9,12 @@
   "setupFilesAfterEnv": [
     "@testing-library/jest-dom/extend-expect",
     "<rootDir>/setup-test.ts"
+  ],
+  "roots": [
+    "<rootDir>/plugins"
+  ],
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/vendor/"
   ]
 }
