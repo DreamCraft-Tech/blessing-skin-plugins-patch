@@ -32,7 +32,7 @@ final class WebChannels
 
     public static function label(?string $channel, string $backend = ''): string
     {
-        $labels = ['password' => '密码登录', 'wecom' => '企业微信', 'remember' => '记住我 · 自动恢复会话',
+        $labels = ['password' => '密码登录', 'wecom' => '企业微信', 'custom:passkey' => '通行密钥', 'custom:two-factor' => '两步验证', 'remember' => '记住我 · 自动恢复会话',
             'oauth' => 'OAuth（渠道未提供）', 'oauth:github' => 'GitHub', 'oauth:google' => 'Google',
             'oauth:live' => 'Microsoft Live', 'oauth:microsoft' => 'Microsoft', 'oauth:littleskin' => 'LittleSkin',
             'unknown' => '其他 / 未识别渠道', 'legacy' => '旧版记录（渠道信息不完整）'];

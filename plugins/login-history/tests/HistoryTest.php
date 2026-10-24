@@ -117,6 +117,25 @@ final class HistoryTest extends Tests\TestCase
         $this->get('/user/login-history?channel=oauth:custom-private')->assertOk()->assertSee('共 0 条');
     }
 
+    public function testPasskeyLoginIsRecordedDisplayedAndFilterable(): void
+    {
+        $user = $this->user();
+        request()->attributes->set('login_history.web_channel', 'custom:passkey');
+        event(new \Illuminate\Auth\Events\Login('web', $user, false));
+        $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'login_channel' => 'custom:passkey']);
+        $this->actingAs($user)->get('/user/login-history?channel=custom:passkey')->assertOk()->assertSee('通行密钥')->assertSee('共 1 条')->assertDontSee('第三方 · passkey');
+        $this->get('/user/login-history?channel=password')->assertOk()->assertSee('共 0 条');
+    }
+
+    public function testPasskeyChannelCannotBeSetByQueryAndHasStableLabel(): void
+    {
+        $request = Request::create('/auth/two-factor/passkey/verify?login_channel=custom:passkey');
+        self::assertSame('unknown', \Blessing\LoginHistory\WebChannels::detect($request, false));
+        self::assertSame('通行密钥', \Blessing\LoginHistory\WebChannels::label('custom:passkey'));
+        self::assertSame('两步验证', \Blessing\LoginHistory\WebChannels::label('custom:two-factor'));
+        self::assertSame('密码登录', \Blessing\LoginHistory\WebChannels::label('password'));
+    }
+
     public function testCustomServerSideChannelSupportsLongProviderIdentifiers(): void
     {
         $channel = 'custom:'.str_repeat('a', 50);

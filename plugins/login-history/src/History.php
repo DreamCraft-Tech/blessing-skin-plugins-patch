@@ -83,7 +83,7 @@ final class History
 
     public function channels(int $uid): array
     {
-        $values = ['password', 'wecom', 'oauth:github', 'oauth:google', 'oauth:live', 'oauth:littleskin', 'remember', 'unknown', 'legacy'];
+        $values = ['password', 'custom:passkey', 'wecom', 'oauth:github', 'oauth:google', 'oauth:live', 'oauth:littleskin', 'remember', 'unknown', 'legacy'];
         $historical = DB::table(Installer::ENTRIES)->where('user_id', $uid)->where('source', 'web')
             ->where('occurred_at', '>=', now('UTC')->subDays(Recorder::DAYS))->whereNotNull('login_channel')
             ->distinct()->pluck('login_channel')->all();
