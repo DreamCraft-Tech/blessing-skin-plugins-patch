@@ -22,7 +22,6 @@ final class Installer
                 $table->string('user_agent', 512)->default('');
                 $table->dateTime('occurred_at')->index();
                 $table->index(['user_id', 'occurred_at']);
-                $table->foreign('user_id')->references('uid')->on('users')->onDelete('cascade');
             });
         }
         if (!Schema::hasTable(self::PROFILES)) {
@@ -36,6 +35,19 @@ final class Installer
                 $table->boolean('selected')->default(false);
                 $table->foreign('entry_id')->references('id')->on(self::ENTRIES)->onDelete('cascade');
             });
+        }
+        foreach ([[self::ENTRIES, ['occurred_at']], [self::ENTRIES, ['user_id', 'occurred_at']], [self::PROFILES, ['player_id']]] as [$name, $columns]) {
+            if (!Schema::hasIndex($name, $columns)) {
+                Schema::table($name, fn ($table) => $table->index($columns));
+            }
+        }
+        if (Schema::getConnection()->getDriverName() === 'mysql') {
+            $hasCascade = collect(Schema::getForeignKeys(self::PROFILES))->contains(
+                fn ($key) => $key['columns'] === ['entry_id']
+            );
+            if (!$hasCascade) {
+                Schema::table(self::PROFILES, fn ($table) => $table->foreign('entry_id')->references('id')->on(self::ENTRIES)->onDelete('cascade'));
+            }
         }
     }
 }

@@ -12,6 +12,13 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Route;
 
 return function (Dispatcher $events): void {
+    // Enabled installations and interrupted enable callbacks must also repair missing tables.
+    \Blessing\LoginHistory\Installer::install();
+
+    \App\Models\User::deleted(function ($user): void {
+        \Illuminate\Support\Facades\DB::table(\Blessing\LoginHistory\Installer::ENTRIES)->where('user_id', $user->uid)->delete();
+    });
+
     $events->listen(ConfigureUserMenu::class, [Menus::class,'appendUserItem']);
     $events->listen(Login::class, Observer::class.'@web');
     $events->listen(RouteMatched::class, Observer::class.'@route');

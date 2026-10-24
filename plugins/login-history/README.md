@@ -4,11 +4,11 @@
 
 ## 安装与入口
 
-1. 在后台上传 `login-history_1.0.0_php85.zip` 并启用。
+1. 在后台上传 `login-history_1.0.1_php85.zip` 并启用。
 2. 用户在 **高级功能 → 登录记录** 查询本人记录。原有 OAuth 应用和企业微信绑定菜单不会被替换。
 3. 后台 **插件配置 → 网页登录与 Yggdrasil 登录记录** 显示采集范围和旧日志检测情况；本版为说明页，不提供查看他人记录的接口。
 
-启用时创建 `login_history_entries` 与 `login_history_profiles` 两张 InnoDB 表，沿用网站数据库表前缀。数据库账号需要建表及外键权限，原 `users` 表也应使用 InnoDB。无需安装 Composer 依赖、编译前端或修改现有 Yggdrasil 插件。
+启用时创建 `login_history_entries` 与 `login_history_profiles` 两张 InnoDB 表，沿用网站数据库表前缀。数据库账号需要建表及插件内部外键权限，不对宿主 `users` 表建立外键，兼容其现有字段类型与表引擎。无需安装 Composer 依赖、编译前端或修改现有 Yggdrasil 插件。
 
 PHP 运行环境应使用之前的 PHP 8.5 配置；OpenResty 沿用现有伪静态规则，运行目录仍为 `public/`。
 
@@ -53,7 +53,7 @@ PHP 运行环境应使用之前的 PHP 8.5 配置；OpenResty 沿用现有伪静
 新记录和页面查询默认保留最近 **90 天**。产生新记录时最多每小时清理一次过期的插件数据；无新登录时物理清理不会主动触发，但查询始终隐藏超出 90 天的记录。旧日志入口也仅显示最近 90 天，其物理数据由原插件管理。
 
 - 停用、卸载插件保留两张历史表，不执行清库。
-- 删除皮肤站账号时，外键删除其新记录及角色快照。
+- 删除皮肤站账号时，通过用户模型删除事件清理其新记录及角色快照（插件需启用）。
 - 记录写入失败不会阻止网页登录或 Yggdrasil 认证；仅向网站日志写入不含凭据的通用告警。
 
 ## 兼容和验证边界
@@ -74,3 +74,13 @@ BLESSING_PLUGINS_PATH=/path/to/blessing-skin-plugins \
 ```
 
 Yggdrasil 仓库应包含 `plugins/yggdrasil-api` 和 `plugins/yggdrasil-connect` 源码。可部署 ZIP 不包含测试和 PHPUnit 配置。
+
+## 缺表修复版本 1.0.1
+
+启用回调和每次插件启动均检查两张插件表，缺哪张补哪张，不删除已有表或记录。已启用站点覆盖升级后刷新页面即可补建；无需反复点击启用。数据库账号仍须具备 CREATE、INDEX 权限（登录记录插件还需插件表之间的 REFERENCES 权限）。若补建失败，请查看网站日志中的首个建表异常（例如外键、表引擎或权限），不要只依据后续的“表不存在”错误判断。
+
+此修复版不创建指向宿主 users.uid 的外键，避免 MariaDB errno 150。账号通过网站正常删除时，由用户模型删除事件清理关联插件数据；插件停用时或绕过模型直接执行 SQL 删除账号，不触发此清理。插件自己的两张登录记录表之间仍使用外键级联。
+
+已核对当前主系统安装迁移：users.uid 使用 increments，即 MariaDB INT UNSIGNED 自增主键；原插件 user_id 同为 unsignedInteger，源码定义的位数与符号一致。主系统 database.php 的 engine 为 null，建 users 表时也没有强制指定引擎。因此 errno 150 的实际原因需通过 SHOW CREATE TABLE users 和 SHOW TABLE STATUS 确认，不能仅凭异常认定为字段类型不一致。
+
+已根据现场 SHOW CREATE TABLE 确认 users 使用 MyISAM，插件表使用 InnoDB，导致跨引擎外键创建失败。新版本取消该外键，并补建缺失索引（包含企业微信绑定唯一约束和授权状态唯一约束）；不会清空已有数据。若已有重复绑定导致唯一索引无法建立，会明确报错，不自动删除或合并绑定。

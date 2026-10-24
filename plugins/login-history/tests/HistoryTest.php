@@ -33,6 +33,29 @@ final class HistoryTest extends Tests\TestCase
         app('router')->getRoutes()->refreshNameLookups();
         config(['logging.channels.ygg' => ['driver'=>'monolog','handler'=>Monolog\Handler\NullHandler::class]]);
     }
+    public function testEnabledPluginBootRepairsMissingSecondTable(): void
+    {
+        $firstSchema = Schema::getColumnListing(Installer::ENTRIES);
+        Schema::drop(Installer::PROFILES);
+        $manager = app(PluginManager::class);
+        // enable is a no-op for an already-enabled plugin: bootstrap must repair it.
+        self::assertTrue($manager->enable('login-history'));
+        self::assertFalse(Schema::hasTable(Installer::PROFILES));
+        $booted = new ReflectionProperty($manager, 'booted');
+        $booted->setValue($manager, false);
+        $manager->boot();
+        self::assertTrue(Schema::hasTable(Installer::PROFILES));
+        self::assertSame($firstSchema, Schema::getColumnListing(Installer::ENTRIES));
+        Installer::install();
+        self::assertTrue(Schema::hasTable(Installer::PROFILES));
+    }
+
+    public function testSchemaDoesNotRequireForeignKeyToHostUsers(): void
+    {
+        $keys = DB::select('PRAGMA foreign_key_list('.Installer::ENTRIES.')');
+        self::assertCount(0, $keys);
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {
@@ -246,7 +269,7 @@ final class HistoryTest extends Tests\TestCase
             DB::table('users')->insert(['uid'=>99]);
             $id=DB::table(Installer::ENTRIES)->insertGetId(['user_id'=>99,'source'=>'web','action'=>'login','backend'=>'web','occurred_at'=>now('UTC')]);
             DB::table(Installer::PROFILES)->insert(['entry_id'=>$id,'player_name'=>'PrefixRole','selected'=>true]);
-            DB::table('users')->where('uid',99)->delete();
+            DB::table(Installer::ENTRIES)->where('user_id',99)->delete();
             self::assertSame(0,DB::table(Installer::ENTRIES)->count());self::assertSame(0,DB::table(Installer::PROFILES)->count());
         } finally {DB::setDefaultConnection($old);Schema::clearResolvedInstance('db.schema');}
     }
