@@ -141,7 +141,7 @@ final class DailyLuckTest extends Tests\TestCase
         $s = app(Settings::class)->values();
         self::assertTrue($s['luck_enabled']);
         self::assertTrue($s['prank_enabled']);
-        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v=1.2.2', false);
+        $this->get('/user')->assertOk()->assertSee('原来的标题')->assertSee('明天再来看看？')->assertSee('千万别点')->assertSee('prank.js?v='.app(PluginManager::class)->get('daily-luck')->version, false);
     }
 
     public function testFooterPlacesLuckOnLeftAndRedPrankOnRight(): void
