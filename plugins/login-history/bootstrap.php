@@ -12,6 +12,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Route;
 
 return function (Dispatcher $events): void {
+    require_once __DIR__.'/vendor/autoload.php';
     // Enabled installations and interrupted enable callbacks must also repair missing tables.
     \Blessing\LoginHistory\Installer::install();
 

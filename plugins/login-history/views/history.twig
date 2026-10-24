@@ -44,9 +44,10 @@
         {% elseif record.source == 'web' %}账号登录
         {% else %}未选择角色（账号级认证）{% endif %}
         {% if record.candidate_profiles|length %}<details class="mt-1"><summary>当时可用角色（{{ record.candidate_profiles|length }}）</summary>{% for profile in record.candidate_profiles %}<div>{{ profile.player_name }} <small class="text-muted">{{ profile.profile_uuid }}</small></div>{% endfor %}</details>{% endif %}
-      </td><td>{{ record.ip ?: '未记录' }}</td><td><span class="badge badge-light" title="{{ record.user_agent }}" tabindex="0">{{ record.client_label }}</span></td></tr>
+      </td><td><span title="参考归属地：{{ record.ip_location }}" tabindex="0">{{ record.ip ?: '未记录' }}</span></td><td><span class="badge badge-light" title="{{ record.user_agent }}" tabindex="0">{{ record.client_label }}</span></td></tr>
     {% else %}<tr><td colspan="6" class="text-center text-muted">没有符合条件的登录记录。</td></tr>{% endfor %}
     </tbody></table></div>
+    <p class="small text-muted">IP 参考归属地：<a href="https://db-ip.com" target="_blank" rel="noopener noreferrer">DB-IP</a></p>
     <div class="d-flex justify-content-between align-items-center"><span>共 {{ records.total() }} 条，第 {{ records.currentPage() }} / {{ records.lastPage() }} 页</span><div>
       {% if records.previousPageUrl() %}<a class="btn btn-outline-secondary btn-sm" href="{{ records.previousPageUrl() }}">上一页</a>{% endif %}
       {% if records.nextPageUrl() %}<a class="btn btn-outline-secondary btn-sm" href="{{ records.nextPageUrl() }}">下一页</a>{% endif %}

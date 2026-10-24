@@ -61,13 +61,15 @@ final class History
         $page = $query->orderByDesc($time)->orderByDesc('id')->paginate(20)->withQueryString();
         $profiles = $legacy ? collect() : DB::table(Installer::PROFILES)->whereIn('entry_id', $page->pluck('id'))->get()->groupBy('entry_id');
         $labels = ['login'=>'网页登录','authenticate'=>'客户端认证','refresh'=>'刷新令牌 / 选择角色','join'=>'请求加入服务器'];
-        $page->getCollection()->transform(function ($row) use ($legacy, $profiles, $labels, $timezone) {
+        $locations = app(GeoLocation::class);
+        $page->getCollection()->transform(function ($row) use ($legacy, $profiles, $labels, $timezone, $locations) {
             $row->action_label = $labels[$row->action] ?? $row->action;
             $row->profiles = $legacy ? collect() : $profiles->get($row->id, collect());
             $row->selected_profiles = $row->profiles->where('selected', true)->values();
             $row->candidate_profiles = $row->profiles->where('selected', false)->values();
             $row->source_label = $legacy ? '旧版 Yggdrasil 日志' : ($row->source === 'web' ? '网页' : 'Yggdrasil');
             $row->user_agent = $legacy ? '' : $row->user_agent;
+            $row->ip_location = $locations->label((string) $row->ip);
             $row->client_label = app(ClientAgent::class)->label($row->user_agent);
             $row->channel_label = $legacy ? '未记录' : ($row->source === 'web'
                 ? WebChannels::label($row->login_channel, $row->backend)

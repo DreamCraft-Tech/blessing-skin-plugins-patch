@@ -1,10 +1,10 @@
-# 网页登录与 Yggdrasil 登录记录 1.1.1
+# 网页登录与 Yggdrasil 登录记录 1.1.2
 
 ## 运行环境与安装
 
-适用 Blessing Skin Server 6.0.2 开发快照、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码与 Twig 模板。
+适用 Blessing Skin Server 6.0.2 开发快照、Laravel 10、PHP 8.5、MariaDB。运行包包含插件代码、Twig 模板与 maxmind-db/reader 1.14.0。
 
-1. 在插件管理上传 `login-history_1.1.1_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
+1. 在插件管理上传 `login-history_1.1.2_php85.zip` 并启用。手动部署时将 `login-history/` 放入网站插件目录。
 2. 更新时覆盖原目录并重新启用插件。数据库账号需具备插件表、字段和索引的创建权限。
 3. 用户入口为“高级功能 → 登录记录”；后台“插件配置 → 网页登录与 Yggdrasil 登录记录”显示功能及既有日志接入状态。
 
@@ -39,6 +39,8 @@ OpenResty 使用网站现有 Laravel 路由规则，运行目录为 `public/`。
 支持按来源、操作、渠道、角色和日期筛选，每页 20 条。查询范围按当前登录用户 UID 确定。
 
 客户端列根据 User-Agent 显示 Windows、macOS、Linux、iOS、Android、iPadOS，以及企业微信、微信等客户端。鼠标悬停或键盘聚焦可查看保存的完整 User-Agent；字段存储上限为 512 字符。模板通过 Twig 自动转义输出。
+
+IP 悬浮提示显示国家、省份和城市作为参考归属地。读取本地 DB-IP 城市库，默认路径为 `storage/app/wecom-login/geoip-city.mmdb`，可通过 `WECOM_GEOIP_DATABASE` 指定。城市库在企业微信插件配置页更新；查询页面按当前库解析历史 IP。
 
 新记录按 UTC 保存，查询日期和页面时间采用网站时区。记录保留 90 天，产生记录时最多每小时清理一次过期数据。
 

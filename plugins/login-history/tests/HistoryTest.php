@@ -153,6 +153,17 @@ final class HistoryTest extends Tests\TestCase
         $this->assertDatabaseHas(Installer::ENTRIES, ['user_id' => $user->uid, 'user_agent' => $agent]);
     }
 
+    public function testIpTooltipUsesLocalLocationAndEscapesAttribute(): void
+    {
+        $geo = new \Blessing\LoginHistory\GeoLocation(__DIR__.'/fixtures/GeoIP2-City-Test.mmdb');
+        self::assertStringContainsString('伦敦', $geo->label('81.2.69.142'));
+        self::assertSame('内网或保留地址', $geo->label('192.168.1.1'));
+        $this->app->instance(\Blessing\LoginHistory\GeoLocation::class, $geo);
+        $user = $this->user();
+        app(Recorder::class)->record($user->uid, 'web', 'login', 'password', Request::create('/test', 'POST', [], [], [], ['REMOTE_ADDR' => '81.2.69.142']), [], 'password');
+        $this->actingAs($user)->get('/user/login-history')->assertOk()->assertSee('参考归属地：英国 · 英格兰 · 伦敦')->assertSee('81.2.69.142');
+    }
+
     private function user(): User {return User::factory()->create();}
     private function player(User $user, string $name): Player
     {
