@@ -37,7 +37,7 @@ class AuthController extends Controller
             JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
         );
         $builder = $jwtConfig->builder();
-        $builder->relatedTo($userUuid)
+        $builder = $builder->relatedTo($userUuid)
             ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
         $token = new Token($clientToken);
@@ -60,7 +60,7 @@ class AuthController extends Controller
             $resp['selectedProfile'] = $availableProfiles[0];
             $id = $availableProfiles[0]['id'];
             $token->profileId = $id;
-            $builder->withClaim('spr', $id);
+            $builder = $builder->withClaim('spr', $id);
         }
 
         $now = CarbonImmutable::now();
@@ -127,7 +127,7 @@ class AuthController extends Controller
             JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
         );
         $builder = $jwtConfig->builder();
-        $builder->relatedTo($userUuid)
+        $builder = $builder->relatedTo($userUuid)
             ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
         $availableProfiles = $this->getAvailableProfiles($user);
@@ -156,7 +156,7 @@ class AuthController extends Controller
             });
             if ($profile) {
                 $resp['selectedProfile'] = $profile;
-                $builder->withClaim('spr', $selected['id']);
+                $builder = $builder->withClaim('spr', $selected['id']);
             } else {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.owner'));
             }
@@ -168,7 +168,7 @@ class AuthController extends Controller
             });
             if ($profile) {
                 $resp['selectedProfile'] = $profile;
-                $builder->withClaim('spr', $profile['id']);
+                $builder = $builder->withClaim('spr', $profile['id']);
             }
         }
 

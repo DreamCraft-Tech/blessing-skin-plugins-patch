@@ -60,7 +60,8 @@ jobs:
             ln -s "$GITHUB_WORKSPACE/build-php85/plugins/$plugin/vendor" "plugins/$plugin/vendor"
           done
           for plugin in wecom-login login-history two-factor cdn-real-ip daily-luck; do
-            "$BLESSING_SERVER_PATH/vendor/bin/phpunit" -c "$GITHUB_WORKSPACE/plugins/$plugin/phpunit.xml"
+            "$BLESSING_SERVER_PATH/vendor/bin/phpunit" -c "$GITHUB_WORKSPACE/plugins/$plugin/phpunit.xml" --log-junit "plugin-$plugin.xml"
+            python3 -c 'import sys,xml.etree.ElementTree as E; r=E.parse(sys.argv[1]).getroot(); assert r.tag=="testsuites" and len(r)>0, "Incomplete PHPUnit execution"' "plugin-$plugin.xml"
           done
           node --test plugins/daily-luck/tests/prank.test.cjs
       - name: Verify every plugin is present and installable

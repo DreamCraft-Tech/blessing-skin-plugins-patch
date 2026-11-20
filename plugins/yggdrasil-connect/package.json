@@ -1,6 +1,6 @@
 {
   "name": "yggdrasil-connect",
-  "version": "6.2.0+php85.1",
+  "version": "6.2.1+php85.1",
   "title": "Yggdrasil Connect",
   "description": "LittleSkin\\YggdrasilConnect::config.plugin-description",
   "author": "LittleSkin",

@@ -329,6 +329,11 @@ final class HistoryTest extends Tests\TestCase
         $refresh=$this->postJson('/api/yggdrasil/authserver/refresh',[
             'accessToken'=>$auth['accessToken'],'clientToken'=>$auth['clientToken'],'selectedProfile'=>$profile,
         ])->assertOk()->json();
+        $cached = \Yggdrasil\Models\Token::find($refresh['accessToken']);
+        self::assertNotNull($cached, 'Refreshed token remains in cache');
+        $claims = json_decode(base64_decode(explode('.', $refresh['accessToken'])[1]), true);
+        self::assertSame('Yggdrasil-Auth', $claims['iss'] ?? null);
+        self::assertTrue($cached->isValid(), 'Cached refreshed token validates its claims');
         $this->postJson('/api/yggdrasil/sessionserver/session/minecraft/join',[
             'accessToken'=>$refresh['accessToken'],'selectedProfile'=>$profile['id'],'serverId'=>'private-server-id',
         ])->assertNoContent();
@@ -343,6 +348,30 @@ final class HistoryTest extends Tests\TestCase
         $this->legacyRoutes();$user=$this->user();$player=$this->player($user,'Solo');$this->authenticate($user)->assertOk();
         $this->assertDatabaseHas(Installer::PROFILES,['player_id'=>$player->pid,'selected'=>true]);
     }
+    public function testConnectIssuesAndRefreshesRealPassportToken(): void
+    {
+        \Laravel\Passport\Passport::tokensCan(array_fill_keys(\LittleSkin\YggdrasilConnect\Scope::getAllScopes(), 'Integration test'));
+        $clients = new \Laravel\Passport\ClientRepository();
+        $clients->createPersonalAccessClient(null, 'Yggdrasil integration', 'http://localhost');
+        app()->instance(\Laravel\Passport\ClientRepository::class, $clients);
+        Schema::create('uuid', function ($table) {
+            $table->increments('id'); $table->unsignedInteger('pid')->unique();
+            $table->string('name'); $table->string('uuid')->unique(); $table->timestamps();
+        });
+        option(['ygg_uuid_algorithm'=>'v3', 'ygg_token_expire_2'=>'604800']);
+        $user = $this->user(); $player = $this->player($user, 'ConnectReal');
+        $uuid = \LittleSkin\YggdrasilConnect\Models\Profile::getUuidFromPlayer($player);
+        $token = \LittleSkin\YggdrasilConnect\Models\AccessToken::create($user);
+        self::assertFalse($token->canJoinServer());
+        self::assertTrue($token->isRefreshable());
+        $refreshed = $token->refresh($uuid);
+        self::assertSame($uuid, $refreshed->selectedProfile);
+        self::assertTrue($refreshed->canJoinServer());
+        self::assertSame($user->uid, $refreshed->owner->uid);
+        $refreshed->revoke();
+        self::assertTrue($refreshed->isRevoked());
+    }
+
     public function testFailedYggdrasilAuthenticationDoesNotProduceSuccess(): void
     {
         $user=$this->user();

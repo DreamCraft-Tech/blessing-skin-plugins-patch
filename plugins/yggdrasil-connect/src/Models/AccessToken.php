@@ -35,8 +35,8 @@ class AccessToken
 
         $this->jwtConfig = JWT\Configuration::forAsymmetricSigner(
             new JWT\Signer\Rsa\Sha256(),
-            JWT\Signer\Key\InMemory::file(storage_path('oauth-private.key')),
-            JWT\Signer\Key\InMemory::file(storage_path('oauth-public.key'))
+            $this->passportKey('private'),
+            $this->passportKey('public')
         );
 
         $this->builder = $this->jwtConfig->builder();
@@ -75,6 +75,16 @@ class AccessToken
         $this->jwt = $jwt;
     }
 
+    private function passportKey(string $type): JWT\Signer\Key\InMemory
+    {
+        $configured = config('passport.'.$type.'_key');
+        if (is_string($configured) && $configured !== '') {
+            return JWT\Signer\Key\InMemory::plainText(str_replace('\\n', "\n", $configured));
+        }
+
+        return JWT\Signer\Key\InMemory::file(\Laravel\Passport\Passport::keyPath('oauth-'.$type.'.key'));
+    }
+
     public static function create(BaseUser $user): AccessToken
     {
         $token = $user->createToken('Yggdrasil Connect', [Scope::PROFILE_SELECT, Scope::SERVER_JOIN])->accessToken;
@@ -91,7 +101,7 @@ class AccessToken
     {
         if (!$this->validator->validate(
             $this->jwtDecoded,
-            new JWT\Validation\Constraint\ValidAt(new SystemClock(new \DateTimeZone(date_default_timezone_get())))
+            new JWT\Validation\Constraint\LooseValidAt(new SystemClock(new \DateTimeZone(date_default_timezone_get())))
         )) {
             return true;
         }
@@ -105,7 +115,7 @@ class AccessToken
 
     public function isExpired2(): bool
     {
-        return $this->isExpired1() && $this->passportToken->created_at->addSeconds(Option::get('ygg_token_expire_2'))->isPast();
+        return $this->isExpired1() && $this->passportToken->created_at->addSeconds((int) Option::get('ygg_token_expire_2'))->isPast();
     }
 
     private function hasScopesToJoinServer(): bool
@@ -212,7 +222,7 @@ class AccessToken
         $newTokenDecoded = $this->parser->parse($newToken->jwt);
 
         // RFC 7519 中规定的声明只能通过这些方法来设置
-        $this->builder->canOnlyBeUsedAfter($newTokenDecoded->claims()->get('nbf'))
+        $this->builder = $this->builder->canOnlyBeUsedAfter($newTokenDecoded->claims()->get('nbf'))
             ->expiresAt($newTokenDecoded->claims()->get('exp'))
             ->identifiedBy($newTokenDecoded->claims()->get('jti'))
             ->issuedAt($newTokenDecoded->claims()->get('iat'))
@@ -222,12 +232,12 @@ class AccessToken
         // 其他声明通过 withClaim() 方法设置
         foreach ($newTokenDecoded->claims()->all() as $key => $value) {
             if (!in_array($key, JWT\Token\RegisteredClaims::ALL)) {
-                $this->builder->withClaim($key, $value);
+                $this->builder = $this->builder->withClaim($key, $value);
             }
         }
 
         // 设置选中的角色
-        $this->builder->withClaim('selectedProfile', $selectedProfile);
+        $this->builder = $this->builder->withClaim('selectedProfile', $selectedProfile);
 
         return new AccessToken($this->builder->getToken($this->jwtConfig->signer(), $this->jwtConfig->signingKey())->toString());
     }
