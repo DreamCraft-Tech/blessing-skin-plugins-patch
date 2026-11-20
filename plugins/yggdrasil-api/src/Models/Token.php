@@ -29,14 +29,20 @@ class Token
                 JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
             );
             $jwtConfig->setValidationConstraints(
+                new JWT\Validation\Constraint\SignedWith($jwtConfig->signer(), $jwtConfig->verificationKey()),
+                new JWT\Validation\Constraint\LooseValidAt(\Lcobucci\Clock\SystemClock::fromUTC()),
                 new JWT\Validation\Constraint\IssuedBy('Yggdrasil-Auth'),
                 new JWT\Validation\Constraint\RelatedTo(
                     Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->owner)->getHex()->toString()
                 )
             );
-            $token = $jwtConfig->parser()->parse($this->accessToken);
+            try {
+                $token = $jwtConfig->parser()->parse($this->accessToken);
 
-            return $jwtConfig->validator()->validate($token, ...$jwtConfig->validationConstraints());
+                return $jwtConfig->validator()->validate($token, ...$jwtConfig->validationConstraints());
+            } catch (JWT\Exception) {
+                return false;
+            }
         } else {
             // fallback for legacy UUID-format accessToken
             return (time() - $this->createdAt - option('ygg_token_expire_1')) < 0;

@@ -348,6 +348,20 @@ final class HistoryTest extends Tests\TestCase
         $this->legacyRoutes();$user=$this->user();$player=$this->player($user,'Solo');$this->authenticate($user)->assertOk();
         $this->assertDatabaseHas(Installer::PROFILES,['player_id'=>$player->pid,'selected'=>true]);
     }
+    public function testLegacyJwtRejectsExpiredAndWronglySignedTokens(): void
+    {
+        $this->legacyRoutes();
+        $user = $this->user();
+        $config = \Lcobucci\JWT\Configuration::forSymmetricSigner(new \Lcobucci\JWT\Signer\Hmac\Sha256(), \Lcobucci\JWT\Signer\Key\InMemory::plainText(config('jwt.secret')));
+        $subject = \Ramsey\Uuid\Uuid::uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS, $user->email)->getHex()->toString();
+        $token = new \Yggdrasil\Models\Token(); $token->owner = $user->email;
+        $builder = $config->builder()->issuedBy('Yggdrasil-Auth')->relatedTo($subject);
+        $token->accessToken = $builder->issuedAt(new \DateTimeImmutable('-2 hours'))->expiresAt(new \DateTimeImmutable('-1 hour'))->getToken($config->signer(), $config->signingKey())->toString();
+        self::assertFalse($token->isValid());
+        $token->accessToken = $builder->issuedAt(new \DateTimeImmutable('-1 minute'))->expiresAt(new \DateTimeImmutable('+1 hour'))->getToken($config->signer(), \Lcobucci\JWT\Signer\Key\InMemory::plainText(str_repeat('x', 64)))->toString();
+        self::assertFalse($token->isValid());
+    }
+
     public function testConnectIssuesAndRefreshesRealPassportToken(): void
     {
         \Laravel\Passport\Passport::tokensCan(array_fill_keys(\LittleSkin\YggdrasilConnect\Scope::getAllScopes(), 'Integration test'));
