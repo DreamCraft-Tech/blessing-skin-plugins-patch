@@ -20,9 +20,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/204-for-unexisted-players_0.1.4_php85.zip",
-        "shasum": "603a171b393c08ab5b258cf717f762cbfd339c06",
-        "sha256": "9ab0e8454887fc42ccf39c02a2f5f1b26987dc681fa40fe425151bc877f540c2"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/204-for-unexisted-players_0.1.4_php85.zip",
+        "shasum": "307c53a74f300859182e0ad1bbad6a70215c91ba",
+        "sha256": "c1738cfdc3ec7ecba35b9a23e5198dfa1a5397ec7614e4ba50b1bf175df2a48e"
       }
     },
     {
@@ -45,9 +45,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/authme-integration_2.4.3_php85.zip",
-        "shasum": "62d5077ef626876cec376318018d2bac0c41d5af",
-        "sha256": "35d06b1084d2f249bddf51258ccfcaa23fc3c31220e8da65b2f3bf85a18a48f9"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/authme-integration_2.4.3_php85.zip",
+        "shasum": "e1f0c1cd1674ea78ae9fd1ff22233f5cc825bdd8",
+        "sha256": "af8709f0a69796077788dc716548f000ba33000a20312df500273817b1f2a549"
       }
     },
     {
@@ -69,9 +69,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/batch-import_4.1.2_php85.zip",
-        "shasum": "0cc02df2a1fba460df8b53cbaa50b412ff4854f2",
-        "sha256": "ca9f3cc6069609f744459b45286631ac3ee178bf419fd1b41b1bbcf7501192b3"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/batch-import_4.1.2_php85.zip",
+        "shasum": "ad6ac60a57c0431cf5b19d98c7d214a4a2e23a91",
+        "sha256": "f3eff05dad28f36f509884179b4c80e44b8a4a01a9cf2fd5153f53f3935221cd"
       }
     },
     {
@@ -94,9 +94,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/cdn-real-ip_1.0.1_php85.zip",
-        "shasum": "7524a94e3a83a2e68e4a97009c86865d0579703b",
-        "sha256": "d4b2896ba41a89dc93776f449b921c5905c26d0fd9f23d9d4a8fb495645defbf"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/cdn-real-ip_1.0.1_php85.zip",
+        "shasum": "2b618cda452af2c0eecc475c5d3eea2d895d19ea",
+        "sha256": "3d9bac7615ada44295ec1d64064fe538fdb54e2580e97d14620383158eeb4ede"
       }
     },
     {
@@ -125,9 +125,9 @@
         "@types/highlight.js": "^9.12.4"
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/config-generator_3.2.2_php85.zip",
-        "shasum": "a0337442b8f61fb7a6dffa28fe8f0f5888e816e3",
-        "sha256": "4fec89f85220ce5ca65d230664f058b51dcfe57ae12d9a7549192d8c431f438e"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/config-generator_3.2.2_php85.zip",
+        "shasum": "8a12066fd653943105dea8168d72da1738cd0b38",
+        "sha256": "773fc7bef79e29a1de9fb7947bcca20f465e8d0cab521c38509ef3a307aa7a85"
       }
     },
     {
@@ -150,9 +150,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/daily-luck_1.2.3_php85.zip",
-        "shasum": "3836d54bd67bd99ba01ba4aa05f8c8c768b0eb3b",
-        "sha256": "bf295bcf772d7fcce986289f8dd5c515763e8a8ed1a6cac08872f8ad6040763f"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/daily-luck_1.2.3_php85.zip",
+        "shasum": "8d69192b4fbb5f7d5f856e5546179b59214e0455",
+        "sha256": "3d24f336090f581eb3379e7cde7d5b5ae7ed5e2d75e4ef2930930d9d61699dd4"
       }
     },
     {
@@ -174,9 +174,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/disable-registration_1.0.3_php85.zip",
-        "shasum": "7306e75fbbcef6dfcc41498f242bdee10cd721c3",
-        "sha256": "9b57eee2ca30026d31115ef67185f222af7b2b651463cca8ad496ecde424593d"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/disable-registration_1.0.3_php85.zip",
+        "shasum": "933c8dae005f497ba0c055790439e2c42e7dd642",
+        "sha256": "81b9430b62fb6f875d337ad137046498063d89e66cbc5484a6ac55a007d70667"
       }
     },
     {
@@ -199,9 +199,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/embedded-comment_1.0.4_php85.zip",
-        "shasum": "312d76dee96a2fb65f867f7b33c9869b71cce047",
-        "sha256": "517f8e154659850e21b0dfc0c6505b51028b80a15e70261b406c00b211b288bb"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/embedded-comment_1.0.4_php85.zip",
+        "shasum": "9d627691e8011800ec271f0409a4c04c089dd77c",
+        "sha256": "2164948d928914ce395096326de1555a5fea103e31282f6cc65e89bf882a8db9"
       }
     },
     {
@@ -222,9 +222,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/eruda_1.0.1_php85.zip",
-        "shasum": "e7116f58e51f1d94355909ce1aa308f0ba89f63e",
-        "sha256": "4c91b34b423e72d897949d3e54c484bba9c4dcc4cea040d472546d4213fcbcbd"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/eruda_1.0.1_php85.zip",
+        "shasum": "67f5422bcc7fb3b3046a9b41d5a7b6b1db17b881",
+        "sha256": "e53aa0737b4ef412c2138c778cbed79b0d0ba0d707b8a978e6389f0a303e79de"
       }
     },
     {
@@ -247,9 +247,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/fast-login_0.1.3_php85.zip",
-        "shasum": "0688f341c0f3835efdedb8906d902bf643a94e13",
-        "sha256": "402f85569547dbe0f12f77a91215201a424adfb5e345d1d4ebbeb0ded5547eb2"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/fast-login_0.1.3_php85.zip",
+        "shasum": "cd684d0041ea99bf5ee188d7be7a945a790be562",
+        "sha256": "bb5367e9dbf0dfe02795aeab599296a8bfe31fce3d64e2fd0dcc0ec89982d04c"
       }
     },
     {
@@ -273,9 +273,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/forum-integration_4.1.1_php85.zip",
-        "shasum": "70ad8379c2ce55279c03f56e30b25ba3d1975e1c",
-        "sha256": "30a3f92eb8ea875994b17041d11e58890e21a85be9ec08a00916a804a7d61dd8"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/forum-integration_4.1.1_php85.zip",
+        "shasum": "0425290a662b15e5a6d1d314503a62302f95a41b",
+        "sha256": "1204271318f0f4ff04b83358391325db771a9ba2622744d2c202d47121e72b64"
       }
     },
     {
@@ -299,9 +299,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/google-adsense_0.0.1_php85.zip",
-        "shasum": "5c16a8e99ddfd0663e6a3fd9f23070c0fe5f672f",
-        "sha256": "a02a7794db2d9aab3beba7293a15d27878a1fa5253dbec5953bbbc6b59e75941"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/google-adsense_0.0.1_php85.zip",
+        "shasum": "63bbe9d3e78afdf7e7d00791e32719e02a9f11b5",
+        "sha256": "0ca7dbc7896a7496d0b2f171589721cd6717bde555d3fbc7e35a4b19f955f68a"
       }
     },
     {
@@ -323,9 +323,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/gravatar_0.1.3_php85.zip",
-        "shasum": "29b07382fa178dfa81c8c5eb29e3445eb4741344",
-        "sha256": "8ef0c037ddc3a03aef843db7ba892a75efa3a7b6f862d57cdb6dad00d8ec4dd2"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/gravatar_0.1.3_php85.zip",
+        "shasum": "52e3479583048c600af1146c013f1af52e1bc5b0",
+        "sha256": "5b75c526c85dd9d23a12624a5e8ab886586fa71a2d719a31b4d83d7b3a872aa7"
       }
     },
     {
@@ -349,9 +349,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/gtag-js_0.1.2_php85.zip",
-        "shasum": "47e8ad608905e88218a735b280a485949f09db66",
-        "sha256": "156a4768c4ce4d604ddf9d44bf512edfa599c729893a62b8e7a944ff82f703af"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/gtag-js_0.1.2_php85.zip",
+        "shasum": "d3ef56b9f9d214bb343849621d29cc35df5849c5",
+        "sha256": "b344c2951f2b1dac3aad233eb34937e6d93f6cf82b13503355bbedfcd06ead75"
       }
     },
     {
@@ -376,9 +376,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/hello-dolly_1.3.0_php85.zip",
-        "shasum": "64726aba137d636d929755f43b21cd0c176406f6",
-        "sha256": "ae03e851688cfc404cc3483c963ff7a4e4c2681e76d38960b3d34417fd147766"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/hello-dolly_1.3.0_php85.zip",
+        "shasum": "e8aff00fc242cbf4e95a2ead23e11cf4ee91972d",
+        "sha256": "bf14f20458646ba3c500d1e60e19d2b96adc6263a5e6bd0c67d61b04bb0b5d64"
       }
     },
     {
@@ -400,9 +400,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/hide-advanced-menu_1.0.1_php85.zip",
-        "shasum": "ea940fddea849a219aea4c67a6b117c03fbf9c8c",
-        "sha256": "01eff480705a80306126766ce9aa889348c4cb6c007082955d79eb494cbfaff8"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/hide-advanced-menu_1.0.1_php85.zip",
+        "shasum": "e84e89d6fade602df074885de4fdc7675216787a",
+        "sha256": "6c02d0890eee7f33fecbb9f04229197892e5a6f64739ffdd66a500d557978a72"
       }
     },
     {
@@ -427,9 +427,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/hitokoto_1.3.0_php85.zip",
-        "shasum": "9f1e13d363b71f46e94b266bca36d22bb00289e4",
-        "sha256": "387751563bba48905f7adcba2b8f477bbca00477cb65107a467c762484a7bf1d"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/hitokoto_1.3.0_php85.zip",
+        "shasum": "0079bc4e982374aafbae915cd57d866c674ca544",
+        "sha256": "296f6867c2485e116edc0918f51d42eedbeed58e25bdd73cf2df4593dc08345a"
       }
     },
     {
@@ -451,9 +451,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/insane-profile-cache_4.0.3_php85.zip",
-        "shasum": "ec6c5c346e82a792b4857159300cb48b7bae52bd",
-        "sha256": "1e0bec428887fe516ec30cb5e4acaecdc30b0bddfef08a0da19b7da44863b70c"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/insane-profile-cache_4.0.3_php85.zip",
+        "shasum": "50d650c9fb107e5bfca07962fff0eb80b85ed7f9",
+        "sha256": "e974aea60054d9fa23b593258c0f26b476e7948e82771472e9caf5e559173d1e"
       }
     },
     {
@@ -474,9 +474,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/insider_1.0.2_php85.zip",
-        "shasum": "3b17a1d4afcc9e502012332e22c81d6ccd05cb31",
-        "sha256": "18d1fe7961dba818f1c947a80cdfaea98d2776e5165fa82412a5e408294a60c4"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/insider_1.0.2_php85.zip",
+        "shasum": "bee74053f12800b1bad87275e319957f9784c9f4",
+        "sha256": "e8f9810361939823d5b57bbb174dd294be87a9fe54d379e6f3ba7facf2d29d48"
       }
     },
     {
@@ -498,9 +498,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/invitation-codes_3.1.2_php85.zip",
-        "shasum": "730442eb08313e199288b866ebafd738de0db575",
-        "sha256": "fd99c88748c7ea4e44033497af9a3ee4a33c8103d2607cd9e3a1bf8e16c349ea"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/invitation-codes_3.1.2_php85.zip",
+        "shasum": "14c40d6df932a49af352a6c649de154f6f4d1f72",
+        "sha256": "bc63d7db0696902dd4270dd27e4d94bb638098249be6a510e386d651ab8d7f81"
       }
     },
     {
@@ -522,9 +522,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/legacy-api_1.1.3_php85.zip",
-        "shasum": "f0a96ed4226db29d7fa06808b8af089c39a77d61",
-        "sha256": "3565c8bca1a5614b950276e8f01c9a620cd7010515e1185a34164dd1e0dfd959"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/legacy-api_1.1.3_php85.zip",
+        "shasum": "ef60682f8d0644ad6e8f0328a58504ff9fd2da91",
+        "sha256": "4a8e6f8512a12010d1cd590216e434a4b1b457a9caa5852d91904c6a0dffc380"
       }
     },
     {
@@ -547,9 +547,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/login-history_1.2.1_php85.zip",
-        "shasum": "9007de2fb64208dd71b8abb17cf1d8f0ca6bba57",
-        "sha256": "ed737034dea76bd0c7d3f76207dcde2dbe099e382612d06e782adddfe5d39254"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/login-history_1.2.1_php85.zip",
+        "shasum": "f4cae7a3f1a60fd2d84e43b126d703b94f71301d",
+        "sha256": "8ca639faa19785540aa57eff4b577189ab48ce8962226d01616efe264215561f"
       }
     },
     {
@@ -572,9 +572,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/mojang-verification_2.0.0_php85.zip",
-        "shasum": "02da9eb47f774e203eba48d8c9a255ebbac9025e",
-        "sha256": "fe860bba5f4d04a44bbd61cfe3b5d3371778b0c0c30c18c657c0044a2b5dde00"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/mojang-verification_2.0.0_php85.zip",
+        "shasum": "44ae901a7436a61b208e7e0a0eeaacc7a3c32968",
+        "sha256": "bb8c651836e3be96537bdd1993ba4c63fd95f35dd3a5e49031a286bb02ba8404"
       }
     },
     {
@@ -596,9 +596,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/oauth_1.0.6_php85.zip",
-        "shasum": "f7b12e0e113e39030c465eadf6cd7974db8f915a",
-        "sha256": "0db04fd96fe3e82dd62b7906c5d7a711bd4988f83aeba9b9e0a2fd5e1f4f75e0"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/oauth_1.0.6_php85.zip",
+        "shasum": "68329f70f0577189d58a6594f25a82bb784af1f7",
+        "sha256": "bc587649f47636bfa2e2c8944163cfe2f74e26ac062cd7a16b0aa30d3b067f65"
       }
     },
     {
@@ -622,9 +622,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/oauth-github_0.2.5_php85.zip",
-        "shasum": "dc58f0352eb3d12002cea95a438ecbc462770989",
-        "sha256": "4d1451c8122157ecfd207eb8fa15fe89668b314b2f257b06e8aed385f851432a"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/oauth-github_0.2.5_php85.zip",
+        "shasum": "d9fb3fd266330db252237bf7c1e435f4be9b95e9",
+        "sha256": "10eba0cd96d2d5e28efff0cb47487d44cd305d30b21c053ef5ae76b7c7cafc5c"
       }
     },
     {
@@ -648,9 +648,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/oauth-google_0.1.5_php85.zip",
-        "shasum": "2dab347f99fc62b760e0141308674a4b916ee6f8",
-        "sha256": "67d9121025d9875d35469aad90485011370d4c42adbd54fece3c9750e075e9cc"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/oauth-google_0.1.5_php85.zip",
+        "shasum": "4d786d9dce4fb0a13d423dbe48ee265cf4433e22",
+        "sha256": "53d8a5b2de273f2a693bcd925d9c1b7ae3b9954735e54fa01a4c9645e8206717"
       }
     },
     {
@@ -673,9 +673,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/oauth-littleskin_0.2.6_php85.zip",
-        "shasum": "440b57ef077e3aa4aa3b64a704ee5f022f38f688",
-        "sha256": "188fd362926aeca2c969bc91ba5a31f8e49021c16f3486f36335c7da6eaf06d4"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/oauth-littleskin_0.2.6_php85.zip",
+        "shasum": "8a9ed852a364765e4276cb19b121b1c3d9e4ee95",
+        "sha256": "2908888e463837014d937d39ea7ba90606d5f7045d66611ce0e2338e283d13d3"
       }
     },
     {
@@ -699,9 +699,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/oauth-microsoft-live_0.2.6_php85.zip",
-        "shasum": "1fcecb3012375203c833342efd571aaf09e26916",
-        "sha256": "7d6a70bcef06c68e53cf87f55dbdc4309213b63a248c3b7c9552193e092c3eab"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/oauth-microsoft-live_0.2.6_php85.zip",
+        "shasum": "259c912575651c676d7c5be4020d039b79668a99",
+        "sha256": "8d1433331e9c8c9bfedae2784a62c627c7850f84df34ce3fc2b4dde1ae4c6e0b"
       }
     },
     {
@@ -723,9 +723,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/password-algorithm-transition_2.2.1_php85.zip",
-        "shasum": "17a941529acc25b2dd999612adc1bccf38d349f8",
-        "sha256": "ceeb97c26946181d682704fde8015f6a4c21b4a45c1d9f4298e7963e6639838c"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/password-algorithm-transition_2.2.1_php85.zip",
+        "shasum": "c715001ff6d949f7d64edb3cf29e03cedeebd126",
+        "sha256": "5d12ff6a6b85dc41e021ee98f87612cd69cfb10fc77a9a0fea72ffc0430332d0"
       }
     },
     {
@@ -746,9 +746,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/pray-for-kyoto-animation_1.0.3_php85.zip",
-        "shasum": "5a8c58455711de953c03ee7d04ecbb113ab2c8e1",
-        "sha256": "5b225183a028fc74968a90c4bcfda0f1c334bf1cec9b136fa047336399074477"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/pray-for-kyoto-animation_1.0.3_php85.zip",
+        "shasum": "8882a24066c63aab19191245db2af3f39327e53f",
+        "sha256": "339d2169e5f48c95c703a890eedf865a8e13754028a1e52166617b0a16b79288"
       }
     },
     {
@@ -770,9 +770,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/predis_1.0.1_php85.zip",
-        "shasum": "88f183c673553b136cfb97daf3e593d3d0e3b58f",
-        "sha256": "1c24e440e93f95b1ee74b28c1f9c130564f039469e378585df0f053f8ce479a0"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/predis_1.0.1_php85.zip",
+        "shasum": "bf449e1851f3e37d6af2ea7deb59e6caf0e1a86c",
+        "sha256": "9823178e6d24313d3efda0e1ffe91e6aa71ae150eb1a5b2700fd2e63a05fe702"
       }
     },
     {
@@ -793,9 +793,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/purge-azure-global-cdn_1.1.2_php85.zip",
-        "shasum": "2d7aa92e13b8be8a5da1e276f984a0bad5f84a1e",
-        "sha256": "c9e29c9c73747ebd3b205d9aaaf5f772f01ad05719d2539bdebd24f22cdb55ad"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/purge-azure-global-cdn_1.1.2_php85.zip",
+        "shasum": "09008e636e0484d1eca36798103a0751562a9c1c",
+        "sha256": "c41b6eb35542a489cd08571ba9a30f5591ade741358782eb5723995dcf4f9e63"
       }
     },
     {
@@ -816,9 +816,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/refresh-ali-cdn_1.0.1_php85.zip",
-        "shasum": "0d4c05a900ccbe072b33ba6649fb626307b3e20e",
-        "sha256": "62cbcf16a23b0381b7d3f01c89a3610e5974716f14dfb376eaaf519ae3e51d7b"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/refresh-ali-cdn_1.0.1_php85.zip",
+        "shasum": "8e253bf24d375b8f6ed8a6e208e0133bf5d85443",
+        "sha256": "4b24718c9092e029a599c96d4e5e122e81cd722d4bec4e0b1268143e37ecfb7f"
       }
     },
     {
@@ -839,9 +839,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/refresh-qcloud-cdn_2.1.3_php85.zip",
-        "shasum": "f4f33abd2111f416889ba6e13be8bd405eb290af",
-        "sha256": "dcb2564cce1ca8ea2223377135c733ed31ca38a3089062e7da0f8b4363f73eba"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/refresh-qcloud-cdn_2.1.3_php85.zip",
+        "shasum": "7959a764e54a4b8eeaaa6c9c289f6f64a812bf44",
+        "sha256": "7744b3c5262b32379c2134c29eafc09fc1d161f4efc60a6ada8d9d1586ea2f3f"
       }
     },
     {
@@ -863,9 +863,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/remote-addr_0.1.1_php85.zip",
-        "shasum": "28e9e3a82709ca249903b0e555dc9493c29b7a09",
-        "sha256": "afef7b9d0168bf478992f67a7f5e2a9e8b515cd0ced19e861ee152f58fcd1922"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/remote-addr_0.1.1_php85.zip",
+        "shasum": "5f2009a19f554f84359e3540068437af86d0c64a",
+        "sha256": "371806f8aa7a7ca56dde301952a529fc1fdf2fe837dfb21df8537775e647a96e"
       }
     },
     {
@@ -891,9 +891,9 @@
         "nanoid": "^4.0.0"
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/restricted-email-domains_0.3.0_php85.zip",
-        "shasum": "0dac1940905ce9113a89286c892f3edc1c98944d",
-        "sha256": "cd291136d1228da119f2d3a1a8f256af2afd7b272618b98b7da2c3d27cc397e5"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/restricted-email-domains_0.3.0_php85.zip",
+        "shasum": "4480dfbb4fa90eeb2da2e1785c9ba83515917504",
+        "sha256": "681a8b47eed4806cc149c173a1369798a63cee603c1662c48f032ca7af31edc2"
       }
     },
     {
@@ -915,9 +915,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/share-registration-link_2.0.2_php85.zip",
-        "shasum": "54789d936dd02041ed59f7506cb62740f2fe8fb5",
-        "sha256": "23680979de346f383f9d5e2e703da0d2aa3a420d6d33dbc102db2691ad7ed5f4"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/share-registration-link_2.0.2_php85.zip",
+        "shasum": "22a01d76d0819e5fe433ad9bca7cc5b735fd3761",
+        "sha256": "745e65ed5974847c123900a2ae04896ea620516d3535b1106027de22b06d3824"
       }
     },
     {
@@ -939,9 +939,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/single-player-limit_3.0.4_php85.zip",
-        "shasum": "8feda83a4184d21b3ab7cee1fb070952ce4ae4c8",
-        "sha256": "eb26f2a8c2cb40cc0477e6a46dcbae51a27acf37685f0c3f50c8d422ca4b9183"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/single-player-limit_3.0.4_php85.zip",
+        "shasum": "c3c82736e486edbdfc0c41effaa80900c0188169",
+        "sha256": "e13309d7f87b74cc692492a66a85554983a74d2a3aae148cfe54cebc316c99ac"
       }
     },
     {
@@ -964,9 +964,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/texture-description_1.3.2_php85.zip",
-        "shasum": "6fc5d8389690ccbc9db5e0786af6a16336f72a46",
-        "sha256": "622bbaa5c79f77486df0d9de0dcd1214c07496c3d4d18ce58ed9011048069fb1"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/texture-description_1.3.2_php85.zip",
+        "shasum": "58a8782ce7d9a199356be3cc47ae787be7279d0e",
+        "sha256": "31fbb431fadf82139ddabbfb9c3a6a7925cf8e34dad94e2eb2329a2b9cc11fd6"
       }
     },
     {
@@ -988,9 +988,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/texture-type-cast_0.4.0_php85.zip",
-        "shasum": "0344d64646a4613edde0f8fb142fb4aa9beebe5d",
-        "sha256": "aaa99ae1f68a9400cd8a380df6be543c4315f5a8781f938bac225bd69ef26d39"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/texture-type-cast_0.4.0_php85.zip",
+        "shasum": "3d8e5bed1d8a4551f5f1ea875be931d4c8de3656",
+        "sha256": "09ae3fd67e3848a4fe860ca0256b3f063f62c6d4cb34f7493d23e7652aba4b47"
       }
     },
     {
@@ -1013,9 +1013,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/textures-aliyun-oss_2.0.6_php85.zip",
-        "shasum": "7e440b55b1726bc4587c1021117e3df55598dbb3",
-        "sha256": "1490e6fd8741c2bc1ec2e5dbc43887178cfd8f529a32d5c4cf2e2e378845a5d5"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/textures-aliyun-oss_2.0.6_php85.zip",
+        "shasum": "acb3637786dd8e734d79276d8af70af02f104b8a",
+        "sha256": "7638ce442a481442661e0a0de5353a4116af267ecec15b491c80e674a895b456"
       }
     },
     {
@@ -1038,9 +1038,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/textures-qcloud-cos_2.0.5_php85.zip",
-        "shasum": "2bcfa95e751343a391a8b08d3871cc4a2bbff219",
-        "sha256": "04a109f245b77b5ec48253e95d0195fe8d83427f9bd6de386531c816d8305687"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/textures-qcloud-cos_2.0.5_php85.zip",
+        "shasum": "6323b1f188dab9840461548406e4a88568259d60",
+        "sha256": "4b7ec34eb3b7588c593b12c447fed585400d64d3d47e023904c9c7e6f823986b"
       }
     },
     {
@@ -1063,9 +1063,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/textures-qiniu-storage_2.0.5_php85.zip",
-        "shasum": "57202acd8655073e1dc37d576f3eeffa9746ec08",
-        "sha256": "011668e3be2c0df122f9ce21b5a864c252b12be35fe21715e4f03ee32cd29792"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/textures-qiniu-storage_2.0.5_php85.zip",
+        "shasum": "1f6868991952c38e6b7856c4af91ae871cdea7f6",
+        "sha256": "932ed88f9411c6dcaf425b8b1eb068c7fe46eccc634e85274dae54f2c831612a"
       }
     },
     {
@@ -1086,9 +1086,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/trust-proxies_0.1.3_php85.zip",
-        "shasum": "b2d887b6d1faa3d2317726e6a7f63c3d200fa30c",
-        "sha256": "d2ff7c5efae7583b8acd0dc7b44026bbfca770db005b5dc82daf04966a3d01c9"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/trust-proxies_0.1.3_php85.zip",
+        "shasum": "14c2d1ad0ea7814ec37098763a86d20ee5006014",
+        "sha256": "47a99628b5871c2e93396f0cca6d020f2341904dc61cb5b0ac392751a4058f10"
       }
     },
     {
@@ -1111,9 +1111,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/two-factor_1.0.1_php85.zip",
-        "shasum": "01605e54607edb6aedd5776fa247b97fb2f29e07",
-        "sha256": "4ec86c469e5fa9006c7f130697c3102eb3d430f8bd3e72964482afcd1edbb296"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/two-factor_1.0.1_php85.zip",
+        "shasum": "4d31f550db8ae205d856be7e1948a4b603304fa3",
+        "sha256": "f2ed62ddf147d9564fcc845e7baaed8c8540415f7ece470dadbccebee35e34cd"
       }
     },
     {
@@ -1135,9 +1135,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/usm-api_1.2.3_php85.zip",
-        "shasum": "29d786915f7eb1f720dc1955e5f2816a8ca3765a",
-        "sha256": "a3df806400326b8f3812b27e8aeedba9a34b11a2724851433e967bccdd68e454"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/usm-api_1.2.3_php85.zip",
+        "shasum": "a122cb97ba6e9bae828fece9df1ab53ae2c2cb35",
+        "sha256": "5b105a398186892a7585267ef76da382b3d5b96d96c2442781eddc02afd73c3f"
       }
     },
     {
@@ -1160,14 +1160,14 @@
       },
       "license": "MIT",
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/wecom-login_1.5.3_php85.zip",
-        "shasum": "b6dc76ea6eb91db0d1816d864f6392de24b42c14",
-        "sha256": "b8165358fbae3e145d96b26709b19868f6c034e092112aaef699a637bfb67d01"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/wecom-login_1.5.3_php85.zip",
+        "shasum": "609da1a3bc19287909c56148c21fc23b3b7a0adb",
+        "sha256": "197e559fbd596a08da701118c116e1cbb4664b18d9a4e45c7bcdd1dc3b55a204"
       }
     },
     {
       "name": "yggdrasil-api",
-      "version": "5.2.2+php85.1",
+      "version": "5.2.3+php85.1",
       "title": "Yggdrasil API",
       "description": "Yggdrasil API + authlib-injector = ✨",
       "author": "printempw",
@@ -1184,9 +1184,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/yggdrasil-api_5.2.2_php85.zip",
-        "shasum": "1219ef17127bbcba2deeac51e8c73641ef367eca",
-        "sha256": "7607852391a3e72b34aadacc9f33f2d8f5910a7a03e686af9a8cdd569e97cfdc"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/yggdrasil-api_5.2.3_php85.zip",
+        "shasum": "c67d5834c66b30183b48f8baf8c0e4a3898a5334",
+        "sha256": "1faa0999390e80501733b3212eea0dfc1d77837ef5452ed7106e1620edb74013"
       }
     },
     {
@@ -1211,9 +1211,9 @@
         }
       },
       "dist": {
-        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch/yggdrasil-connect_6.2.1_php85.zip",
-        "shasum": "44444f07f5356cf791b19029258e04e7952a3c2a",
-        "sha256": "11c411737fcca62654553237d7e5b445fd458f0ee02542bb86e0c9c4742dd8f6"
+        "url": "https://plugin.blessing.dreamcraft.eu.org/releases/20261120-patch-2/yggdrasil-connect_6.2.1_php85.zip",
+        "shasum": "a3fc62c83ac13c37fc00bc407a0a4e064ad5625f",
+        "sha256": "e45151b2f5cdca8f284ef0dd0e6fe85a2ee9371eefd45b3dc4e70f2a4b0e161e"
       }
     }
   ]

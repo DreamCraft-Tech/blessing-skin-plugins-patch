@@ -1,13 +1,13 @@
 {
-  "commit": "e72975ec6ec483227dd5d06e21e18354c8592f68",
+  "commit": "b4c509d8460bf22110a5415bca8897b76e95c80f",
   "php": "8.5",
-  "catalog_sha256": "1ab3425f042194d40faa155350105f1eadae87b322c56e7785478c70f24083a0",
+  "catalog_sha256": "d6e5fd66a37892fb89aee8bae14f5ea684f6afe9e604e35ed20c3eb6b07f9449",
   "packages": [
     {
       "name": "204-for-unexisted-players",
       "version": "0.1.4+php85.1",
       "filename": "204-for-unexisted-players_0.1.4_php85.zip",
-      "sha256": "9ab0e8454887fc42ccf39c02a2f5f1b26987dc681fa40fe425151bc877f540c2",
+      "sha256": "c1738cfdc3ec7ecba35b9a23e5198dfa1a5397ec7614e4ba50b1bf175df2a48e",
       "metadata": {
         "en": {
           "name": "204-for-unexisted-players",
@@ -53,7 +53,7 @@
       "name": "authme-integration",
       "version": "2.4.3+php85.1",
       "filename": "authme-integration_2.4.3_php85.zip",
-      "sha256": "35d06b1084d2f249bddf51258ccfcaa23fc3c31220e8da65b2f3bf85a18a48f9",
+      "sha256": "af8709f0a69796077788dc716548f000ba33000a20312df500273817b1f2a549",
       "metadata": {
         "en": {
           "name": "authme-integration",
@@ -101,7 +101,7 @@
       "name": "batch-import",
       "version": "4.1.2+php85.1",
       "filename": "batch-import_4.1.2_php85.zip",
-      "sha256": "ca9f3cc6069609f744459b45286631ac3ee178bf419fd1b41b1bbcf7501192b3",
+      "sha256": "f3eff05dad28f36f509884179b4c80e44b8a4a01a9cf2fd5153f53f3935221cd",
       "metadata": {
         "en": {
           "name": "batch-import",
@@ -147,7 +147,7 @@
       "name": "cdn-real-ip",
       "version": "1.0.1",
       "filename": "cdn-real-ip_1.0.1_php85.zip",
-      "sha256": "d4b2896ba41a89dc93776f449b921c5905c26d0fd9f23d9d4a8fb495645defbf",
+      "sha256": "3d9bac7615ada44295ec1d64064fe538fdb54e2580e97d14620383158eeb4ede",
       "metadata": {
         "en": {
           "name": "cdn-real-ip",
@@ -195,7 +195,7 @@
       "name": "config-generator",
       "version": "3.2.2+php85.1",
       "filename": "config-generator_3.2.2_php85.zip",
-      "sha256": "4fec89f85220ce5ca65d230664f058b51dcfe57ae12d9a7549192d8c431f438e",
+      "sha256": "773fc7bef79e29a1de9fb7947bcca20f465e8d0cab521c38509ef3a307aa7a85",
       "metadata": {
         "en": {
           "name": "config-generator",
@@ -255,7 +255,7 @@
       "name": "daily-luck",
       "version": "1.2.3",
       "filename": "daily-luck_1.2.3_php85.zip",
-      "sha256": "bf295bcf772d7fcce986289f8dd5c515763e8a8ed1a6cac08872f8ad6040763f",
+      "sha256": "3d24f336090f581eb3379e7cde7d5b5ae7ed5e2d75e4ef2930930d9d61699dd4",
       "metadata": {
         "en": {
           "name": "daily-luck",
@@ -303,7 +303,7 @@
       "name": "disable-registration",
       "version": "1.0.3+php85.1",
       "filename": "disable-registration_1.0.3_php85.zip",
-      "sha256": "9b57eee2ca30026d31115ef67185f222af7b2b651463cca8ad496ecde424593d",
+      "sha256": "81b9430b62fb6f875d337ad137046498063d89e66cbc5484a6ac55a007d70667",
       "metadata": {
         "en": {
           "name": "disable-registration",
@@ -349,7 +349,7 @@
       "name": "embedded-comment",
       "version": "1.0.4+php85.1",
       "filename": "embedded-comment_1.0.4_php85.zip",
-      "sha256": "517f8e154659850e21b0dfc0c6505b51028b80a15e70261b406c00b211b288bb",
+      "sha256": "2164948d928914ce395096326de1555a5fea103e31282f6cc65e89bf882a8db9",
       "metadata": {
         "en": {
           "name": "embedded-comment",
@@ -397,7 +397,7 @@
       "name": "eruda",
       "version": "1.0.1+php85.1",
       "filename": "eruda_1.0.1_php85.zip",
-      "sha256": "4c91b34b423e72d897949d3e54c484bba9c4dcc4cea040d472546d4213fcbcbd",
+      "sha256": "e53aa0737b4ef412c2138c778cbed79b0d0ba0d707b8a978e6389f0a303e79de",
       "metadata": {
         "en": {
           "name": "eruda",
@@ -441,7 +441,7 @@
       "name": "fast-login",
       "version": "0.1.3+php85.1",
       "filename": "fast-login_0.1.3_php85.zip",
-      "sha256": "402f85569547dbe0f12f77a91215201a424adfb5e345d1d4ebbeb0ded5547eb2",
+      "sha256": "bb5367e9dbf0dfe02795aeab599296a8bfe31fce3d64e2fd0dcc0ec89982d04c",
       "metadata": {
         "en": {
           "name": "fast-login",
@@ -489,7 +489,7 @@
       "name": "forum-integration",
       "version": "4.1.1+php85.1",
       "filename": "forum-integration_4.1.1_php85.zip",
-      "sha256": "30a3f92eb8ea875994b17041d11e58890e21a85be9ec08a00916a804a7d61dd8",
+      "sha256": "1204271318f0f4ff04b83358391325db771a9ba2622744d2c202d47121e72b64",
       "metadata": {
         "en": {
           "name": "forum-integration",
@@ -539,7 +539,7 @@
       "name": "google-adsense",
       "version": "0.0.1+php85.1",
       "filename": "google-adsense_0.0.1_php85.zip",
-      "sha256": "a02a7794db2d9aab3beba7293a15d27878a1fa5253dbec5953bbbc6b59e75941",
+      "sha256": "0ca7dbc7896a7496d0b2f171589721cd6717bde555d3fbc7e35a4b19f955f68a",
       "metadata": {
         "en": {
           "name": "google-adsense",
@@ -589,7 +589,7 @@
       "name": "gravatar",
       "version": "0.1.3+php85.1",
       "filename": "gravatar_0.1.3_php85.zip",
-      "sha256": "8ef0c037ddc3a03aef843db7ba892a75efa3a7b6f862d57cdb6dad00d8ec4dd2",
+      "sha256": "5b75c526c85dd9d23a12624a5e8ab886586fa71a2d719a31b4d83d7b3a872aa7",
       "metadata": {
         "en": {
           "name": "gravatar",
@@ -635,7 +635,7 @@
       "name": "gtag-js",
       "version": "0.1.2+php85.1",
       "filename": "gtag-js_0.1.2_php85.zip",
-      "sha256": "156a4768c4ce4d604ddf9d44bf512edfa599c729893a62b8e7a944ff82f703af",
+      "sha256": "b344c2951f2b1dac3aad233eb34937e6d93f6cf82b13503355bbedfcd06ead75",
       "metadata": {
         "en": {
           "name": "gtag-js",
@@ -685,7 +685,7 @@
       "name": "hello-dolly",
       "version": "1.3.0+php85.1",
       "filename": "hello-dolly_1.3.0_php85.zip",
-      "sha256": "ae03e851688cfc404cc3483c963ff7a4e4c2681e76d38960b3d34417fd147766",
+      "sha256": "bf14f20458646ba3c500d1e60e19d2b96adc6263a5e6bd0c67d61b04bb0b5d64",
       "metadata": {
         "en": {
           "name": "hello-dolly",
@@ -737,7 +737,7 @@
       "name": "hide-advanced-menu",
       "version": "1.0.1+php85.1",
       "filename": "hide-advanced-menu_1.0.1_php85.zip",
-      "sha256": "01eff480705a80306126766ce9aa889348c4cb6c007082955d79eb494cbfaff8",
+      "sha256": "6c02d0890eee7f33fecbb9f04229197892e5a6f64739ffdd66a500d557978a72",
       "metadata": {
         "en": {
           "name": "hide-advanced-menu",
@@ -783,7 +783,7 @@
       "name": "hitokoto",
       "version": "1.3.0+php85.1",
       "filename": "hitokoto_1.3.0_php85.zip",
-      "sha256": "387751563bba48905f7adcba2b8f477bbca00477cb65107a467c762484a7bf1d",
+      "sha256": "296f6867c2485e116edc0918f51d42eedbeed58e25bdd73cf2df4593dc08345a",
       "metadata": {
         "en": {
           "name": "hitokoto",
@@ -835,7 +835,7 @@
       "name": "insane-profile-cache",
       "version": "4.0.3+php85.1",
       "filename": "insane-profile-cache_4.0.3_php85.zip",
-      "sha256": "1e0bec428887fe516ec30cb5e4acaecdc30b0bddfef08a0da19b7da44863b70c",
+      "sha256": "e974aea60054d9fa23b593258c0f26b476e7948e82771472e9caf5e559173d1e",
       "metadata": {
         "en": {
           "name": "insane-profile-cache",
@@ -881,7 +881,7 @@
       "name": "insider",
       "version": "1.0.2+php85.1",
       "filename": "insider_1.0.2_php85.zip",
-      "sha256": "18d1fe7961dba818f1c947a80cdfaea98d2776e5165fa82412a5e408294a60c4",
+      "sha256": "e8f9810361939823d5b57bbb174dd294be87a9fe54d379e6f3ba7facf2d29d48",
       "metadata": {
         "en": {
           "name": "insider",
@@ -925,7 +925,7 @@
       "name": "invitation-codes",
       "version": "3.1.2+php85.1",
       "filename": "invitation-codes_3.1.2_php85.zip",
-      "sha256": "fd99c88748c7ea4e44033497af9a3ee4a33c8103d2607cd9e3a1bf8e16c349ea",
+      "sha256": "bc63d7db0696902dd4270dd27e4d94bb638098249be6a510e386d651ab8d7f81",
       "metadata": {
         "en": {
           "name": "invitation-codes",
@@ -971,7 +971,7 @@
       "name": "legacy-api",
       "version": "1.1.3+php85.1",
       "filename": "legacy-api_1.1.3_php85.zip",
-      "sha256": "3565c8bca1a5614b950276e8f01c9a620cd7010515e1185a34164dd1e0dfd959",
+      "sha256": "4a8e6f8512a12010d1cd590216e434a4b1b457a9caa5852d91904c6a0dffc380",
       "metadata": {
         "en": {
           "name": "legacy-api",
@@ -1017,7 +1017,7 @@
       "name": "login-history",
       "version": "1.2.1",
       "filename": "login-history_1.2.1_php85.zip",
-      "sha256": "ed737034dea76bd0c7d3f76207dcde2dbe099e382612d06e782adddfe5d39254",
+      "sha256": "8ca639faa19785540aa57eff4b577189ab48ce8962226d01616efe264215561f",
       "metadata": {
         "en": {
           "name": "login-history",
@@ -1065,7 +1065,7 @@
       "name": "mojang-verification",
       "version": "2.0.0+php85.1",
       "filename": "mojang-verification_2.0.0_php85.zip",
-      "sha256": "fe860bba5f4d04a44bbd61cfe3b5d3371778b0c0c30c18c657c0044a2b5dde00",
+      "sha256": "bb8c651836e3be96537bdd1993ba4c63fd95f35dd3a5e49031a286bb02ba8404",
       "metadata": {
         "en": {
           "name": "mojang-verification",
@@ -1113,7 +1113,7 @@
       "name": "oauth",
       "version": "1.0.6+php85.1",
       "filename": "oauth_1.0.6_php85.zip",
-      "sha256": "0db04fd96fe3e82dd62b7906c5d7a711bd4988f83aeba9b9e0a2fd5e1f4f75e0",
+      "sha256": "bc587649f47636bfa2e2c8944163cfe2f74e26ac062cd7a16b0aa30d3b067f65",
       "metadata": {
         "en": {
           "name": "oauth",
@@ -1159,7 +1159,7 @@
       "name": "oauth-github",
       "version": "0.2.5+php85.1",
       "filename": "oauth-github_0.2.5_php85.zip",
-      "sha256": "4d1451c8122157ecfd207eb8fa15fe89668b314b2f257b06e8aed385f851432a",
+      "sha256": "10eba0cd96d2d5e28efff0cb47487d44cd305d30b21c053ef5ae76b7c7cafc5c",
       "metadata": {
         "en": {
           "name": "oauth-github",
@@ -1209,7 +1209,7 @@
       "name": "oauth-google",
       "version": "0.1.5+php85.1",
       "filename": "oauth-google_0.1.5_php85.zip",
-      "sha256": "67d9121025d9875d35469aad90485011370d4c42adbd54fece3c9750e075e9cc",
+      "sha256": "53d8a5b2de273f2a693bcd925d9c1b7ae3b9954735e54fa01a4c9645e8206717",
       "metadata": {
         "en": {
           "name": "oauth-google",
@@ -1259,7 +1259,7 @@
       "name": "oauth-littleskin",
       "version": "0.2.6+php85.1",
       "filename": "oauth-littleskin_0.2.6_php85.zip",
-      "sha256": "188fd362926aeca2c969bc91ba5a31f8e49021c16f3486f36335c7da6eaf06d4",
+      "sha256": "2908888e463837014d937d39ea7ba90606d5f7045d66611ce0e2338e283d13d3",
       "metadata": {
         "en": {
           "name": "oauth-littleskin",
@@ -1307,7 +1307,7 @@
       "name": "oauth-microsoft-live",
       "version": "0.2.6+php85.1",
       "filename": "oauth-microsoft-live_0.2.6_php85.zip",
-      "sha256": "7d6a70bcef06c68e53cf87f55dbdc4309213b63a248c3b7c9552193e092c3eab",
+      "sha256": "8d1433331e9c8c9bfedae2784a62c627c7850f84df34ce3fc2b4dde1ae4c6e0b",
       "metadata": {
         "en": {
           "name": "oauth-microsoft-live",
@@ -1357,7 +1357,7 @@
       "name": "password-algorithm-transition",
       "version": "2.2.1+php85.1",
       "filename": "password-algorithm-transition_2.2.1_php85.zip",
-      "sha256": "ceeb97c26946181d682704fde8015f6a4c21b4a45c1d9f4298e7963e6639838c",
+      "sha256": "5d12ff6a6b85dc41e021ee98f87612cd69cfb10fc77a9a0fea72ffc0430332d0",
       "metadata": {
         "en": {
           "name": "password-algorithm-transition",
@@ -1403,7 +1403,7 @@
       "name": "pray-for-kyoto-animation",
       "version": "1.0.3+php85.1",
       "filename": "pray-for-kyoto-animation_1.0.3_php85.zip",
-      "sha256": "5b225183a028fc74968a90c4bcfda0f1c334bf1cec9b136fa047336399074477",
+      "sha256": "339d2169e5f48c95c703a890eedf865a8e13754028a1e52166617b0a16b79288",
       "metadata": {
         "en": {
           "name": "pray-for-kyoto-animation",
@@ -1447,7 +1447,7 @@
       "name": "predis",
       "version": "1.0.1+php85.1",
       "filename": "predis_1.0.1_php85.zip",
-      "sha256": "1c24e440e93f95b1ee74b28c1f9c130564f039469e378585df0f053f8ce479a0",
+      "sha256": "9823178e6d24313d3efda0e1ffe91e6aa71ae150eb1a5b2700fd2e63a05fe702",
       "metadata": {
         "en": {
           "name": "predis",
@@ -1493,7 +1493,7 @@
       "name": "purge-azure-global-cdn",
       "version": "1.1.2+php85.1",
       "filename": "purge-azure-global-cdn_1.1.2_php85.zip",
-      "sha256": "c9e29c9c73747ebd3b205d9aaaf5f772f01ad05719d2539bdebd24f22cdb55ad",
+      "sha256": "c41b6eb35542a489cd08571ba9a30f5591ade741358782eb5723995dcf4f9e63",
       "metadata": {
         "en": {
           "name": "purge-azure-global-cdn",
@@ -1537,7 +1537,7 @@
       "name": "refresh-ali-cdn",
       "version": "1.0.1+php85.1",
       "filename": "refresh-ali-cdn_1.0.1_php85.zip",
-      "sha256": "62cbcf16a23b0381b7d3f01c89a3610e5974716f14dfb376eaaf519ae3e51d7b",
+      "sha256": "4b24718c9092e029a599c96d4e5e122e81cd722d4bec4e0b1268143e37ecfb7f",
       "metadata": {
         "en": {
           "name": "refresh-ali-cdn",
@@ -1581,7 +1581,7 @@
       "name": "refresh-qcloud-cdn",
       "version": "2.1.3+php85.1",
       "filename": "refresh-qcloud-cdn_2.1.3_php85.zip",
-      "sha256": "dcb2564cce1ca8ea2223377135c733ed31ca38a3089062e7da0f8b4363f73eba",
+      "sha256": "7744b3c5262b32379c2134c29eafc09fc1d161f4efc60a6ada8d9d1586ea2f3f",
       "metadata": {
         "en": {
           "name": "refresh-qcloud-cdn",
@@ -1625,7 +1625,7 @@
       "name": "remote-addr",
       "version": "0.1.1+php85.1",
       "filename": "remote-addr_0.1.1_php85.zip",
-      "sha256": "afef7b9d0168bf478992f67a7f5e2a9e8b515cd0ced19e861ee152f58fcd1922",
+      "sha256": "371806f8aa7a7ca56dde301952a529fc1fdf2fe837dfb21df8537775e647a96e",
       "metadata": {
         "en": {
           "name": "remote-addr",
@@ -1671,7 +1671,7 @@
       "name": "restricted-email-domains",
       "version": "0.3.0+php85.1",
       "filename": "restricted-email-domains_0.3.0_php85.zip",
-      "sha256": "cd291136d1228da119f2d3a1a8f256af2afd7b272618b98b7da2c3d27cc397e5",
+      "sha256": "681a8b47eed4806cc149c173a1369798a63cee603c1662c48f032ca7af31edc2",
       "metadata": {
         "en": {
           "name": "restricted-email-domains",
@@ -1725,7 +1725,7 @@
       "name": "share-registration-link",
       "version": "2.0.2+php85.1",
       "filename": "share-registration-link_2.0.2_php85.zip",
-      "sha256": "23680979de346f383f9d5e2e703da0d2aa3a420d6d33dbc102db2691ad7ed5f4",
+      "sha256": "745e65ed5974847c123900a2ae04896ea620516d3535b1106027de22b06d3824",
       "metadata": {
         "en": {
           "name": "share-registration-link",
@@ -1771,7 +1771,7 @@
       "name": "single-player-limit",
       "version": "3.0.4+php85.1",
       "filename": "single-player-limit_3.0.4_php85.zip",
-      "sha256": "eb26f2a8c2cb40cc0477e6a46dcbae51a27acf37685f0c3f50c8d422ca4b9183",
+      "sha256": "e13309d7f87b74cc692492a66a85554983a74d2a3aae148cfe54cebc316c99ac",
       "metadata": {
         "en": {
           "name": "single-player-limit",
@@ -1817,7 +1817,7 @@
       "name": "texture-description",
       "version": "1.3.2+php85.1",
       "filename": "texture-description_1.3.2_php85.zip",
-      "sha256": "622bbaa5c79f77486df0d9de0dcd1214c07496c3d4d18ce58ed9011048069fb1",
+      "sha256": "31fbb431fadf82139ddabbfb9c3a6a7925cf8e34dad94e2eb2329a2b9cc11fd6",
       "metadata": {
         "en": {
           "name": "texture-description",
@@ -1865,7 +1865,7 @@
       "name": "texture-type-cast",
       "version": "0.4.0+php85.1",
       "filename": "texture-type-cast_0.4.0_php85.zip",
-      "sha256": "aaa99ae1f68a9400cd8a380df6be543c4315f5a8781f938bac225bd69ef26d39",
+      "sha256": "09ae3fd67e3848a4fe860ca0256b3f063f62c6d4cb34f7493d23e7652aba4b47",
       "metadata": {
         "en": {
           "name": "texture-type-cast",
@@ -1911,7 +1911,7 @@
       "name": "textures-aliyun-oss",
       "version": "2.0.6+php85.1",
       "filename": "textures-aliyun-oss_2.0.6_php85.zip",
-      "sha256": "1490e6fd8741c2bc1ec2e5dbc43887178cfd8f529a32d5c4cf2e2e378845a5d5",
+      "sha256": "7638ce442a481442661e0a0de5353a4116af267ecec15b491c80e674a895b456",
       "metadata": {
         "en": {
           "name": "textures-aliyun-oss",
@@ -1959,7 +1959,7 @@
       "name": "textures-qcloud-cos",
       "version": "2.0.5+php85.1",
       "filename": "textures-qcloud-cos_2.0.5_php85.zip",
-      "sha256": "04a109f245b77b5ec48253e95d0195fe8d83427f9bd6de386531c816d8305687",
+      "sha256": "4b7ec34eb3b7588c593b12c447fed585400d64d3d47e023904c9c7e6f823986b",
       "metadata": {
         "en": {
           "name": "textures-qcloud-cos",
@@ -2007,7 +2007,7 @@
       "name": "textures-qiniu-storage",
       "version": "2.0.5+php85.1",
       "filename": "textures-qiniu-storage_2.0.5_php85.zip",
-      "sha256": "011668e3be2c0df122f9ce21b5a864c252b12be35fe21715e4f03ee32cd29792",
+      "sha256": "932ed88f9411c6dcaf425b8b1eb068c7fe46eccc634e85274dae54f2c831612a",
       "metadata": {
         "en": {
           "name": "textures-qiniu-storage",
@@ -2055,7 +2055,7 @@
       "name": "trust-proxies",
       "version": "0.1.3+php85.1",
       "filename": "trust-proxies_0.1.3_php85.zip",
-      "sha256": "d2ff7c5efae7583b8acd0dc7b44026bbfca770db005b5dc82daf04966a3d01c9",
+      "sha256": "47a99628b5871c2e93396f0cca6d020f2341904dc61cb5b0ac392751a4058f10",
       "metadata": {
         "en": {
           "name": "trust-proxies",
@@ -2099,7 +2099,7 @@
       "name": "two-factor",
       "version": "1.0.1",
       "filename": "two-factor_1.0.1_php85.zip",
-      "sha256": "4ec86c469e5fa9006c7f130697c3102eb3d430f8bd3e72964482afcd1edbb296",
+      "sha256": "f2ed62ddf147d9564fcc845e7baaed8c8540415f7ece470dadbccebee35e34cd",
       "metadata": {
         "en": {
           "name": "two-factor",
@@ -2147,7 +2147,7 @@
       "name": "usm-api",
       "version": "1.2.3+php85.1",
       "filename": "usm-api_1.2.3_php85.zip",
-      "sha256": "a3df806400326b8f3812b27e8aeedba9a34b11a2724851433e967bccdd68e454",
+      "sha256": "5b105a398186892a7585267ef76da382b3d5b96d96c2442781eddc02afd73c3f",
       "metadata": {
         "en": {
           "name": "usm-api",
@@ -2193,7 +2193,7 @@
       "name": "wecom-login",
       "version": "1.5.3",
       "filename": "wecom-login_1.5.3_php85.zip",
-      "sha256": "b8165358fbae3e145d96b26709b19868f6c034e092112aaef699a637bfb67d01",
+      "sha256": "197e559fbd596a08da701118c116e1cbb4664b18d9a4e45c7bcdd1dc3b55a204",
       "metadata": {
         "en": {
           "name": "wecom-login",
@@ -2239,13 +2239,13 @@
     },
     {
       "name": "yggdrasil-api",
-      "version": "5.2.2+php85.1",
-      "filename": "yggdrasil-api_5.2.2_php85.zip",
-      "sha256": "7607852391a3e72b34aadacc9f33f2d8f5910a7a03e686af9a8cdd569e97cfdc",
+      "version": "5.2.3+php85.1",
+      "filename": "yggdrasil-api_5.2.3_php85.zip",
+      "sha256": "1faa0999390e80501733b3212eea0dfc1d77837ef5452ed7106e1620edb74013",
       "metadata": {
         "en": {
           "name": "yggdrasil-api",
-          "version": "5.2.2+php85.1",
+          "version": "5.2.3+php85.1",
           "title": "Yggdrasil API",
           "description": "Yggdrasil API + authlib-injector = ✨",
           "author": "printempw",
@@ -2264,7 +2264,7 @@
         },
         "zh_CN": {
           "name": "yggdrasil-api",
-          "version": "5.2.2+php85.1",
+          "version": "5.2.3+php85.1",
           "title": "Yggdrasil API",
           "description": "Yggdrasil API + authlib-injector = ✨",
           "author": "printempw",
@@ -2287,7 +2287,7 @@
       "name": "yggdrasil-connect",
       "version": "6.2.1+php85.1",
       "filename": "yggdrasil-connect_6.2.1_php85.zip",
-      "sha256": "11c411737fcca62654553237d7e5b445fd458f0ee02542bb86e0c9c4742dd8f6",
+      "sha256": "e45151b2f5cdca8f284ef0dd0e6fe85a2ee9371eefd45b3dc4e70f2a4b0e161e",
       "metadata": {
         "en": {
           "name": "yggdrasil-connect",

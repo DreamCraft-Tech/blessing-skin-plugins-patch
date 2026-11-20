@@ -1,0 +1,2339 @@
+{
+  "commit": "b4c509d8460bf22110a5415bca8897b76e95c80f",
+  "php": "8.5",
+  "catalog_sha256": "d6e5fd66a37892fb89aee8bae14f5ea684f6afe9e604e35ed20c3eb6b07f9449",
+  "packages": [
+    {
+      "name": "204-for-unexisted-players",
+      "version": "0.1.4+php85.1",
+      "filename": "204-for-unexisted-players_0.1.4_php85.zip",
+      "sha256": "c1738cfdc3ec7ecba35b9a23e5198dfa1a5397ec7614e4ba50b1bf175df2a48e",
+      "metadata": {
+        "en": {
+          "name": "204-for-unexisted-players",
+          "title": "Respond with 204",
+          "version": "0.1.4+php85.1",
+          "description": "Respond with 204 when requesting a non-existed player.",
+          "author": "GPlane",
+          "url": "",
+          "namespace": "Blessing\\NoContent",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "square-root-alt",
+              "bg": "indigo"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "204-for-unexisted-players",
+          "title": "返回 204",
+          "version": "0.1.4+php85.1",
+          "description": "对请求不存在的角色的 JSON Profile 返回 204",
+          "author": "GPlane",
+          "url": "",
+          "namespace": "Blessing\\NoContent",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "square-root-alt",
+              "bg": "indigo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "authme-integration",
+      "version": "2.4.3+php85.1",
+      "filename": "authme-integration_2.4.3_php85.zip",
+      "sha256": "af8709f0a69796077788dc716548f000ba33000a20312df500273817b1f2a549",
+      "metadata": {
+        "en": {
+          "name": "authme-integration",
+          "version": "2.4.3+php85.1",
+          "title": "Authme 数据对接",
+          "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Integration\\Authme",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "single-player-limit": "^3.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "key",
+              "bg": "maroon"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "authme-integration",
+          "version": "2.4.3+php85.1",
+          "title": "Authme 数据对接",
+          "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Integration\\Authme",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "single-player-limit": "^3.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "key",
+              "bg": "maroon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "batch-import",
+      "version": "4.1.2+php85.1",
+      "filename": "batch-import_4.1.2_php85.zip",
+      "sha256": "f3eff05dad28f36f509884179b4c80e44b8a4a01a9cf2fd5153f53f3935221cd",
+      "metadata": {
+        "en": {
+          "name": "batch-import",
+          "version": "4.1.2+php85.1",
+          "title": "Batch Import",
+          "description": "Import textures to skin library.",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "BatchImport",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "database",
+              "bg": "danger"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "batch-import",
+          "version": "4.1.2+php85.1",
+          "title": "批量导入",
+          "description": "批量导入材质至皮肤库。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "BatchImport",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "database",
+              "bg": "danger"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "cdn-real-ip",
+      "version": "1.0.1",
+      "filename": "cdn-real-ip_1.0.1_php85.zip",
+      "sha256": "3d9bac7615ada44295ec1d64064fe538fdb54e2580e97d14620383158eeb4ede",
+      "metadata": {
+        "en": {
+          "name": "cdn-real-ip",
+          "version": "1.0.1",
+          "title": "CDN 真实客户端地址",
+          "description": "统一识别 CDN 与反向代理后的客户端 IP 和请求协议，支持多厂商、可信代理及请求诊断。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\CdnRealIp",
+          "license": "MIT",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "network-wired",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "cdn-real-ip",
+          "version": "1.0.1",
+          "title": "CDN 真实客户端地址",
+          "description": "统一识别 CDN 与反向代理后的客户端 IP 和请求协议，支持多厂商、可信代理及请求诊断。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\CdnRealIp",
+          "license": "MIT",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "network-wired",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "config-generator",
+      "version": "3.2.2+php85.1",
+      "filename": "config-generator_3.2.2_php85.zip",
+      "sha256": "773fc7bef79e29a1de9fb7947bcca20f465e8d0cab521c38509ef3a307aa7a85",
+      "metadata": {
+        "en": {
+          "name": "config-generator",
+          "version": "3.2.2+php85.1",
+          "title": "Config Generator",
+          "description": "Generate configurations of skin mods.",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Blessing\\ConfigGenerator",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "code",
+              "bg": "success"
+            }
+          },
+          "dependencies": {
+            "highlight.js": "^11.7.0"
+          },
+          "devDependencies": {
+            "@types/highlight.js": "^9.12.4"
+          }
+        },
+        "zh_CN": {
+          "name": "config-generator",
+          "version": "3.2.2+php85.1",
+          "title": "配置生成",
+          "description": "在用户中心添加自动生成皮肤 Mod 配置的页面。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Blessing\\ConfigGenerator",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "code",
+              "bg": "success"
+            }
+          },
+          "dependencies": {
+            "highlight.js": "^11.7.0"
+          },
+          "devDependencies": {
+            "@types/highlight.js": "^9.12.4"
+          }
+        }
+      }
+    },
+    {
+      "name": "daily-luck",
+      "version": "1.2.3",
+      "filename": "daily-luck_1.2.3_php85.zip",
+      "sha256": "3d24f336090f581eb3379e7cde7d5b5ae7ed5e2d75e4ef2930930d9d61699dd4",
+      "metadata": {
+        "en": {
+          "name": "daily-luck",
+          "version": "1.2.3",
+          "title": "今日人品与千万别点",
+          "description": "仪表板每日人品与互动彩蛋，支持独立开关、自定义短评和趣味配色。",
+          "author": "DreamUniverse843",
+          "license": "MIT",
+          "namespace": "Blessing\\DailyLuck",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "dice",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "daily-luck",
+          "version": "1.2.3",
+          "title": "今日人品与千万别点",
+          "description": "仪表板每日人品与互动彩蛋，支持独立开关、自定义短评和趣味配色。",
+          "author": "DreamUniverse843",
+          "license": "MIT",
+          "namespace": "Blessing\\DailyLuck",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "dice",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "disable-registration",
+      "version": "1.0.3+php85.1",
+      "filename": "disable-registration_1.0.3_php85.zip",
+      "sha256": "81b9430b62fb6f875d337ad137046498063d89e66cbc5484a6ac55a007d70667",
+      "metadata": {
+        "en": {
+          "name": "disable-registration",
+          "title": "Disable Registration",
+          "version": "1.0.3+php85.1",
+          "description": "Disable Registration",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\DisableRegistration",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "danger",
+              "fa": "ban"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "disable-registration",
+          "title": "关闭注册功能",
+          "version": "1.0.3+php85.1",
+          "description": "关闭注册功能",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\DisableRegistration",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "danger",
+              "fa": "ban"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "embedded-comment",
+      "version": "1.0.4+php85.1",
+      "filename": "embedded-comment_1.0.4_php85.zip",
+      "sha256": "2164948d928914ce395096326de1555a5fea103e31282f6cc65e89bf882a8db9",
+      "metadata": {
+        "en": {
+          "name": "embedded-comment",
+          "title": "Embedded Comment",
+          "version": "1.0.4+php85.1",
+          "description": "Integrate 3rd-party comment service to texture detail page.",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\EmbeddedComment",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "comment-dots",
+              "bg": "indigo"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "embedded-comment",
+          "title": "嵌入第三方评论",
+          "version": "1.0.4+php85.1",
+          "description": "向材质详情页中嵌入第三方评论系统",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\EmbeddedComment",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "comment-dots",
+              "bg": "indigo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "eruda",
+      "version": "1.0.1+php85.1",
+      "filename": "eruda_1.0.1_php85.zip",
+      "sha256": "e53aa0737b4ef412c2138c778cbed79b0d0ba0d707b8a978e6389f0a303e79de",
+      "metadata": {
+        "en": {
+          "name": "eruda",
+          "version": "1.0.1+php85.1",
+          "title": "Eruda",
+          "description": "适用于移动端浏览器的开发者工具。",
+          "author": "Little_Qiu",
+          "namespace": "Eruda",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "toolbox",
+              "bg": "olive"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "eruda",
+          "version": "1.0.1+php85.1",
+          "title": "Eruda",
+          "description": "适用于移动端浏览器的开发者工具。",
+          "author": "Little_Qiu",
+          "namespace": "Eruda",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "toolbox",
+              "bg": "olive"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "fast-login",
+      "version": "0.1.3+php85.1",
+      "filename": "fast-login_0.1.3_php85.zip",
+      "sha256": "bb5367e9dbf0dfe02795aeab599296a8bfe31fce3d64e2fd0dcc0ec89982d04c",
+      "metadata": {
+        "en": {
+          "name": "fast-login",
+          "title": "FastLogin",
+          "version": "0.1.3+php85.1",
+          "description": "Insert a record to FastLogin when user passed Mojang verification.",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\FastLogin",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "mojang-verification": "^2.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "green",
+              "fa": "sign-in-alt"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "fast-login",
+          "title": "FastLogin",
+          "version": "0.1.3+php85.1",
+          "description": "当用户通过正版验证时向 FastLogin 增加一条记录",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\FastLogin",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "mojang-verification": "^2.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "green",
+              "fa": "sign-in-alt"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "forum-integration",
+      "version": "4.1.1+php85.1",
+      "filename": "forum-integration_4.1.1_php85.zip",
+      "sha256": "1204271318f0f4ff04b83358391325db771a9ba2622744d2c202d47121e72b64",
+      "metadata": {
+        "en": {
+          "name": "forum-integration",
+          "version": "4.1.1+php85.1",
+          "title": "论坛数据对接",
+          "description": "与 Discuz、Phpwind、Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Integration\\Forum",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": ">=4.0.0",
+            "single-player-limit": ">=2.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "sync",
+              "bg": "gray"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "forum-integration",
+          "version": "4.1.1+php85.1",
+          "title": "论坛数据对接",
+          "description": "与 Discuz、Phpwind、Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "Integration\\Forum",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": ">=4.0.0",
+            "single-player-limit": ">=2.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "sync",
+              "bg": "gray"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "google-adsense",
+      "version": "0.0.1+php85.1",
+      "filename": "google-adsense_0.0.1_php85.zip",
+      "sha256": "0ca7dbc7896a7496d0b2f171589721cd6717bde555d3fbc7e35a4b19f955f68a",
+      "metadata": {
+        "en": {
+          "name": "google-adsense",
+          "title": "Google Adsense",
+          "version": "0.0.1+php85.1",
+          "description": "Insert your Google AdSense ID to the site.",
+          "author": "Big_Cake",
+          "url": "https://bigcake.cakemc.top/",
+          "namespace": "BigCake\\googleadsense",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "success"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "google-adsense",
+          "title": "Google Adsense",
+          "version": "0.0.1+php85.1",
+          "description": "为站点加入 Google Adsense 代码来投放广告。",
+          "author": "Big_Cake",
+          "url": "https://bigcake.cakemc.top/",
+          "namespace": "BigCake\\googleadsense",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "success"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "gravatar",
+      "version": "0.1.3+php85.1",
+      "filename": "gravatar_0.1.3_php85.zip",
+      "sha256": "5b75c526c85dd9d23a12624a5e8ab886586fa71a2d719a31b4d83d7b3a872aa7",
+      "metadata": {
+        "en": {
+          "name": "gravatar",
+          "title": "Gravatar",
+          "version": "0.1.3+php85.1",
+          "description": "Gravatar 支持",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Gravatar",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "user-check",
+              "bg": "primary"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "gravatar",
+          "title": "Gravatar",
+          "version": "0.1.3+php85.1",
+          "description": "Gravatar 支持",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Gravatar",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "user-check",
+              "bg": "primary"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "gtag-js",
+      "version": "0.1.2+php85.1",
+      "filename": "gtag-js_0.1.2_php85.zip",
+      "sha256": "b344c2951f2b1dac3aad233eb34937e6d93f6cf82b13503355bbedfcd06ead75",
+      "metadata": {
+        "en": {
+          "name": "gtag-js",
+          "title": "gtag.js",
+          "version": "0.1.2+php85.1",
+          "description": "Send event data to Google Analytics, Google Ads, etc.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Gtag",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "orange"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "gtag-js",
+          "title": "gtag.js",
+          "version": "0.1.2+php85.1",
+          "description": "用于 Google Analytics、Google Ads 等。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Gtag",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "orange"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "hello-dolly",
+      "version": "1.3.0+php85.1",
+      "filename": "hello-dolly_1.3.0_php85.zip",
+      "sha256": "bf14f20458646ba3c500d1e60e19d2b96adc6263a5e6bd0c67d61b04bb0b5d64",
+      "metadata": {
+        "en": {
+          "name": "hello-dolly",
+          "version": "1.3.0+php85.1",
+          "title": "Hello Dolly",
+          "description": "This is not just a plugin, it symbolizes the hope and enthusiasm of an entire generation summed up in two words sung most famously by Louis Armstrong: Hello, Dolly. When activated you will randomly see a lyric from <cite>Hello, Dolly</cite> in the upper right of your admin screen on every page.",
+          "author": "Matt Mullenweg",
+          "url": "https://blessing.studio/",
+          "namespace": "HelloDolly",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "conflicts": {
+              "hitokoto": "*"
+            },
+            "icon": {
+              "fa": "quote-left",
+              "bg": "teal"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "hello-dolly",
+          "version": "1.3.0+php85.1",
+          "title": "你好多莉",
+          "description": "这不是普通的插件，它象征着一代人希望和热情，浓缩成Louis Armstrong的四个字：你好，多莉。在启用后，在您站点后台每个页面的右上角都可以看到一句来自《俏红娘》音乐剧的英文原版台词。",
+          "author": "Matt Mullenweg",
+          "url": "https://blessing.studio/",
+          "namespace": "HelloDolly",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "conflicts": {
+              "hitokoto": "*"
+            },
+            "icon": {
+              "fa": "quote-left",
+              "bg": "teal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "hide-advanced-menu",
+      "version": "1.0.1+php85.1",
+      "filename": "hide-advanced-menu_1.0.1_php85.zip",
+      "sha256": "6c02d0890eee7f33fecbb9f04229197892e5a6f64739ffdd66a500d557978a72",
+      "metadata": {
+        "en": {
+          "name": "hide-advanced-menu",
+          "title": "Hide \"Advanced\" Menu",
+          "version": "1.0.1+php85.1",
+          "description": "Hide \"Advanced\" menu at left side bar.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\HideAdvancedMenu",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "info",
+              "fa": "code-branch"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "hide-advanced-menu",
+          "title": "隐藏「高级功能」菜单",
+          "version": "1.0.1+php85.1",
+          "description": "隐藏左侧的「高级功能」菜单。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\HideAdvancedMenu",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "info",
+              "fa": "code-branch"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "hitokoto",
+      "version": "1.3.0+php85.1",
+      "filename": "hitokoto_1.3.0_php85.zip",
+      "sha256": "296f6867c2485e116edc0918f51d42eedbeed58e25bdd73cf2df4593dc08345a",
+      "metadata": {
+        "en": {
+          "name": "hitokoto",
+          "version": "1.3.0+php85.1",
+          "title": "一言",
+          "description": "在用户中心和管理面板的右上角显示一言。",
+          "author": "Little_Qiu",
+          "url": "https://www.littleqiu.net",
+          "namespace": "Hitokoto",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "conflicts": {
+              "hello-dolly": "*"
+            },
+            "icon": {
+              "fa": "quote-right",
+              "bg": "teal"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "hitokoto",
+          "version": "1.3.0+php85.1",
+          "title": "一言",
+          "description": "在用户中心和管理面板的右上角显示一言。",
+          "author": "Little_Qiu",
+          "url": "https://www.littleqiu.net",
+          "namespace": "Hitokoto",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "conflicts": {
+              "hello-dolly": "*"
+            },
+            "icon": {
+              "fa": "quote-right",
+              "bg": "teal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "insane-profile-cache",
+      "version": "4.0.3+php85.1",
+      "filename": "insane-profile-cache_4.0.3_php85.zip",
+      "sha256": "e974aea60054d9fa23b593258c0f26b476e7948e82771472e9caf5e559173d1e",
+      "metadata": {
+        "en": {
+          "name": "insane-profile-cache",
+          "version": "4.0.3+php85.1",
+          "title": "Profile 文件缓存",
+          "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "InsaneProfileCache",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "running",
+              "bg": "warning"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "insane-profile-cache",
+          "version": "4.0.3+php85.1",
+          "title": "Profile 文件缓存",
+          "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "InsaneProfileCache",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "running",
+              "bg": "warning"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "insider",
+      "version": "1.0.2+php85.1",
+      "filename": "insider_1.0.2_php85.zip",
+      "sha256": "e8f9810361939823d5b57bbb174dd294be87a9fe54d379e6f3ba7facf2d29d48",
+      "metadata": {
+        "en": {
+          "name": "insider",
+          "title": "使用预览版",
+          "description": "自动将 Blessing Skin 更新源切换到包含预览版的地址。",
+          "author": "GPlane",
+          "version": "1.0.2+php85.1",
+          "namespace": "Insider",
+          "require": {
+            "blessing-skin-server": ">=4.4.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "spa",
+              "bg": "olive"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "insider",
+          "title": "使用预览版",
+          "description": "自动将 Blessing Skin 更新源切换到包含预览版的地址。",
+          "author": "GPlane",
+          "version": "1.0.2+php85.1",
+          "namespace": "Insider",
+          "require": {
+            "blessing-skin-server": ">=4.4.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "spa",
+              "bg": "olive"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "invitation-codes",
+      "version": "3.1.2+php85.1",
+      "filename": "invitation-codes_3.1.2_php85.zip",
+      "sha256": "bc63d7db0696902dd4270dd27e4d94bb638098249be6a510e386d651ab8d7f81",
+      "metadata": {
+        "en": {
+          "name": "invitation-codes",
+          "version": "3.1.2+php85.1",
+          "title": "Registration Invitation Codes",
+          "description": "Require invitation codes for users when registering.",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "InvitationCodes",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "phone",
+              "bg": "gray-dark"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "invitation-codes",
+          "version": "3.1.2+php85.1",
+          "title": "注册邀请码",
+          "description": "在管理后台生成邀请码，只有持有邀请码才可以注册成为本站用户。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "InvitationCodes",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "phone",
+              "bg": "gray-dark"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "legacy-api",
+      "version": "1.1.3+php85.1",
+      "filename": "legacy-api_1.1.3_php85.zip",
+      "sha256": "4a8e6f8512a12010d1cd590216e434a4b1b457a9caa5852d91904c6a0dffc380",
+      "metadata": {
+        "en": {
+          "name": "legacy-api",
+          "title": "Legacy Skin Loading",
+          "version": "1.1.3+php85.1",
+          "description": "Provides legacy loading which is based on player name.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Legacy",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "republican",
+              "bg": "purple"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "legacy-api",
+          "title": "传统皮肤加载方式",
+          "version": "1.1.3+php85.1",
+          "description": "提供传统的皮肤加载方式，即直接访问角色名。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Legacy",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "republican",
+              "bg": "purple"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "login-history",
+      "version": "1.2.1",
+      "filename": "login-history_1.2.1_php85.zip",
+      "sha256": "8ca639faa19785540aa57eff4b577189ab48ce8962226d01616efe264215561f",
+      "metadata": {
+        "en": {
+          "name": "login-history",
+          "version": "1.2.1",
+          "title": "网页登录与 Yggdrasil 登录记录",
+          "description": "在高级功能中查询自己的网页登录、Yggdrasil 认证及角色入服记录，支持同一账号的多个角色。",
+          "author": "DreamUniverse843",
+          "license": "MIT",
+          "namespace": "Blessing\\LoginHistory",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "history",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "login-history",
+          "version": "1.2.1",
+          "title": "网页登录与 Yggdrasil 登录记录",
+          "description": "在高级功能中查询自己的网页登录、Yggdrasil 认证及角色入服记录，支持同一账号的多个角色。",
+          "author": "DreamUniverse843",
+          "license": "MIT",
+          "namespace": "Blessing\\LoginHistory",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "history",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "mojang-verification",
+      "version": "2.0.0+php85.1",
+      "filename": "mojang-verification_2.0.0_php85.zip",
+      "sha256": "bb8c651836e3be96537bdd1993ba4c63fd95f35dd3a5e49031a286bb02ba8404",
+      "metadata": {
+        "en": {
+          "name": "mojang-verification",
+          "version": "2.0.0+php85.1",
+          "title": "Mojang Verification",
+          "description": "Provides verification and binding support for paid Minecraft user.",
+          "author": "GPlane",
+          "namespace": "GPlane\\Mojang",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "dragon",
+              "bg": "fuchsia"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "mojang-verification",
+          "version": "2.0.0+php85.1",
+          "title": "正版验证",
+          "description": "为拥有正版账号的用户提供验证、绑定。",
+          "author": "GPlane",
+          "namespace": "GPlane\\Mojang",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "dragon",
+              "bg": "fuchsia"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "oauth",
+      "version": "1.0.6+php85.1",
+      "filename": "oauth_1.0.6_php85.zip",
+      "sha256": "bc587649f47636bfa2e2c8944163cfe2f74e26ac062cd7a16b0aa30d3b067f65",
+      "metadata": {
+        "en": {
+          "name": "oauth",
+          "title": "OAuth Client Core",
+          "version": "1.0.6+php85.1",
+          "description": "Core plugin of OAuth client.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuthCore",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "primary",
+              "fa": "box"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "oauth",
+          "title": "OAuth 客户端核心",
+          "version": "1.0.6+php85.1",
+          "description": "OAuth 客户端核心插件",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuthCore",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "primary",
+              "fa": "box"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "oauth-github",
+      "version": "0.2.5+php85.1",
+      "filename": "oauth-github_0.2.5_php85.zip",
+      "sha256": "10eba0cd96d2d5e28efff0cb47487d44cd305d30b21c053ef5ae76b7c7cafc5c",
+      "metadata": {
+        "en": {
+          "name": "oauth-github",
+          "title": "Log In with GitHub",
+          "version": "0.2.5+php85.1",
+          "description": "Log in skin server with GitHub.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuth\\GitHub",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "github",
+              "faType": "fab",
+              "bg": "success"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "oauth-github",
+          "title": "使用 GitHub 登录",
+          "version": "0.2.5+php85.1",
+          "description": "用 GitHub 账号来登录皮肤站",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuth\\GitHub",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "github",
+              "faType": "fab",
+              "bg": "success"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "oauth-google",
+      "version": "0.1.5+php85.1",
+      "filename": "oauth-google_0.1.5_php85.zip",
+      "sha256": "53d8a5b2de273f2a693bcd925d9c1b7ae3b9954735e54fa01a4c9645e8206717",
+      "metadata": {
+        "en": {
+          "name": "oauth-google",
+          "title": "Log In with Google",
+          "version": "0.1.5+php85.1",
+          "description": "Log in skin server with Google.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuth\\Google",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "lightblue"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "oauth-google",
+          "title": "使用 Google 登录",
+          "version": "0.1.5+php85.1",
+          "description": "用 Google 账号来登录皮肤站",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\OAuth\\Google",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "google",
+              "faType": "fab",
+              "bg": "lightblue"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "oauth-littleskin",
+      "version": "0.2.6+php85.1",
+      "filename": "oauth-littleskin_0.2.6_php85.zip",
+      "sha256": "2908888e463837014d937d39ea7ba90606d5f7045d66611ce0e2338e283d13d3",
+      "metadata": {
+        "en": {
+          "name": "oauth-littleskin",
+          "title": "Log In with LittleSkin",
+          "version": "0.2.6+php85.1",
+          "description": "Log in skin server with LittleSkin account.",
+          "author": "Asnxthaony",
+          "url": "https://github.com/Asnxthaony",
+          "namespace": "Blessing\\OAuth\\LittleSkin",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "rocket",
+              "bg": "pink"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "oauth-littleskin",
+          "title": "使用 LittleSkin 登录",
+          "version": "0.2.6+php85.1",
+          "description": "用 LittleSkin 账号来登录皮肤站",
+          "author": "Asnxthaony",
+          "url": "https://github.com/Asnxthaony",
+          "namespace": "Blessing\\OAuth\\LittleSkin",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "rocket",
+              "bg": "pink"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "oauth-microsoft-live",
+      "version": "0.2.6+php85.1",
+      "filename": "oauth-microsoft-live_0.2.6_php85.zip",
+      "sha256": "8d1433331e9c8c9bfedae2784a62c627c7850f84df34ce3fc2b4dde1ae4c6e0b",
+      "metadata": {
+        "en": {
+          "name": "oauth-microsoft-live",
+          "title": "Log In with Microsoft Live",
+          "version": "0.2.6+php85.1",
+          "description": "Log in skin server with Microsoft Live.",
+          "author": "GPlane",
+          "url": "",
+          "namespace": "Blessing\\OAuth\\Live",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "microsoft",
+              "faType": "fab",
+              "bg": "primary"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "oauth-microsoft-live",
+          "title": "使用 Microsoft Live 登录",
+          "version": "0.2.6+php85.1",
+          "description": "通过 Microsoft Live 来登录皮肤站",
+          "author": "GPlane",
+          "url": "",
+          "namespace": "Blessing\\OAuth\\Live",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "oauth": "^1.0.0",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "microsoft",
+              "faType": "fab",
+              "bg": "primary"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "password-algorithm-transition",
+      "version": "2.2.1+php85.1",
+      "filename": "password-algorithm-transition_2.2.1_php85.zip",
+      "sha256": "5d12ff6a6b85dc41e021ee98f87612cd69cfb10fc77a9a0fea72ffc0430332d0",
+      "metadata": {
+        "en": {
+          "name": "password-algorithm-transition",
+          "version": "2.2.1+php85.1",
+          "title": "Password Algorithm Transition",
+          "description": "Switch to another password hashing algorithm progressively.",
+          "author": "GPlane",
+          "namespace": "GPlane\\PasswordTransition",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "star-of-life",
+              "bg": "lime"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "password-algorithm-transition",
+          "version": "2.2.1+php85.1",
+          "title": "密码算法切换",
+          "description": "将站点的密码算法进行渐进式的切换。",
+          "author": "GPlane",
+          "namespace": "GPlane\\PasswordTransition",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "star-of-life",
+              "bg": "lime"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "pray-for-kyoto-animation",
+      "version": "1.0.3+php85.1",
+      "filename": "pray-for-kyoto-animation_1.0.3_php85.zip",
+      "sha256": "339d2169e5f48c95c703a890eedf865a8e13754028a1e52166617b0a16b79288",
+      "metadata": {
+        "en": {
+          "name": "pray-for-kyoto-animation",
+          "version": "1.0.3+php85.1",
+          "title": "祈福京阿尼",
+          "description": "为京都动画第一工作室祈福。",
+          "author": "GPlane",
+          "namespace": "Pfka",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "pray",
+              "bg": "black"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "pray-for-kyoto-animation",
+          "version": "1.0.3+php85.1",
+          "title": "祈福京阿尼",
+          "description": "为京都动画第一工作室祈福。",
+          "author": "GPlane",
+          "namespace": "Pfka",
+          "require": {
+            "blessing-skin-server": "*",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "pray",
+              "bg": "black"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "predis",
+      "version": "1.0.1+php85.1",
+      "filename": "predis_1.0.1_php85.zip",
+      "sha256": "9823178e6d24313d3efda0e1ffe91e6aa71ae150eb1a5b2700fd2e63a05fe702",
+      "metadata": {
+        "en": {
+          "name": "predis",
+          "title": "Predis",
+          "version": "1.0.1+php85.1",
+          "description": "设置 Redis 客户端为 Predis。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Predis",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "memory",
+              "bg": "danger"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "predis",
+          "title": "Predis",
+          "version": "1.0.1+php85.1",
+          "description": "设置 Redis 客户端为 Predis。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\Predis",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "memory",
+              "bg": "danger"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "purge-azure-global-cdn",
+      "version": "1.1.2+php85.1",
+      "filename": "purge-azure-global-cdn_1.1.2_php85.zip",
+      "sha256": "c41b6eb35542a489cd08571ba9a30f5591ade741358782eb5723995dcf4f9e63",
+      "metadata": {
+        "en": {
+          "name": "purge-azure-global-cdn",
+          "version": "1.1.2+php85.1",
+          "title": "刷新 Azure 国际版 CDN",
+          "description": "当资源被更新时，自动刷新 Azure 国际版 CDN 的缓存。不适用于 Azure 中国版。",
+          "author": "Honoka Tech LTD(GB)",
+          "namespace": "Honoka\\PurgeAzureGlobalCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "blue"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "purge-azure-global-cdn",
+          "version": "1.1.2+php85.1",
+          "title": "刷新 Azure 国际版 CDN",
+          "description": "当资源被更新时，自动刷新 Azure 国际版 CDN 的缓存。不适用于 Azure 中国版。",
+          "author": "Honoka Tech LTD(GB)",
+          "namespace": "Honoka\\PurgeAzureGlobalCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "blue"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "refresh-ali-cdn",
+      "version": "1.0.1+php85.1",
+      "filename": "refresh-ali-cdn_1.0.1_php85.zip",
+      "sha256": "4b24718c9092e029a599c96d4e5e122e81cd722d4bec4e0b1268143e37ecfb7f",
+      "metadata": {
+        "en": {
+          "name": "refresh-ali-cdn",
+          "version": "1.0.1+php85.1",
+          "title": "刷新阿里云 CDN",
+          "description": "当角色信息被更新时，自动刷新阿里云 CDN 中的 JSON Profile。",
+          "author": "hank9999",
+          "namespace": "Hank9999\\RefreshAliCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "lime"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "refresh-ali-cdn",
+          "version": "1.0.1+php85.1",
+          "title": "刷新阿里云 CDN",
+          "description": "当角色信息被更新时，自动刷新阿里云 CDN 中的 JSON Profile。",
+          "author": "hank9999",
+          "namespace": "Hank9999\\RefreshAliCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "lime"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "refresh-qcloud-cdn",
+      "version": "2.1.3+php85.1",
+      "filename": "refresh-qcloud-cdn_2.1.3_php85.zip",
+      "sha256": "7744b3c5262b32379c2134c29eafc09fc1d161f4efc60a6ada8d9d1586ea2f3f",
+      "metadata": {
+        "en": {
+          "name": "refresh-qcloud-cdn",
+          "version": "2.1.3+php85.1",
+          "title": "刷新腾讯云 CDN",
+          "description": "当角色信息被更新时，自动刷新 CDN 中的 JSON Profile。",
+          "author": "GPlane",
+          "namespace": "GPlane\\RefreshQcloudCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "orange"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "refresh-qcloud-cdn",
+          "version": "2.1.3+php85.1",
+          "title": "刷新腾讯云 CDN",
+          "description": "当角色信息被更新时，自动刷新 CDN 中的 JSON Profile。",
+          "author": "GPlane",
+          "namespace": "GPlane\\RefreshQcloudCdn",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "fire",
+              "bg": "orange"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "remote-addr",
+      "version": "0.1.1+php85.1",
+      "filename": "remote-addr_0.1.1_php85.zip",
+      "sha256": "371806f8aa7a7ca56dde301952a529fc1fdf2fe837dfb21df8537775e647a96e",
+      "metadata": {
+        "en": {
+          "name": "remote-addr",
+          "title": "Remote Addr",
+          "version": "0.1.1+php85.1",
+          "description": "通过 `REMOTE_ADDR` 来获取 IP。使用负载均衡或反向代理的网站请不要使用。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\RemoteAddr",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "ethernet",
+              "bg": "indigo"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "remote-addr",
+          "title": "Remote Addr",
+          "version": "0.1.1+php85.1",
+          "description": "通过 `REMOTE_ADDR` 来获取 IP。使用负载均衡或反向代理的网站请不要使用。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\RemoteAddr",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "ethernet",
+              "bg": "indigo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "restricted-email-domains",
+      "version": "0.3.0+php85.1",
+      "filename": "restricted-email-domains_0.3.0_php85.zip",
+      "sha256": "681a8b47eed4806cc149c173a1369798a63cee603c1662c48f032ca7af31edc2",
+      "metadata": {
+        "en": {
+          "name": "restricted-email-domains",
+          "title": "Email Domains Restriction",
+          "version": "0.3.0+php85.1",
+          "description": "Restrict email domain names for registration.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\RestrictedEmailDomains",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "ConfigController",
+            "icon": {
+              "bg": "purple",
+              "fa": "at"
+            }
+          },
+          "dependencies": {
+            "nanoid": "^4.0.0"
+          }
+        },
+        "zh_CN": {
+          "name": "restricted-email-domains",
+          "title": "邮箱域名限制",
+          "version": "0.3.0+php85.1",
+          "description": "限制用户注册时所使用的邮箱",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\RestrictedEmailDomains",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "ConfigController",
+            "icon": {
+              "bg": "purple",
+              "fa": "at"
+            }
+          },
+          "dependencies": {
+            "nanoid": "^4.0.0"
+          }
+        }
+      }
+    },
+    {
+      "name": "share-registration-link",
+      "version": "2.0.2+php85.1",
+      "filename": "share-registration-link_2.0.2_php85.zip",
+      "sha256": "745e65ed5974847c123900a2ae04896ea620516d3535b1106027de22b06d3824",
+      "metadata": {
+        "en": {
+          "name": "share-registration-link",
+          "version": "2.0.2+php85.1",
+          "title": "分享注册链接",
+          "description": "允许用户分享注册链接并获得积分",
+          "author": "GPlane",
+          "namespace": "GPlane\\ShareRegistrationLink",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "GPlane\\ShareRegistrationLink\\Configuration",
+            "icon": {
+              "fa": "share-alt",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "share-registration-link",
+          "version": "2.0.2+php85.1",
+          "title": "分享注册链接",
+          "description": "允许用户分享注册链接并获得积分",
+          "author": "GPlane",
+          "namespace": "GPlane\\ShareRegistrationLink",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "GPlane\\ShareRegistrationLink\\Configuration",
+            "icon": {
+              "fa": "share-alt",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "single-player-limit",
+      "version": "3.0.4+php85.1",
+      "filename": "single-player-limit_3.0.4_php85.zip",
+      "sha256": "e13309d7f87b74cc692492a66a85554983a74d2a3aae148cfe54cebc316c99ac",
+      "metadata": {
+        "en": {
+          "name": "single-player-limit",
+          "version": "3.0.4+php85.1",
+          "title": "Single Player Limitation",
+          "description": "Enforce each user can own only one user.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "SinglePlayerLimit",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "user-lock",
+              "bg": "yellow"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "single-player-limit",
+          "version": "3.0.4+php85.1",
+          "title": "单角色限制",
+          "description": "限制一个用户至多只能拥有一个角色。",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "SinglePlayerLimit",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "user-lock",
+              "bg": "yellow"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "texture-description",
+      "version": "1.3.2+php85.1",
+      "filename": "texture-description_1.3.2_php85.zip",
+      "sha256": "31fbb431fadf82139ddabbfb9c3a6a7925cf8e34dad94e2eb2329a2b9cc11fd6",
+      "metadata": {
+        "en": {
+          "name": "texture-description",
+          "title": "Texture Description",
+          "version": "1.3.2+php85.1",
+          "description": "Allow users to add description for texture.",
+          "author": "Steven Qiu & GPlane",
+          "url": "",
+          "namespace": "Blessing\\TextureDescription",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "bg": "olive",
+              "fa": "file-invoice"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "texture-description",
+          "title": "材质描述",
+          "version": "1.3.2+php85.1",
+          "description": "允许用户为材质添加描述",
+          "author": "Steven Qiu & GPlane",
+          "url": "",
+          "namespace": "Blessing\\TextureDescription",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "bg": "olive",
+              "fa": "file-invoice"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "texture-type-cast",
+      "version": "0.4.0+php85.1",
+      "filename": "texture-type-cast_0.4.0_php85.zip",
+      "sha256": "09ae3fd67e3848a4fe860ca0256b3f063f62c6d4cb34f7493d23e7652aba4b47",
+      "metadata": {
+        "en": {
+          "name": "texture-type-cast",
+          "title": "Texture Type Casting",
+          "version": "0.4.0+php85.1",
+          "description": "Force to cast types of all textures.",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\TextureTypeCast",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "danger",
+              "fa": "file-signature"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "texture-type-cast",
+          "title": "材质类型强制转换",
+          "version": "0.4.0+php85.1",
+          "description": "强制对全站的材质进行材质类型修改",
+          "author": "GPlane",
+          "url": "https://gplane.win/",
+          "namespace": "Blessing\\TextureTypeCast",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "bg": "danger",
+              "fa": "file-signature"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "textures-aliyun-oss",
+      "version": "2.0.6+php85.1",
+      "filename": "textures-aliyun-oss_2.0.6_php85.zip",
+      "sha256": "7638ce442a481442661e0a0de5353a4116af267ecec15b491c80e674a895b456",
+      "metadata": {
+        "en": {
+          "name": "textures-aliyun-oss",
+          "version": "2.0.6+php85.1",
+          "title": "阿里云对象存储 OSS",
+          "description": "将用户上传的材质存储文件至阿里云 OSS 中。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureAliyunOSS",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "spider",
+              "bg": "danger"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "textures-aliyun-oss",
+          "version": "2.0.6+php85.1",
+          "title": "阿里云对象存储 OSS",
+          "description": "将用户上传的材质存储文件至阿里云 OSS 中。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureAliyunOSS",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "spider",
+              "bg": "danger"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "textures-qcloud-cos",
+      "version": "2.0.5+php85.1",
+      "filename": "textures-qcloud-cos_2.0.5_php85.zip",
+      "sha256": "4b7ec34eb3b7588c593b12c447fed585400d64d3d47e023904c9c7e6f823986b",
+      "metadata": {
+        "en": {
+          "name": "textures-qcloud-cos",
+          "version": "2.0.5+php85.1",
+          "title": "腾讯云对象存储 COS",
+          "description": "将用户上传的材质存储文件至腾讯云 COS 中。仅支持 COS v5。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureQcloudCOS",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "subway",
+              "bg": "teal"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "textures-qcloud-cos",
+          "version": "2.0.5+php85.1",
+          "title": "腾讯云对象存储 COS",
+          "description": "将用户上传的材质存储文件至腾讯云 COS 中。仅支持 COS v5。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureQcloudCOS",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "subway",
+              "bg": "teal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "textures-qiniu-storage",
+      "version": "2.0.5+php85.1",
+      "filename": "textures-qiniu-storage_2.0.5_php85.zip",
+      "sha256": "932ed88f9411c6dcaf425b8b1eb068c7fe46eccc634e85274dae54f2c831612a",
+      "metadata": {
+        "en": {
+          "name": "textures-qiniu-storage",
+          "version": "2.0.5+php85.1",
+          "title": "七牛云存储",
+          "description": "将用户上传的材质存储文件至七牛云存储中。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureQiniuStorage",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "radiation",
+              "bg": "purple"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "textures-qiniu-storage",
+          "version": "2.0.5+php85.1",
+          "title": "七牛云存储",
+          "description": "将用户上传的材质存储文件至七牛云存储中。",
+          "author": "printempw",
+          "url": "https://blessing.studio/",
+          "namespace": "TextureQiniuStorage",
+          "config": "config.blade.php",
+          "require": {
+            "blessing-skin-server": "^4|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "radiation",
+              "bg": "purple"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "trust-proxies",
+      "version": "0.1.3+php85.1",
+      "filename": "trust-proxies_0.1.3_php85.zip",
+      "sha256": "47a99628b5871c2e93396f0cca6d020f2341904dc61cb5b0ac392751a4058f10",
+      "metadata": {
+        "en": {
+          "name": "trust-proxies",
+          "version": "0.1.3+php85.1",
+          "title": "代理信任",
+          "description": "当站点使用负载均衡并开启 SSL 时，若遇到 URL 问题，可尝试安装并开启此插件。",
+          "author": "GPlane",
+          "namespace": "GPlane\\TrustProxies",
+          "require": {
+            "blessing-skin-server": "^4.2.0|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "torii-gate",
+              "bg": "maroon"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "trust-proxies",
+          "version": "0.1.3+php85.1",
+          "title": "代理信任",
+          "description": "当站点使用负载均衡并开启 SSL 时，若遇到 URL 问题，可尝试安装并开启此插件。",
+          "author": "GPlane",
+          "namespace": "GPlane\\TrustProxies",
+          "require": {
+            "blessing-skin-server": "^4.2.0|^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "torii-gate",
+              "bg": "maroon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "two-factor",
+      "version": "1.0.1",
+      "filename": "two-factor_1.0.1_php85.zip",
+      "sha256": "f2ed62ddf147d9564fcc845e7baaed8c8540415f7ece470dadbccebee35e34cd",
+      "metadata": {
+        "en": {
+          "name": "two-factor",
+          "version": "1.0.1",
+          "title": "两步验证",
+          "description": "使用验证器验证码与通行密钥保护账号，支持通行密钥直接登录。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\TwoFactor",
+          "license": "MIT",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "shield-alt",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "two-factor",
+          "version": "1.0.1",
+          "title": "两步验证",
+          "description": "使用验证器验证码与通行密钥保护账号，支持通行密钥直接登录。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\TwoFactor",
+          "license": "MIT",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "shield-alt",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "usm-api",
+      "version": "1.2.3+php85.1",
+      "filename": "usm-api_1.2.3_php85.zip",
+      "sha256": "5b105a398186892a7585267ef76da382b3d5b96d96c2442781eddc02afd73c3f",
+      "metadata": {
+        "en": {
+          "name": "usm-api",
+          "title": "Universal Skin API",
+          "version": "1.2.3+php85.1",
+          "description": "Universal Skin Mod API",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\Usm",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "underline",
+              "bg": "success"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "usm-api",
+          "title": "Universal Skin API",
+          "version": "1.2.3+php85.1",
+          "description": "Universal Skin Mod API",
+          "author": "GPlane",
+          "url": "https://gplane.win",
+          "namespace": "Blessing\\Usm",
+          "require": {
+            "blessing-skin-server": "^5|^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "icon": {
+              "fa": "underline",
+              "bg": "success"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "wecom-login",
+      "version": "1.5.3",
+      "filename": "wecom-login_1.5.3_php85.zip",
+      "sha256": "197e559fbd596a08da701118c116e1cbb4664b18d9a4e45c7bcdd1dc3b55a204",
+      "metadata": {
+        "en": {
+          "name": "wecom-login",
+          "version": "1.5.3",
+          "title": "企业微信登录与绑定",
+          "description": "通过企业微信自建应用扫码登录，支持账号自助绑定、解绑和登录消息通知。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\WeCom",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "building",
+              "bg": "success"
+            }
+          },
+          "license": "MIT"
+        },
+        "zh_CN": {
+          "name": "wecom-login",
+          "version": "1.5.3",
+          "title": "企业微信登录与绑定",
+          "description": "通过企业微信自建应用扫码登录，支持账号自助绑定、解绑和登录消息通知。",
+          "author": "DreamUniverse843",
+          "namespace": "Blessing\\WeCom",
+          "require": {
+            "blessing-skin-server": "^6.0.2",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Configuration",
+            "icon": {
+              "fa": "building",
+              "bg": "success"
+            }
+          },
+          "license": "MIT"
+        }
+      }
+    },
+    {
+      "name": "yggdrasil-api",
+      "version": "5.2.3+php85.1",
+      "filename": "yggdrasil-api_5.2.3_php85.zip",
+      "sha256": "1faa0999390e80501733b3212eea0dfc1d77837ef5452ed7106e1620edb74013",
+      "metadata": {
+        "en": {
+          "name": "yggdrasil-api",
+          "version": "5.2.3+php85.1",
+          "title": "Yggdrasil API",
+          "description": "Yggdrasil API + authlib-injector = ✨",
+          "author": "printempw",
+          "namespace": "Yggdrasil",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "fa": "khanda",
+              "bg": "info"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "yggdrasil-api",
+          "version": "5.2.3+php85.1",
+          "title": "Yggdrasil API",
+          "description": "Yggdrasil API + authlib-injector = ✨",
+          "author": "printempw",
+          "namespace": "Yggdrasil",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "fa": "khanda",
+              "bg": "info"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "yggdrasil-connect",
+      "version": "6.2.1+php85.1",
+      "filename": "yggdrasil-connect_6.2.1_php85.zip",
+      "sha256": "e45151b2f5cdca8f284ef0dd0e6fe85a2ee9371eefd45b3dc4e70f2a4b0e161e",
+      "metadata": {
+        "en": {
+          "name": "yggdrasil-connect",
+          "version": "6.2.1+php85.1",
+          "title": "Yggdrasil Connect",
+          "description": "Refactored from Yggdrasil API plugin, fixing some bugs and adding Yggdrasil Connect support. Please read the plugin README before use.",
+          "author": "LittleSkin",
+          "namespace": "LittleSkin\\YggdrasilConnect",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "fa": "khanda",
+              "bg": "blue"
+            },
+            "conflicts": {
+              "yggdrasil-api": "*"
+            }
+          }
+        },
+        "zh_CN": {
+          "name": "yggdrasil-connect",
+          "version": "6.2.1+php85.1",
+          "title": "Yggdrasil Connect",
+          "description": "重构版 Yggdrasil API 插件，修复了大量 Bug，添加了 Yggdrasil Connect 支持。使用之前请阅读插件 README。",
+          "author": "LittleSkin",
+          "namespace": "LittleSkin\\YggdrasilConnect",
+          "require": {
+            "blessing-skin-server": "^6",
+            "php": "~8.5.0"
+          },
+          "enchants": {
+            "config": "Controllers\\ConfigController",
+            "icon": {
+              "fa": "khanda",
+              "bg": "blue"
+            },
+            "conflicts": {
+              "yggdrasil-api": "*"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
